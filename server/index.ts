@@ -2036,6 +2036,24 @@ function formatRelationship(r: FamilyRelationship) {
   };
 }
 
+// ─── Static frontend (single-container self-hosted deploys) ─────
+// When a production build exists next to the server (e.g. the Docker
+// image), serve it and fall back to index.html for client-side routes
+// so /family-tree/:id works on refresh. In local dev dist/ is absent,
+// so this block is a no-op and `npm run dev` is unaffected.
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+
+const distDir = path.resolve(process.cwd(), 'dist');
+if (existsSync(distDir)) {
+  app.use(express.static(distDir));
+  // Regex route (Express 5 dropped the '*' wildcard): anything that is
+  // not an API request and did not match a static file gets the SPA.
+  app.get(/^(?!\/api\/).*/, (_req: express.Request, res: express.Response) => {
+    res.sendFile(path.join(distDir, 'index.html'));
+  });
+}
+
 // ─── Start ───────────────────────────────────────────────
 
 // P2-7: the hourly digest check exists only when a mailer is configured.
