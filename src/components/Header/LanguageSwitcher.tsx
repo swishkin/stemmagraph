@@ -15,7 +15,7 @@ export const LanguageSwitcher: React.FC = () => {
 
   return (
     <div
-      className="flex rounded-lg border border-gray-300 overflow-hidden"
+      className="flex rounded-lg border border-gray-300 dark:border-gray-700 overflow-hidden"
       role="group"
       aria-label={t('header.language')}
     >
@@ -28,7 +28,7 @@ export const LanguageSwitcher: React.FC = () => {
           className={`px-2 py-1.5 text-xs font-semibold uppercase transition-colors ${
             i18n.language === code
               ? 'bg-blue-600 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50'
+              : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
           }`}
         >
           {code}

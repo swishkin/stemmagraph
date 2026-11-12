@@ -25,20 +25,20 @@ export const MemberDetailSidebar: React.FC = () => {
 
   return (
     <>
-      <div className="w-80 bg-white border-l border-gray-200 p-6 overflow-y-auto">
+      <div className="w-80 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 p-6 overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Member Details</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Member Details</h2>
           <div className="flex items-center space-x-2">
             <button
               onClick={handleEdit}
-              className="p-2 rounded-md hover:bg-gray-100 text-gray-600 hover:text-gray-800"
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
               title="Edit"
             >
               <Edit className="w-4 h-4" />
             </button>
             <button
               onClick={handleClose}
-              className="p-2 rounded-md hover:bg-gray-100"
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <X className="w-5 h-5" />
             </button>
@@ -47,7 +47,7 @@ export const MemberDetailSidebar: React.FC = () => {
 
         {/* Profile Photo */}
         <div className="text-center mb-6">
-          <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden bg-gray-200">
+          <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800">
             {selectedMember.photoUrl ? (
               <img
                 src={selectedMember.photoUrl}
@@ -60,9 +60,9 @@ export const MemberDetailSidebar: React.FC = () => {
               </div>
             )}
           </div>
-          <h3 className="text-2xl font-bold text-gray-900">{selectedMember.name}</h3>
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedMember.name}</h3>
           {selectedMember.nickname && (
-            <p className="text-gray-600">"{selectedMember.nickname}"</p>
+            <p className="text-gray-600 dark:text-gray-400">"{selectedMember.nickname}"</p>
           )}
         </div>
 
@@ -71,8 +71,8 @@ export const MemberDetailSidebar: React.FC = () => {
           <div className="flex items-center space-x-3">
             <Calendar className="w-5 h-5 text-gray-400" />
             <div>
-              <p className="text-sm text-gray-600">Birth Date</p>
-              <p className="font-medium">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Birth Date</p>
+              <p className="font-medium text-gray-900 dark:text-white">
                 {new Date(selectedMember.birthDate).toLocaleDateString('en-US', {
                   day: 'numeric',
                   month: 'long',
@@ -85,8 +85,8 @@ export const MemberDetailSidebar: React.FC = () => {
           <div className="flex items-center space-x-3">
             <Calendar className="w-5 h-5 text-gray-400" />
             <div>
-              <p className="text-sm text-gray-600">Age</p>
-              <p className="font-medium">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Age</p>
+              <p className="font-medium text-gray-900 dark:text-white">
                 {calculateAge(selectedMember.birthDate, selectedMember.deathDate)} years
                 {!selectedMember.isAlive && ' (dec.)'}
               </p>
@@ -97,8 +97,8 @@ export const MemberDetailSidebar: React.FC = () => {
             <div className="flex items-center space-x-3">
               <MapPin className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm text-gray-600">Birth Place</p>
-                <p className="font-medium">{selectedMember.birthPlace}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Birth Place</p>
+                <p className="font-medium text-gray-900 dark:text-white">{selectedMember.birthPlace}</p>
               </div>
             </div>
           )}
@@ -107,8 +107,8 @@ export const MemberDetailSidebar: React.FC = () => {
             <div className="flex items-center space-x-3">
               <MapPin className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm text-gray-600">Current Location</p>
-                <p className="font-medium">{selectedMember.currentLocation}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Current Location</p>
+                <p className="font-medium text-gray-900 dark:text-white">{selectedMember.currentLocation}</p>
               </div>
             </div>
           )}
@@ -117,8 +117,8 @@ export const MemberDetailSidebar: React.FC = () => {
             <div className="flex items-center space-x-3">
               <Briefcase className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm text-gray-600">Profession</p>
-                <p className="font-medium">{selectedMember.profession}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Profession</p>
+                <p className="font-medium text-gray-900 dark:text-white">{selectedMember.profession}</p>
               </div>
             </div>
           )}
@@ -127,8 +127,8 @@ export const MemberDetailSidebar: React.FC = () => {
             <div className="flex items-center space-x-3">
               <GraduationCap className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm text-gray-600">Education</p>
-                <p className="font-medium">{selectedMember.education}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Education</p>
+                <p className="font-medium text-gray-900 dark:text-white">{selectedMember.education}</p>
               </div>
             </div>
           )}
@@ -136,8 +136,8 @@ export const MemberDetailSidebar: React.FC = () => {
           <div className="flex items-center space-x-3">
             <Heart className="w-5 h-5 text-gray-400" />
             <div>
-              <p className="text-sm text-gray-600">Marital Status</p>
-              <p className="font-medium">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Marital Status</p>
+              <p className="font-medium text-gray-900 dark:text-white">
                 {selectedMember.maritalStatus === 'married' && 'Married'}
                 {selectedMember.maritalStatus === 'single' && 'Single'}
                 {selectedMember.maritalStatus === 'divorced' && 'Divorced'}
@@ -150,18 +150,18 @@ export const MemberDetailSidebar: React.FC = () => {
         {/* Contact Information */}
         {(selectedMember.phone || selectedMember.email) && (
           <div className="mb-8">
-            <h4 className="text-lg font-semibold text-gray-900 mb-4">Contact</h4>
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Contact</h4>
             <div className="space-y-3">
               {selectedMember.phone && (
                 <div className="flex items-center space-x-3">
                   <Phone className="w-5 h-5 text-gray-400" />
-                  <span className="text-sm">{selectedMember.phone}</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">{selectedMember.phone}</span>
                 </div>
               )}
               {selectedMember.email && (
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-gray-400" />
-                  <span className="text-sm">{selectedMember.email}</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">{selectedMember.email}</span>
                 </div>
               )}
             </div>
@@ -191,7 +191,7 @@ export const MemberDetailSidebar: React.FC = () => {
             </button>
           )}
           
-          <button className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+          <button className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             Share Profile
           </button>
         </div>

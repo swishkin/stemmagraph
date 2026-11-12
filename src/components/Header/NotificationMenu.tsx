@@ -116,11 +116,11 @@ export const NotificationMenu: React.FC = () => {
     <div className="relative">
       <button
         onClick={toggleOpen}
-        className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         aria-label={t('notifications.ariaLabel', { count: unreadCount })}
         aria-expanded={isOpen}
       >
-        <Bell className="w-5 h-5 text-gray-600" />
+        <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
         {unreadCount > 0 && (
           <span
             className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center"
@@ -142,16 +142,16 @@ export const NotificationMenu: React.FC = () => {
             }}
             style={{ outline: 'none' }}
           />
-          <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-            <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100">
-              <p className="text-sm font-semibold text-gray-900">
+          <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100 dark:border-gray-800">
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">
                 {t('notifications.title')}
               </p>
               <div className="flex items-center space-x-1">
                 <button
                   onClick={loadWithSpinner}
                   disabled={isLoading}
-                  className="p-1.5 rounded-md hover:bg-gray-100 disabled:opacity-50 transition-colors"
+                  className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 transition-colors"
                   aria-label={t('notifications.refresh')}
                   title={t('notifications.refresh')}
                 >
@@ -162,7 +162,7 @@ export const NotificationMenu: React.FC = () => {
                 <button
                   onClick={() => void markAllRead()}
                   disabled={unreadCount === 0}
-                  className="p-1.5 rounded-md hover:bg-gray-100 disabled:opacity-50 transition-colors"
+                  className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 transition-colors"
                   aria-label={t('notifications.markAllRead')}
                   title={t('notifications.markAllRead')}
                 >
@@ -173,12 +173,12 @@ export const NotificationMenu: React.FC = () => {
 
             <div className="max-h-80 overflow-y-auto">
               {loadFailed && (
-                <p className="px-3 py-4 text-sm text-red-600">
+                <p className="px-3 py-4 text-sm text-red-600 dark:text-red-400">
                   {t('notifications.loadError')}
                 </p>
               )}
               {!loadFailed && notifications.length === 0 && (
-                <p className="px-3 py-4 text-sm text-gray-500">
+                <p className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
                   {t('notifications.empty')}
                 </p>
               )}
@@ -189,8 +189,10 @@ export const NotificationMenu: React.FC = () => {
                   <button
                     key={n.id}
                     onClick={() => void markRead(n)}
-                    className={`w-full text-left px-3 py-2.5 border-b border-gray-50 last:border-b-0 transition-colors ${
-                      isUnread ? 'bg-blue-50/60 hover:bg-blue-100/60' : 'hover:bg-gray-50'
+                    className={`w-full text-left px-3 py-2.5 border-b border-gray-50 dark:border-gray-800 last:border-b-0 transition-colors ${
+                      isUnread
+                        ? 'bg-blue-50/60 hover:bg-blue-100/60 dark:bg-blue-900/30 dark:hover:bg-blue-900/40'
+                        : 'hover:bg-gray-50 dark:hover:bg-gray-800'
                     }`}
                   >
                     <span className="flex items-start space-x-2">
@@ -203,12 +205,14 @@ export const NotificationMenu: React.FC = () => {
                       <span className="min-w-0">
                         <span
                           className={`block text-sm leading-snug ${
-                            isUnread ? 'font-medium text-gray-900' : 'text-gray-600'
+                            isUnread
+                              ? 'font-medium text-gray-900 dark:text-white'
+                              : 'text-gray-600 dark:text-gray-300'
                           }`}
                         >
                           {t(description.key, description.values)}
                         </span>
-                        <span className="block text-xs text-gray-400 mt-0.5">
+                        <span className="block text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                           {formatDate(n.createdAt, i18n.language)}
                         </span>
                       </span>

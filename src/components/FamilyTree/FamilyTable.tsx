@@ -55,7 +55,7 @@ const SortableHeader: React.FC<SortableHeaderProps> = ({
   onSort
 }) => (
   <th 
-    className={`px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors ${className}`}
+    className={`px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors ${className}`}
     onClick={() => onSort(field)}
   >
     <div className="flex items-center space-x-1">
@@ -106,12 +106,12 @@ const TableRow: React.FC<TableRowProps> = ({
     <tr
       key={member.id}
       className={`h-16 transition-colors cursor-pointer ${
-        index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+        index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-800'
       } ${
-        isSelected ? 'bg-blue-100' : ''
+        isSelected ? 'bg-blue-100 dark:bg-blue-900/40' : ''
       } ${
-        isHighlighted ? 'bg-blue-200 ring-2 ring-blue-400' : ''
-      } hover:bg-blue-50`}
+        isHighlighted ? 'bg-blue-200 dark:bg-blue-900/60 ring-2 ring-blue-400' : ''
+      } hover:bg-blue-50 dark:hover:bg-blue-900/30`}
       onClick={() => onRowClick(member)}
     >
       <td className="px-4 py-3">
@@ -122,7 +122,7 @@ const TableRow: React.FC<TableRowProps> = ({
             e.stopPropagation();
             onRowSelect(member.id);
           }}
-          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          className="rounded border-gray-300 dark:border-gray-700 text-blue-600 focus:ring-blue-500"
         />
       </td>
 
@@ -151,11 +151,11 @@ const TableRow: React.FC<TableRowProps> = ({
       {visibleColumns.name && (
         <td className="px-4 py-3">
           <div>
-            <div className="text-sm font-bold text-gray-900">
+            <div className="text-sm font-bold text-gray-900 dark:text-white">
               {highlightText(member.name, searchQuery)}
             </div>
             {member.nickname && (
-              <div className="text-xs text-gray-500 italic">
+              <div className="text-xs text-gray-500 dark:text-gray-400 italic">
                 "{highlightText(member.nickname, searchQuery)}"
               </div>
             )}
@@ -167,7 +167,7 @@ const TableRow: React.FC<TableRowProps> = ({
         <td className="px-4 py-3">
           <div className="flex items-center space-x-1">
             <Users className="w-3 h-3 text-gray-400" />
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-gray-700 dark:text-gray-300">
               {getRelationshipText(member)}
             </span>
           </div>
@@ -176,7 +176,7 @@ const TableRow: React.FC<TableRowProps> = ({
 
       {visibleColumns.birth && (
         <td className="px-4 py-3">
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-gray-700 dark:text-gray-300">
             {formatDateWithLocale(member.birthDate, i18n.language)}
           </div>
         </td>
@@ -185,7 +185,7 @@ const TableRow: React.FC<TableRowProps> = ({
       {visibleColumns.age && (
         <td className="px-4 py-3 text-right">
           <div className={`text-sm font-medium ${
-            member.isAlive ? 'text-gray-900' : 'text-gray-500'
+            member.isAlive ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'
           }`}>
             {t('table.ageYears', { age })} {!member.isAlive && '✝'}
           </div>
@@ -244,7 +244,7 @@ const TableRow: React.FC<TableRowProps> = ({
                 e.stopPropagation();
                 onMemberSelect(member);
               }}
-              className="p-1 text-gray-600 hover:bg-gray-100 rounded transition-colors"
+              className="p-1 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
               title={t('table.detail')}
             >
               <Info className="w-3 h-3" />
@@ -444,10 +444,10 @@ export const FamilyTable: React.FC = () => {
     <div className="flex-1 flex flex-col">
       {/* Bulk Actions Bar */}
       {selectedRows.size > 0 && (
-        <div className="bg-blue-50 border-b border-blue-200 px-6 py-3">
+        <div className="bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800 px-6 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-blue-900">
+              <span className="text-sm font-medium text-blue-900 dark:text-blue-300">
                 {t('table.selected', { count: selectedRows.size })}
               </span>
               <div className="flex items-center space-x-2">
@@ -471,7 +471,7 @@ export const FamilyTable: React.FC = () => {
             </div>
             <button 
               onClick={() => setSelectedRows(new Set())}
-              className="text-sm text-blue-600 hover:text-blue-800"
+              className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
             >
               {t('table.clearSelection')}
             </button>
@@ -480,14 +480,14 @@ export const FamilyTable: React.FC = () => {
       )}
 
       {/* Table Controls */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               {t('table.membersTitle', { count: filteredMembers.length })}
             </h3>
             {searchQuery && (
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 {t('table.searchResultsFor', { query: searchQuery })}
               </div>
             )}
@@ -495,11 +495,11 @@ export const FamilyTable: React.FC = () => {
 
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600">{t('table.show')}</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">{t('table.show')}</span>
               <select
                 value={itemsPerPage}
                 onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
-                className="px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
               >
                 <option value={25}>25</option>
                 <option value={50}>50</option>
@@ -510,7 +510,7 @@ export const FamilyTable: React.FC = () => {
 
             <button
               onClick={() => setShowColumnSettings(!showColumnSettings)}
-              className="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+              className="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <Settings className="w-4 h-4" />
               <span className="text-sm">{t('table.columnsButton')}</span>
@@ -521,18 +521,18 @@ export const FamilyTable: React.FC = () => {
 
       {/* Column Settings */}
       {showColumnSettings && (
-        <div className="bg-gray-50 border-b border-gray-200 px-6 py-4">
+        <div className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
           <div className="flex items-center space-x-6">
-            <span className="text-sm font-medium text-gray-700">{t('table.showColumns')}</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('table.showColumns')}</span>
             {Object.entries(visibleColumns).map(([key, visible]) => (
               <label key={key} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   checked={visible}
                   onChange={(e) => setVisibleColumns(prev => ({ ...prev, [key]: e.target.checked }))}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-gray-300 dark:border-gray-700 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-600 capitalize">
+                <span className="text-sm text-gray-600 dark:text-gray-400 capitalize">
                   {getColumnLabel(key, t)}
                 </span>
               </label>
@@ -543,20 +543,20 @@ export const FamilyTable: React.FC = () => {
 
       {/* Table */}
       <div ref={tableRef} className="flex-1 overflow-auto">
-        <table className="min-w-full bg-white">
-          <thead className="bg-gray-50 sticky top-0 z-10">
+        <table className="min-w-full bg-white dark:bg-gray-900">
+          <thead className="bg-gray-50 dark:bg-gray-900 sticky top-0 z-10">
             <tr>
               <th className="px-4 py-3 w-10">
                 <input
                   type="checkbox"
                   checked={selectedRows.size === currentMembers.length && currentMembers.length > 0}
                   onChange={handleSelectAll}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-gray-300 dark:border-gray-700 text-blue-600 focus:ring-blue-500"
                 />
               </th>
               
               {visibleColumns.photo && (
-                <th className="px-4 py-3 w-16 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                <th className="px-4 py-3 w-16 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                   {t('table.columns.photo')}
                 </th>
               )}
@@ -573,7 +573,7 @@ export const FamilyTable: React.FC = () => {
               )}
               
               {visibleColumns.relationship && (
-                <th className="px-4 py-3 w-40 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                <th className="px-4 py-3 w-40 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                   {t('table.columns.relationship')}
                 </th>
               )}
@@ -601,7 +601,7 @@ export const FamilyTable: React.FC = () => {
               )}
               
               {visibleColumns.status && (
-                <th className="px-4 py-3 w-24 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
+                <th className="px-4 py-3 w-24 text-center text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                   {t('table.columns.status')}
                 </th>
               )}
@@ -618,7 +618,7 @@ export const FamilyTable: React.FC = () => {
               )}
               
               {visibleColumns.contact && (
-                <th className="px-4 py-3 w-28 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
+                <th className="px-4 py-3 w-28 text-center text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                   {t('table.columns.contact')}
                 </th>
               )}
@@ -697,7 +697,7 @@ export const FamilyTable: React.FC = () => {
 
         {/* Empty State */}
         {filteredMembers.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+          <div className="flex flex-col items-center justify-center py-16 text-gray-500 dark:text-gray-400">
             <Filter className="w-12 h-12 mb-4 text-gray-300" />
             <h3 className="text-lg font-medium mb-2">{t('table.noMembers')}</h3>
             <p className="text-sm text-center">
@@ -711,7 +711,7 @@ export const FamilyTable: React.FC = () => {
       {itemsPerPage !== -1 && totalPages > 1 && (
         <div className="bg-white border-t border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-700">
+            <div className="text-sm text-gray-700 dark:text-gray-300">
               Showing {startIndex + 1}-{Math.min(endIndex, filteredMembers.length)} of {filteredMembers.length} members
             </div>
             

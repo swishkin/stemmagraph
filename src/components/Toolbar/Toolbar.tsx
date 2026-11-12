@@ -26,14 +26,14 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onBackToDashboard }) => {
   };
 
   return (
-    <div className="bg-white border-b border-gray-200 px-4 py-3">
+    <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-6">
           {/* Back to Dashboard Button */}
           {onBackToDashboard && (
             <button
               onClick={onBackToDashboard}
-              className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
+              className="flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>{t('toolbar.dashboard')}</span>
@@ -42,39 +42,39 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onBackToDashboard }) => {
 
           {/* Divider */}
           {onBackToDashboard && (
-            <div className="h-6 w-px bg-gray-300" />
+            <div className="h-6 w-px bg-gray-300 dark:bg-gray-700" />
           )}
 
           {/* View Mode */}
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-gray-700">{t('toolbar.view')}</span>
-            <div className="flex rounded-lg border border-gray-300">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('toolbar.view')}</span>
+            <div className="flex rounded-lg border border-gray-300 dark:border-gray-700">
               <button
                 onClick={() => handleViewChange('tree')}
                 className={`px-3 py-1.5 text-sm rounded-l-lg transition-colors ${
                   viewMode.type === 'tree'
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                    : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                 }`}
               >
                 {t('toolbar.viewMode.tree')}
               </button>
               <button
                 onClick={() => handleViewChange('card')}
-                className={`px-3 py-1.5 text-sm border-l border-gray-300 transition-colors ${
+                className={`px-3 py-1.5 text-sm border-l border-gray-300 dark:border-gray-700 transition-colors ${
                   viewMode.type === 'card'
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                    : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                 }`}
               >
                 {t('toolbar.viewMode.card')}
               </button>
               <button
                 onClick={() => handleViewChange('list')}
-                className={`px-3 py-1.5 text-sm rounded-r-lg border-l border-gray-300 transition-colors ${
+                className={`px-3 py-1.5 text-sm rounded-r-lg border-l border-gray-300 dark:border-gray-700 transition-colors ${
                   viewMode.type === 'list'
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                    : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                 }`}
               >
                 {t('toolbar.viewMode.list')}
@@ -85,13 +85,13 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onBackToDashboard }) => {
           {/* Edit Mode Toggle - Only for Tree View */}
           {viewMode.type === 'tree' && (
             <div className="flex items-center space-x-2">
-              <span className="text-sm font-medium text-gray-700">{t('toolbar.mode')}</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('toolbar.mode')}</span>
               <button
                 onClick={handleEditModeToggle}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 transition-all duration-200 ${
                   editMode
                     ? 'bg-blue-600 border-blue-600 text-white shadow-md'
-                    : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                    : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                 }`}
               >
                 {editMode ? (
@@ -114,9 +114,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onBackToDashboard }) => {
 
           {/* Filter */}
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-gray-700">{t('toolbar.filter')}</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('toolbar.filter')}</span>
             <select
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
               value={viewMode.selectedGeneration ?? ''}
               onChange={(e) => setViewMode({
                 selectedGeneration: e.target.value ? parseInt(e.target.value) : null
@@ -134,7 +134,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onBackToDashboard }) => {
                 type="checkbox"
                 checked={viewMode.showAlive}
                 onChange={(e) => setViewMode({ showAlive: e.target.checked })}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 dark:border-gray-700 text-blue-600 focus:ring-blue-500"
               />
               <span>{t('toolbar.living')}</span>
             </label>
@@ -144,7 +144,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onBackToDashboard }) => {
                 type="checkbox"
                 checked={viewMode.showDeceased}
                 onChange={(e) => setViewMode({ showDeceased: e.target.checked })}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 dark:border-gray-700 text-blue-600 focus:ring-blue-500"
               />
               <span>{t('toolbar.deceased')}</span>
             </label>
@@ -175,15 +175,15 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onBackToDashboard }) => {
 
       {/* Edit Mode Info Bar */}
       {editMode && (
-        <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Edit3 className="w-4 h-4 text-blue-600" />
-              <span className="text-sm font-medium text-blue-800">
+              <span className="text-sm font-medium text-blue-800 dark:text-blue-300">
                 {t('toolbar.editActive')}
               </span>
             </div>
-            <div className="text-xs text-blue-600">
+            <div className="text-xs text-blue-600 dark:text-blue-400">
               {t('toolbar.editTip')}
             </div>
           </div>

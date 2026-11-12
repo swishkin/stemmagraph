@@ -43,31 +43,31 @@ export const Dashboard: React.FC = () => {
     <button
       type="button"
       onClick={handleCreateTree}
-      className="group relative bg-white rounded-xl border-2 border-dashed transition-all duration-200 h-48 flex flex-col items-center justify-center cursor-pointer border-gray-300 hover:border-green-500 hover:bg-green-50"
+      className="group relative bg-white dark:bg-gray-900 rounded-xl border-2 border-dashed transition-all duration-200 h-48 flex flex-col items-center justify-center cursor-pointer border-gray-300 dark:border-gray-700 hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20"
       aria-label={t('dashboard.createNew')}
     >
-      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3 group-hover:bg-green-200 transition-colors">
+      <div className="w-12 h-12 bg-green-100 dark:bg-green-900/40 rounded-full flex items-center justify-center mb-3 group-hover:bg-green-200 dark:group-hover:bg-green-900/60 transition-colors">
         <Plus className="w-6 h-6 text-green-600" />
       </div>
-      <h3 className="font-semibold text-gray-900 mb-1">{t('dashboard.createNew')}</h3>
-      <p className="text-sm text-gray-500 text-center px-4">
+      <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('dashboard.createNew')}</h3>
+      <p className="text-sm text-gray-500 dark:text-gray-400 text-center px-4">
         {t('dashboard.createNewDesc')}
       </p>
     </button>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50" data-testid="dashboard">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950" data-testid="dashboard">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
+      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2">
               <TreePine className="w-8 h-8 text-green-600" />
-              <h1 className="text-2xl font-bold text-gray-900">{t('app.brand')}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('app.brand')}</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-6 ml-8">
-              <button className="text-blue-600 font-medium border-b-2 border-blue-600 pb-1">
+              <button className="text-blue-600 dark:text-blue-400 font-medium border-b-2 border-blue-600 pb-1">
                 {t('header.nav.dashboard')}
               </button>
             </nav>
@@ -75,13 +75,13 @@ export const Dashboard: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             {/* View Toggle */}
-            <div className="flex items-center bg-gray-100 rounded-lg p-1">
+            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('card')}
                 className={`p-2 rounded-md transition-colors ${
                   viewMode === 'card' 
-                    ? 'bg-white text-gray-900 shadow-xs' 
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                 }`}
                 title={t('dashboard.cardView')}
               >
@@ -91,8 +91,8 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setViewMode('list')}
                 className={`p-2 rounded-md transition-colors ${
                   viewMode === 'list' 
-                    ? 'bg-white text-gray-900 shadow-xs' 
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                 }`}
                 title={t('dashboard.listView')}
               >
@@ -107,13 +107,13 @@ export const Dashboard: React.FC = () => {
       </header>
 
       {/* Status Bar */}
-      <div className="px-6 py-3 border-b bg-blue-50 border-blue-200">
+      <div className="px-6 py-3 border-b bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
         <div className="flex items-center space-x-4">
-          <span className="font-medium text-blue-800">
+          <span className="font-medium text-blue-800 dark:text-blue-300">
             {t('dashboard.treeCount', { count: familyTrees.length })}
           </span>
-          <span className="text-blue-700">•</span>
-          <span className="text-blue-700">{t('dashboard.memberCount', { count: currentMemberCount })}</span>
+          <span className="text-blue-700 dark:text-blue-400">•</span>
+          <span className="text-blue-700 dark:text-blue-400">{t('dashboard.memberCount', { count: currentMemberCount })}</span>
         </div>
       </div>
 
@@ -123,8 +123,8 @@ export const Dashboard: React.FC = () => {
           {/* Header Section */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">{t('dashboard.familyTreesTitle')}</h2>
-              <p className="text-gray-600 mt-1">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">{t('dashboard.familyTreesTitle')}</h2>
+              <p className="text-gray-600 dark:text-gray-400 mt-1">
                 {t('dashboard.familyTreesSubtitle')}
               </p>
             </div>
@@ -141,15 +141,15 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Section tabs: family trees vs activity feed (P2-6) */}
-          <div className="flex items-center space-x-1 mb-6 border-b border-gray-200" role="tablist" aria-label={t('activityFeed.tab')}>
+          <div className="flex items-center space-x-1 mb-6 border-b border-gray-200 dark:border-gray-800" role="tablist" aria-label={t('activityFeed.tab')}>
             <button
               role="tab"
               aria-selected={activeTab === 'trees'}
               onClick={() => setActiveTab('trees')}
               className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
                 activeTab === 'trees'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-900'
+                  ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
               {t('dashboard.familyTreesTitle')}
@@ -160,8 +160,8 @@ export const Dashboard: React.FC = () => {
               onClick={() => setActiveTab('activity')}
               className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
                 activeTab === 'activity'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-900'
+                  ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
               {t('activityFeed.tab')}
@@ -180,7 +180,7 @@ export const Dashboard: React.FC = () => {
               {familyTrees.map((tree) => (
                 <div
                   key={tree.id}
-                  className="group bg-white rounded-xl shadow-xs border border-gray-200 hover:shadow-lg transition-all duration-200 overflow-hidden"
+                  className="group bg-white dark:bg-gray-900 rounded-xl shadow-xs border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-200 overflow-hidden"
                 >
                   {/* Thumbnail */}
                   <div className="h-24 bg-linear-to-br from-blue-500 to-green-500 relative">
@@ -191,18 +191,18 @@ export const Dashboard: React.FC = () => {
 
                   {/* Content */}
                   <div className="p-4">
-                    <h3 className="font-bold text-gray-900 text-lg mb-2 truncate">
+                    <h3 className="font-bold text-gray-900 dark:text-white text-lg mb-2 truncate">
                       {tree.name}
                     </h3>
                     
                     <div className="space-y-2 mb-4">
-                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                      <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                         <Users className="w-4 h-4" />
                         <span>
                           {t('dashboard.members', { count: tree.memberCount })} • {t('dashboard.generations', { count: tree.generationCount })}
                         </span>
                       </div>
-                      <div className="flex items-center space-x-2 text-sm text-gray-500">
+                      <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                         <Calendar className="w-4 h-4" />
                         <span>{t('dashboard.updated', { date: formatDate(tree.lastUpdated) })}</span>
                       </div>
@@ -219,20 +219,20 @@ export const Dashboard: React.FC = () => {
                       {(tree.role === 'owner' || tree.role === 'editor') && (
                         <button
                           onClick={() => setReviewTreeId(tree.id)}
-                          className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                          className="p-2 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                           title={t('changeReview.open')}
                           aria-label={t('changeReview.open')}
                         >
-                          <FileDiff className="w-4 h-4 text-gray-600" />
+                          <FileDiff className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                         </button>
                       )}
                       <button
                         onClick={() => setSharingTreeId(tree.id)}
-                        className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="p-2 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                         title={t('invitePanel.open')}
                         aria-label={t('invitePanel.open')}
                       >
-                        <Settings className="w-4 h-4 text-gray-600" />
+                        <Settings className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                       </button>
                     </div>
                   </div>
@@ -241,40 +241,40 @@ export const Dashboard: React.FC = () => {
             </div>
           ) : (
             /* List View */
-            <div className="bg-white rounded-xl shadow-xs border border-gray-200 overflow-hidden">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xs border border-gray-200 dark:border-gray-800 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-200">
+                  <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
                     <tr>
-                      <th className="text-left py-4 px-6 font-semibold text-gray-900">{t('dashboard.table.name')}</th>
-                      <th className="text-left py-4 px-6 font-semibold text-gray-900">{t('dashboard.table.members')}</th>
-                      <th className="text-left py-4 px-6 font-semibold text-gray-900">{t('dashboard.table.generations')}</th>
-                      <th className="text-left py-4 px-6 font-semibold text-gray-900">{t('dashboard.table.lastUpdated')}</th>
-                      <th className="text-center py-4 px-6 font-semibold text-gray-900">{t('dashboard.table.actions')}</th>
+                      <th className="text-left py-4 px-6 font-semibold text-gray-900 dark:text-white">{t('dashboard.table.name')}</th>
+                      <th className="text-left py-4 px-6 font-semibold text-gray-900 dark:text-white">{t('dashboard.table.members')}</th>
+                      <th className="text-left py-4 px-6 font-semibold text-gray-900 dark:text-white">{t('dashboard.table.generations')}</th>
+                      <th className="text-left py-4 px-6 font-semibold text-gray-900 dark:text-white">{t('dashboard.table.lastUpdated')}</th>
+                      <th className="text-center py-4 px-6 font-semibold text-gray-900 dark:text-white">{t('dashboard.table.actions')}</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
                     {familyTrees.map((tree) => (
-                      <tr key={tree.id} className="hover:bg-gray-50 transition-colors">
+                      <tr key={tree.id} className="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                         <td className="py-4 px-6">
                           <div className="flex items-center space-x-3">
                             <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-green-500 rounded-lg flex items-center justify-center">
                               <TreePine className="w-5 h-5 text-white" />
                             </div>
                             <div>
-                              <h3 className="font-semibold text-gray-900">{tree.name}</h3>
-                              <p className="text-sm text-gray-500">{t('dashboard.created', { date: formatDate(tree.createdAt) })}</p>
+                              <h3 className="font-semibold text-gray-900 dark:text-white">{tree.name}</h3>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{t('dashboard.created', { date: formatDate(tree.createdAt) })}</p>
                             </div>
                           </div>
                         </td>
                         <td className="py-4 px-6">
-                          <span className="font-medium text-gray-900">{tree.memberCount}</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{tree.memberCount}</span>
                         </td>
                         <td className="py-4 px-6">
-                          <span className="font-medium text-gray-900">{tree.generationCount}</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{tree.generationCount}</span>
                         </td>
                         <td className="py-4 px-6">
-                          <span className="text-gray-600">{formatDate(tree.lastUpdated)}</span>
+                          <span className="text-gray-600 dark:text-gray-400">{formatDate(tree.lastUpdated)}</span>
                         </td>
                         <td className="py-4 px-6">
                           <div className="flex items-center justify-center space-x-2">
@@ -287,20 +287,20 @@ export const Dashboard: React.FC = () => {
                             {(tree.role === 'owner' || tree.role === 'editor') && (
                               <button
                                 onClick={() => setReviewTreeId(tree.id)}
-                                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                className="p-2 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                                 title={t('changeReview.open')}
                                 aria-label={t('changeReview.open')}
                               >
-                                <FileDiff className="w-4 h-4 text-gray-600" />
+                                <FileDiff className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                               </button>
                             )}
                             <button
                               onClick={() => setSharingTreeId(tree.id)}
-                              className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                              className="p-2 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                               title={t('invitePanel.open')}
                               aria-label={t('invitePanel.open')}
                             >
-                              <Settings className="w-4 h-4 text-gray-600" />
+                              <Settings className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                             </button>
                           </div>
                         </td>
@@ -313,8 +313,8 @@ export const Dashboard: React.FC = () => {
               {familyTrees.length === 0 && (
                 <div className="text-center py-12">
                   <TreePine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('dashboard.emptyTitle')}</h3>
-                  <p className="text-gray-500 mb-6">{t('dashboard.emptyDesc')}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{t('dashboard.emptyTitle')}</h3>
+                  <p className="text-gray-500 dark:text-gray-400 mb-6">{t('dashboard.emptyDesc')}</p>
                   <button
                     onClick={handleCreateTree}
                     className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"

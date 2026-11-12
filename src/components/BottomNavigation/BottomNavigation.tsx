@@ -13,16 +13,16 @@ export const BottomNavigation: React.FC = () => {
 
   return (
     <>
-      <div className="bg-white border-t border-gray-200 px-4 py-3">
+      <div className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Generation Tabs */}
           <div className="flex items-center space-x-1">
-            <span className="text-sm font-medium text-gray-700 mr-3">{t('bottomNav.generation')}</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mr-3">{t('bottomNav.generation')}</span>
             <div className="flex space-x-1">
               {generations.map(gen => (
                 <button
                   key={gen}
-                  className="px-3 py-1.5 text-sm rounded-md hover:bg-gray-100 transition-colors"
+                  className="px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   {gen}
                 </button>
@@ -40,17 +40,17 @@ export const BottomNavigation: React.FC = () => {
               <span>{t('bottomNav.addMember')}</span>
             </button>
             
-            <button className="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+            <button className="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
               <Download className="w-4 h-4" />
               <span>{t('bottomNav.export')}</span>
             </button>
             
-            <button className="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+            <button className="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
               <Printer className="w-4 h-4" />
               <span>{t('bottomNav.print')}</span>
             </button>
             
-            <button className="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+            <button className="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
               <Share2 className="w-4 h-4" />
               <span>{t('bottomNav.share')}</span>
             </button>

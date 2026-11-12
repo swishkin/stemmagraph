@@ -5,12 +5,26 @@ import { useTranslation } from 'react-i18next';
 import { getAccountAdminApi } from '../../lib/adapters';
 import { isAdminUser } from '../../lib/account-states/adminView';
 import { AdminPanel } from '../Admin/AdminPanel';
+import { ProfileModal } from './ProfileModal';
+import { SettingsModal } from './SettingsModal';
+import { resolveTheme, setTheme, THEME_STORAGE_KEY, type AppTheme } from '../../lib/theme';
 
 export const UserMenu: React.FC = () => {
   const { user, logout } = useAuthStore();
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  // Current theme for the Settings modal; the actual application to
+  // <html> + persistence happens in lib/theme on every change.
+  const [theme, setThemeState] = useState<AppTheme>(() => {
+    try {
+      return resolveTheme(window.localStorage.getItem(THEME_STORAGE_KEY));
+    } catch {
+      return 'light';
+    }
+  });
 
   if (!user) return null;
 
@@ -28,11 +42,26 @@ export const UserMenu: React.FC = () => {
     setIsAdminOpen(true);
   };
 
+  const openProfile = () => {
+    setIsOpen(false);
+    setIsProfileOpen(true);
+  };
+
+  const openSettings = () => {
+    setIsOpen(false);
+    setIsSettingsOpen(true);
+  };
+
+  const handleThemeChange = (next: AppTheme) => {
+    setTheme(next); // persist + apply the class on <html>
+    setThemeState(next);
+  };
+
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       >
         <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
           {user.avatar ? (
@@ -67,24 +96,24 @@ export const UserMenu: React.FC = () => {
             }}
             style={{ outline: 'none' }}
           />
-          <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-            <div className="p-3 border-b border-gray-100">
-              <p className="text-sm font-medium text-gray-900">{user.name}</p>
-              <p className="text-xs text-gray-500">{user.email}</p>
+          <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20">
+            <div className="p-3 border-b border-gray-100 dark:border-gray-800">
+              <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
             </div>
             
             <div className="py-2">
               <button
-                onClick={() => setIsOpen(false)}
-                className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                onClick={openProfile}
+                className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
                 <User className="w-4 h-4" />
                 <span>{t('userMenu.profile')}</span>
               </button>
               
               <button
-                onClick={() => setIsOpen(false)}
-                className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                onClick={openSettings}
+                className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
                 <Settings className="w-4 h-4" />
                 <span>{t('userMenu.settings')}</span>
@@ -93,7 +122,7 @@ export const UserMenu: React.FC = () => {
               {canAdmin && (
                 <button
                   onClick={openAdminPanel}
-                  className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
                   <ShieldCheck className="w-4 h-4" />
                   <span>{t('userMenu.admin')}</span>
@@ -104,7 +133,7 @@ export const UserMenu: React.FC = () => {
               
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
                 <span>{t('userMenu.signOut')}</span>
@@ -115,6 +144,14 @@ export const UserMenu: React.FC = () => {
       )}
 
       {isAdminOpen && <AdminPanel onClose={() => setIsAdminOpen(false)} />}
+      {isProfileOpen && <ProfileModal onClose={() => setIsProfileOpen(false)} />}
+      {isSettingsOpen && (
+        <SettingsModal
+          onClose={() => setIsSettingsOpen(false)}
+          theme={theme}
+          onThemeChange={handleThemeChange}
+        />
+      )}
     </div>
   );
 };

@@ -86,7 +86,7 @@ function App() {
     <ProtectedRoute>
       {currentView === 'dashboard' && <Dashboard />}
       {currentView === 'family-tree' && (
-        <div className="h-screen flex flex-col bg-gray-50">
+        <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
           <Header onMenuToggle={handleMenuToggle} familyName={currentFamilyTreeName} />
 
           <Toolbar
