@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { Plus, Users, Calendar, Settings, List, Grid3X3, TreePine, FileDiff } from 'lucide-react';
 import { CreateFamilyTreeModal } from './CreateFamilyTreeModal';
+import { UserChrome } from '../Header/UserChrome';
 import { FeedPanel } from './FeedPanel';
 import { InvitationsPanel } from './InvitationsPanel';
 import { ChangeReviewPanel } from './ChangeReviewPanel';
 import { DigestSettingsPanel } from '../DigestSettingsPanel';
-import { useAuthStore } from '../../store/authStore';
 import { useDashboardStore } from '../../store/dashboardStore';
 import { navigate } from '../../utils/routing';
 import { useTranslation } from 'react-i18next';
 import { formatDate as formatDateWithLocale } from '../../lib/i18n';
 
 export const Dashboard: React.FC = () => {
-  const { user } = useAuthStore();
   const { familyTrees, viewMode, setViewMode } = useDashboardStore();
   const { t, i18n } = useTranslation();
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -65,11 +64,11 @@ export const Dashboard: React.FC = () => {
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2">
               <TreePine className="w-8 h-8 text-green-600" />
-              <h1 className="text-2xl font-bold text-gray-900">FamilyTree</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{t('app.brand')}</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-6 ml-8">
               <button className="text-blue-600 font-medium border-b-2 border-blue-600 pb-1">
-                Dashboard
+                {t('header.nav.dashboard')}
               </button>
             </nav>
           </div>
@@ -101,22 +100,8 @@ export const Dashboard: React.FC = () => {
               </button>
             </div>
 
-            {/* User Menu */}
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
-                {user?.avatar ? (
-                  <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-blue-500 text-white text-sm font-medium">
-                    {user?.name.charAt(0)}
-                  </div>
-                )}
-              </div>
-              <div className="hidden md:block">
-                <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                <p className="text-xs text-gray-500">{user?.email}</p>
-              </div>
-            </div>
+            {/* Global chrome: language, notifications, user menu */}
+            <UserChrome />
           </div>
         </div>
       </header>

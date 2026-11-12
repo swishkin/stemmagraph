@@ -57,6 +57,14 @@
     "previous": "Sebelumnya",
     "next": "Berikutnya"
   },
+  "memberCard": {
+    "editProfile": "Edit Profil",
+    "addChild": "Tambah Anak",
+    "shareProfile": "Bagikan Profil"
+  },
+  "contextMenu": {
+    "close": "Tutup menu konteks"
+  },
   "relationship": {
     "selectType": "Pilih jenis hubungan:",
     "close": "Tutup modal",

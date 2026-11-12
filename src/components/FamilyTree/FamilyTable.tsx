@@ -448,24 +448,24 @@ export const FamilyTable: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <span className="text-sm font-medium text-blue-900">
-                {selectedRows.size} anggota dipilih
+                {t('table.selected', { count: selectedRows.size })}
               </span>
               <div className="flex items-center space-x-2">
                 <button className="flex items-center space-x-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors">
                   <Download className="w-4 h-4" />
-                  <span>Export</span>
+                  <span>{t('table.export')}</span>
                 </button>
                 <button className="flex items-center space-x-1 px-3 py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition-colors">
                   <MessageSquare className="w-4 h-4" />
-                  <span>Kirim Pesan</span>
+                  <span>{t('table.sendMessage')}</span>
                 </button>
                 <button className="flex items-center space-x-1 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700 transition-colors">
                   <Users className="w-4 h-4" />
-                  <span>Grup</span>
+                  <span>{t('table.group')}</span>
                 </button>
                 <button className="flex items-center space-x-1 px-3 py-1.5 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 transition-colors">
                   <Trash2 className="w-4 h-4" />
-                  <span>Delete</span>
+                  <span>{t('table.delete')}</span>
                 </button>
               </div>
             </div>
@@ -473,7 +473,7 @@ export const FamilyTable: React.FC = () => {
               onClick={() => setSelectedRows(new Set())}
               className="text-sm text-blue-600 hover:text-blue-800"
             >
-              Batal Pilih
+              {t('table.clearSelection')}
             </button>
           </div>
         </div>
@@ -557,7 +557,7 @@ export const FamilyTable: React.FC = () => {
               
               {visibleColumns.photo && (
                 <th className="px-4 py-3 w-16 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Foto
+                  {t('table.columns.photo')}
                 </th>
               )}
               
@@ -568,13 +568,13 @@ export const FamilyTable: React.FC = () => {
                   sortConfig={sortConfig}
                   onSort={handleSort}
                 >
-                  Nama
+                  {t('table.columns.name')}
                 </SortableHeader>
               )}
               
               {visibleColumns.relationship && (
                 <th className="px-4 py-3 w-40 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Hubungan
+                  {t('table.columns.relationship')}
                 </th>
               )}
               
@@ -585,41 +585,41 @@ export const FamilyTable: React.FC = () => {
                   sortConfig={sortConfig}
                   onSort={handleSort}
                 >
-                  Lahir
+                  {t('table.columns.birth')}
                 </SortableHeader>
               )}
               
               {visibleColumns.age && (
                 <SortableHeader 
-                  field="age" 
+                  field="age"
                   className="w-20 text-right"
                   sortConfig={sortConfig}
                   onSort={handleSort}
                 >
-                  Age
+                  {t('table.columns.age')}
                 </SortableHeader>
               )}
               
               {visibleColumns.status && (
                 <th className="px-4 py-3 w-24 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Status
+                  {t('table.columns.status')}
                 </th>
               )}
               
               {visibleColumns.location && (
                 <SortableHeader 
-                  field="location" 
+                  field="location"
                   className="w-32"
                   sortConfig={sortConfig}
                   onSort={handleSort}
                 >
-                  Lokasi
+                  {t('table.columns.location')}
                 </SortableHeader>
               )}
               
               {visibleColumns.contact && (
                 <th className="px-4 py-3 w-28 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Kontak
+                  {t('table.columns.contact')}
                 </th>
               )}
             </tr>

@@ -57,6 +57,14 @@
     "previous": "Previous",
     "next": "Next"
   },
+  "memberCard": {
+    "editProfile": "Edit Profile",
+    "addChild": "Add Child",
+    "shareProfile": "Share Profile"
+  },
+  "contextMenu": {
+    "close": "Close context menu"
+  },
   "relationship": {
     "selectType": "Select relationship type:",
     "close": "Close modal",

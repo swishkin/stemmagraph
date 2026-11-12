@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { FamilyMember } from '../../types/family';
 import { useFamilyStore } from '../../store/familyStore';
 import { MapPin, Briefcase, Calendar, Phone, Mail, Edit, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { UnifiedMemberModal } from '../Forms/UnifiedMemberModal';
 
 interface GridMemberCardProps {
@@ -16,6 +17,7 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
   highlightText 
 }) => {
   const { setSelectedMember } = useFamilyStore();
+  const { t } = useTranslation('canvas');
   const [showContextMenu, setShowContextMenu] = useState(false);
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
   const [showEditModal, setShowEditModal] = useState(false);
@@ -242,7 +244,7 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
                 setShowContextMenu(false);
               }
             }}
-            aria-label="Close context menu"
+            aria-label={t('contextMenu.close')}
           />
           <div 
             className="fixed bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50 min-w-48"
@@ -256,7 +258,7 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
               className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
             >
               <Edit className="w-4 h-4" />
-              <span>Edit Profile</span>
+              <span>{t('memberCard.editProfile')}</span>
             </button>
 
             <button 
@@ -264,27 +266,27 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
               className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
             >
               <Plus className="w-4 h-4" />
-              <span>Add Child</span>
+              <span>{t('memberCard.addChild')}</span>
             </button>
             
             {member.phone && (
               <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2">
                 <Phone className="w-4 h-4" />
-                <span>WhatsApp</span>
+                <span>{t('table.whatsapp')}</span>
               </button>
             )}
             
             {member.email && (
               <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2">
                 <Mail className="w-4 h-4" />
-                <span>Email</span>
+                <span>{t('table.email')}</span>
               </button>
             )}
             
             <hr className="my-2" />
             
             <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors">
-              Share Profil
+              {t('memberCard.shareProfile')}
             </button>
           </div>
         </>
