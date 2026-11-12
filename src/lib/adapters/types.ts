@@ -350,6 +350,30 @@ export interface DigestApi {
   updateDigestPreferences(optIn: boolean): Promise<{ optIn: boolean }>;
 }
 
+// ─── Self-service account (profile, password, deletion) ─────────
+
+/** Fields a user may update on their own account. */
+export interface ProfileUpdate {
+  name?: string;
+  familyName?: string | null;
+  avatar?: string | null;
+  email?: string;
+}
+
+export interface UserProfileApi {
+  /** PUT /users/me: updates the caller's own profile fields. */
+  updateProfile(updates: ProfileUpdate): Promise<AuthUser>;
+  /** PUT /users/me/password: verifies current, sets new. */
+  changePassword(currentPassword: string, newPassword: string): Promise<AuthUser>;
+  /**
+   * DELETE /users/me: deletes the caller's account. The password is
+   * re-verified by the server (401 INVALID_CREDENTIALS on mismatch);
+   * 409 (code OWNS_TREES) when the caller owns a tree. Memberships,
+   * invitations and notifications are removed by the server.
+   */
+  deleteAccount(password: string): Promise<void>;
+}
+
 // ─── Change review (P2-5, ADR 0009) ──────────────────────
 
 export type ChangeTargetTypeValue = 'member' | 'relationship';

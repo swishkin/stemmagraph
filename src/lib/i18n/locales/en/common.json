@@ -55,6 +55,40 @@
       "generic": "Import failed. Check the file and try again."
     }
   },
+  "profile": {
+    "close": "Close profile",
+    "title": "Your Account",
+    "unavailable": "Account management isn't available with the current data adapter.",
+    "sectionProfile": "Profile",
+    "name": "First name",
+    "familyName": "Family name",
+    "email": "Email",
+    "avatar": "Avatar URL",
+    "save": "Save changes",
+    "saveFailed": "Failed to save. Please try again.",
+    "saved": "Profile saved.",
+    "sectionPassword": "Password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "passwordMismatch": "New passwords do not match.",
+    "passwordChanged": "Password changed.",
+    "changePassword": "Change password",
+    "sectionDanger": "Danger zone",
+    "deleteWarning": "Deleting your account is permanent. Your membership in trees you don't own, the invitations you created, and your notifications will be removed. You must delete any trees you own first.",
+    "deletePasswordPlaceholder": "Type your password to confirm",
+    "deleteAccount": "Delete account",
+    "deleteFailed": "Failed to delete the account. Please try again."
+  },
+  "settings": {
+    "title": "Settings",
+    "close": "Close settings",
+    "appearance": "Appearance",
+    "light": "Light",
+    "dark": "Dark",
+    "language": "Language",
+    "scopeNote": "Theme and language are saved in this browser only."
+  },
   "toolbar": {
     "dashboard": "Dashboard",
     "unsavedConfirm": "You have unsaved changes. Are you sure you want to exit edit mode?",

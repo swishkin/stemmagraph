@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Class-based dark mode (v4): the `dark` class on <html> toggles all
+   dark: variants. The theme choice is managed in src/lib/theme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Native form controls follow the theme. */
+.dark {
+  color-scheme: dark;
+}
+
 /* ─── Preserve v3 defaults for minimal visual regression ─── */
 @layer base {
   /*

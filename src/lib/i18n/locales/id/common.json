@@ -55,6 +55,40 @@
       "generic": "Impor gagal. Periksa file lalu coba lagi."
     }
   },
+  "profile": {
+    "close": "Tutup profil",
+    "title": "Akun Anda",
+    "unavailable": "Manajemen akun tidak tersedia dengan adapter data ini.",
+    "sectionProfile": "Profil",
+    "name": "Nama",
+    "familyName": "Nama keluarga",
+    "email": "Email",
+    "avatar": "URL avatar",
+    "save": "Simpan perubahan",
+    "saveFailed": "Gagal menyimpan. Silakan coba lagi.",
+    "saved": "Profil disimpan.",
+    "sectionPassword": "Kata sandi",
+    "currentPassword": "Kata sandi saat ini",
+    "newPassword": "Kata sandi baru",
+    "confirmPassword": "Ulangi kata sandi baru",
+    "passwordMismatch": "Kata sandi baru tidak sama.",
+    "passwordChanged": "Kata sandi berhasil diubah.",
+    "changePassword": "Ubah kata sandi",
+    "sectionDanger": "Zona berbahaya",
+    "deleteWarning": "Menghapus akun bersifat permanen. Keanggotaan Anda pada pohon yang tidak Anda miliki, undangan yang Anda buat, dan notifikasi Anda akan dihapus. Hapus dulu pohon yang Anda miliki.",
+    "deletePasswordPlaceholder": "Ketik kata sandi untuk konfirmasi",
+    "deleteAccount": "Hapus akun",
+    "deleteFailed": "Gagal menghapus akun. Silakan coba lagi."
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "close": "Tutup pengaturan",
+    "appearance": "Tampilan",
+    "light": "Terang",
+    "dark": "Gelap",
+    "language": "Bahasa",
+    "scopeNote": "Tema dan bahasa disimpan di peramban ini saja."
+  },
   "toolbar": {
     "dashboard": "Dasbor",
     "unsavedConfirm": "Ada perubahan yang belum disimpan. Yakin ingin keluar dari mode edit?",

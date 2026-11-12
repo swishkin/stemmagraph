@@ -13,7 +13,7 @@
 //   VITE_SUPABASE_URL=https://xxx.supabase.co
 //   VITE_SUPABASE_ANON_KEY=eyJhbGciOi...
 
-import { DataAdapter, AccountAdminApi, InvitationAdminApi, ActivityFeedApi, GrowthMetricsApi, DigestApi, ChangeReviewApi } from './types';
+import { DataAdapter, AccountAdminApi, InvitationAdminApi, ActivityFeedApi, GrowthMetricsApi, DigestApi, UserProfileApi, ChangeReviewApi } from './types';
 import { MockAdapter } from './mock.adapter';
 import { RestAdapter } from './rest.adapter';
 import { SupabaseAdapter } from './supabase.adapter';
@@ -148,6 +148,15 @@ export function getDigestApi(): DigestApi | null {
 }
 
 /**
+ * Self-service account API (profile, password, deletion). REST adapter
+ * only: mock/supabase have no server-backed accounts.
+ */
+export function getUserProfileApi(): UserProfileApi | null {
+  const adapter = getAdapter();
+  return adapter instanceof RestAdapter ? adapter : null;
+}
+
+/**
  * Override adapter with a custom implementation (useful for testing).
  */
 export function setAdapter(adapter: DataAdapter): void {
@@ -193,6 +202,8 @@ export type {
   GrowthWeekMetrics,
   DigestApi,
   DigestPreview,
+  UserProfileApi,
+  ProfileUpdate,
   ChangeReviewApi,
   ChangeProposalRecord,
   CreateChangeProposalInput,

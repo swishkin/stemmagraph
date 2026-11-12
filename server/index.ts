@@ -366,6 +366,125 @@ app.get('/api/v1/auth/session', requireAuth, async (req: AuthenticatedRequest, r
 
 app.post('/api/v1/auth/logout', (_req, res) => res.status(204).send());
 
+// ─── Self-service account endpoints ───────────────────────
+// A user manages only their own account; every route here is scoped to
+// req.userId. Status and role stay owner-managed (admin routes below).
+
+// Update own profile: name, familyName, avatar, email.
+app.put('/api/v1/users/me', requireAuth, async (req: AuthenticatedRequest, res) => {
+  try {
+    const body = (req.body ?? {}) as {
+      name?: unknown; familyName?: unknown; avatar?: unknown; email?: unknown;
+    };
+    const data: Record<string, unknown> = {};
+
+    if (body.name !== undefined) {
+      const trimmed = String(body.name).trim();
+      if (!trimmed) return res.status(400).json({ code: 'VALIDATION_ERROR', message: 'name must not be empty' });
+      data.name = trimmed;
+    }
+    if (body.familyName !== undefined) {
+      const trimmed = body.familyName === null ? '' : String(body.familyName).trim();
+      data.familyName = trimmed || null;
+    }
+    if (body.avatar !== undefined) {
+      const trimmed = body.avatar === null ? '' : String(body.avatar).trim();
+      data.avatar = trimmed || null;
+    }
+    if (body.email !== undefined) {
+      const trimmed = String(body.email).trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+        return res.status(400).json({ code: 'VALIDATION_ERROR', message: 'email is not valid' });
+      }
+      const existing = await prisma.user.findUnique({ where: { email: trimmed } });
+      if (existing && existing.id !== req.userId) {
+        return res.status(409).json({ code: 'EMAIL_TAKEN', message: 'Email is already in use' });
+      }
+      data.email = trimmed;
+    }
+
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ code: 'VALIDATION_ERROR', message: 'No fields to update' });
+    }
+
+    const user = await prisma.user.update({ where: { id: req.userId! }, data });
+    res.json({ user: toPublicUser(user) });
+  } catch (e) {
+    res.status(500).json({ code: 'USER_ERROR', message: (e as Error).message });
+  }
+});
+
+// Change own password. The current JWT stays valid (session is not
+// revoked); other devices keep their tokens until they expire.
+app.put('/api/v1/users/me/password', requireAuth, async (req: AuthenticatedRequest, res) => {
+  try {
+    const { currentPassword, newPassword } = (req.body ?? {}) as {
+      currentPassword?: unknown; newPassword?: unknown;
+    };
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ code: 'VALIDATION_ERROR', message: 'currentPassword and newPassword are required' });
+    }
+    if (String(newPassword).length < 8) {
+      return res.status(400).json({ code: 'VALIDATION_ERROR', message: 'newPassword must be at least 8 characters' });
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: req.userId! } });
+    if (!user) return res.status(404).json({ code: 'NOT_FOUND', message: 'User not found' });
+
+    const valid = await bcrypt.compare(String(currentPassword), user.password);
+    if (!valid) {
+      return res.status(401).json({ code: 'INVALID_CREDENTIALS', message: 'Current password is incorrect' });
+    }
+
+    const passwordHash = await bcrypt.hash(String(newPassword), 12);
+    const updated = await prisma.user.update({ where: { id: user.id }, data: { password: passwordHash } });
+    res.json({ user: toPublicUser(updated) });
+  } catch (e) {
+    res.status(500).json({ code: 'USER_ERROR', message: (e as Error).message });
+  }
+});
+
+// Delete own account. Irreversible, so the password is re-verified
+// (a valid JWT alone is not enough). Ownership is held in TreeMember
+// (role "owner"), so a user who owns any tree must delete or disband
+// those trees first. Pending change proposals are rejected (the
+// proposer no longer exists); memberships, invitations, and
+// notifications cascade.
+app.delete('/api/v1/users/me', requireAuth, async (req: AuthenticatedRequest, res) => {
+  try {
+    const { password } = (req.body ?? {}) as { password?: unknown };
+    if (!password) {
+      return res.status(400).json({ code: 'VALIDATION_ERROR', message: 'password is required' });
+    }
+
+    const self = await prisma.user.findUnique({ where: { id: req.userId! } });
+    if (!self) return res.status(404).json({ code: 'NOT_FOUND', message: 'User not found' });
+
+    const valid = await bcrypt.compare(String(password), self.password);
+    if (!valid) {
+      return res.status(401).json({ code: 'INVALID_CREDENTIALS', message: 'Password is incorrect' });
+    }
+
+    const owned = await prisma.treeMember.findFirst({
+      where: { userId: req.userId!, role: 'owner' },
+      select: { treeId: true },
+    });
+    if (owned) {
+      return res.status(409).json({ code: 'OWNS_TREES', message: 'You own at least one tree; delete it first' });
+    }
+
+    await prisma.changeProposal.updateMany({
+      where: { proposerUserId: req.userId!, state: 'pending' },
+      data: { state: 'rejected', decisionNote: 'Proposer deleted their account' },
+    });
+
+    await prisma.user.delete({ where: { id: req.userId! } });
+    res.status(204).send();
+  } catch (e) {
+    res.status(500).json({ code: 'USER_ERROR', message: (e as Error).message });
+  }
+});
+
 // ─── Admin: Account Management (P2-1) ────────────────────
 // All routes require an active owner. The state machine and the
 // last-owner guard live in src/lib/account-states (pure, unit tested).

@@ -24,6 +24,7 @@
 import {
   DataAdapter,
   AuthSession,
+  AuthUser,
   AuthCredentials,
   RegisterInput,
   FamilyTreeRecord,
@@ -51,6 +52,8 @@ import {
   GrowthMetricsQueryOptions,
   DigestApi,
   DigestPreview,
+  UserProfileApi,
+  ProfileUpdate,
   ChangeReviewApi,
   ChangeProposalPage,
   ChangeProposalRecord,
@@ -73,7 +76,7 @@ interface RestAdapterOptions {
   onTokenRefresh?: () => Promise<string | null>;
 }
 
-export class RestAdapter implements DataAdapter, AccountAdminApi, InvitationAdminApi, ActivityFeedApi, GrowthMetricsApi, DigestApi, ChangeReviewApi {
+export class RestAdapter implements DataAdapter, AccountAdminApi, InvitationAdminApi, ActivityFeedApi, GrowthMetricsApi, DigestApi, UserProfileApi, ChangeReviewApi {
   readonly name = 'rest';
   readonly version = '1.0.0';
   readonly description = 'Generic REST API adapter (MySQL / PostgreSQL / etc.)';
@@ -418,6 +421,27 @@ export class RestAdapter implements DataAdapter, AccountAdminApi, InvitationAdmi
 
   async updateDigestPreferences(optIn: boolean): Promise<{ optIn: boolean }> {
     return this.request<{ optIn: boolean }>('PUT', '/digest/preferences', { optIn });
+  }
+
+  // ── Self-service account ─────────────────────────────────
+  // Pure routing: validation, uniqueness and ownership guards live in
+  // the server routes (PUT/DELETE /users/me).
+
+  async updateProfile(updates: ProfileUpdate): Promise<AuthUser> {
+    const res = await this.request<{ user: AuthUser }>('PUT', '/users/me', updates);
+    return res.user;
+  }
+
+  async changePassword(currentPassword: string, newPassword: string): Promise<AuthUser> {
+    const res = await this.request<{ user: AuthUser }>('PUT', '/users/me/password', {
+      currentPassword,
+      newPassword,
+    });
+    return res.user;
+  }
+
+  async deleteAccount(password: string): Promise<void> {
+    await this.request<null>('DELETE', '/users/me', { password });
   }
 
   // ── Change review (P2-5, ADR 0009) ─────────────────────
