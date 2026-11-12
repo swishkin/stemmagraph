@@ -367,8 +367,10 @@ export interface UserProfileApi {
   changePassword(currentPassword: string, newPassword: string): Promise<AuthUser>;
   /**
    * DELETE /users/me: deletes the caller's account. The password is
-   * re-verified by the server (401 INVALID_CREDENTIALS on mismatch);
-   * 409 (code OWNS_TREES) when the caller owns a tree. Memberships,
+   * re-verified by the server (401 INVALID_CREDENTIALS on mismatch).
+   * 409 codes: OWNS_TREES (caller owns a tree — delete it first) and
+   * INSTALLATION_OWNER (no role transfer exists in the app; an operator
+   * must promote another owner with scripts/seed-owner.mjs). Memberships,
    * invitations and notifications are removed by the server.
    */
   deleteAccount(password: string): Promise<void>;

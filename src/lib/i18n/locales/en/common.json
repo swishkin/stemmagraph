@@ -75,7 +75,7 @@
     "passwordChanged": "Password changed.",
     "changePassword": "Change password",
     "sectionDanger": "Danger zone",
-    "deleteWarning": "Deleting your account is permanent. Your membership in trees you don't own, the invitations you created, and your notifications will be removed. You must delete any trees you own first.",
+    "deleteWarning": "Deleting your account is permanent. Your membership in trees you don't own, the invitations you created, and your notifications will be removed. You must delete any trees you own first; owner accounts must be handed over by the server administrator before they can be deleted.",
     "deletePasswordPlaceholder": "Type your password to confirm",
     "deleteAccount": "Delete account",
     "deleteFailed": "Failed to delete the account. Please try again."

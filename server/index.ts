@@ -398,7 +398,7 @@ app.put('/api/v1/users/me', requireAuth, async (req: AuthenticatedRequest, res) 
       }
       const existing = await prisma.user.findUnique({ where: { email: trimmed } });
       if (existing && existing.id !== req.userId) {
-        return res.status(409).json({ code: 'EMAIL_TAKEN', message: 'Email is already in use' });
+        return res.status(409).json({ code: 'EMAIL_EXISTS', message: 'Email is already in use' });
       }
       data.email = trimmed;
     }
@@ -445,11 +445,18 @@ app.put('/api/v1/users/me/password', requireAuth, async (req: AuthenticatedReque
 });
 
 // Delete own account. Irreversible, so the password is re-verified
-// (a valid JWT alone is not enough). Ownership is held in TreeMember
-// (role "owner"), so a user who owns any tree must delete or disband
-// those trees first. Pending change proposals are rejected (the
-// proposer no longer exists); memberships, invitations, and
-// notifications cascade.
+// (a valid JWT alone is not enough). Two ownership guards:
+//   - installation owners (User.role "owner") cannot self-delete: there
+//     is no role-transfer endpoint, and deleting the last owner would
+//     leave the seeded tree unmanageable (it has no TreeMember owner
+//     row) and new registrations with no one left to approve them.
+//     Recovery: promote another account with scripts/seed-owner.mjs,
+//     then retry.
+//   - per-tree owners (TreeMember.role "owner") must delete those
+//     trees first, so no tree is left without an owner.
+// Pending change proposals are rejected with a note (the proposer no
+// longer exists); other proposals, memberships, invitations, and
+// notifications cascade via the schema.
 app.delete('/api/v1/users/me', requireAuth, async (req: AuthenticatedRequest, res) => {
   try {
     const { password } = (req.body ?? {}) as { password?: unknown };
@@ -463,6 +470,13 @@ app.delete('/api/v1/users/me', requireAuth, async (req: AuthenticatedRequest, re
     const valid = await bcrypt.compare(String(password), self.password);
     if (!valid) {
       return res.status(401).json({ code: 'INVALID_CREDENTIALS', message: 'Password is incorrect' });
+    }
+
+    if (self.role === 'owner') {
+      return res.status(409).json({
+        code: 'INSTALLATION_OWNER',
+        message: 'Owner accounts cannot be deleted from the app. Have another account promoted to owner first (scripts/seed-owner.mjs), then try again.',
+      });
     }
 
     const owned = await prisma.treeMember.findFirst({

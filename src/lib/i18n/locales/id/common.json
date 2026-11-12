@@ -75,7 +75,7 @@
     "passwordChanged": "Kata sandi berhasil diubah.",
     "changePassword": "Ubah kata sandi",
     "sectionDanger": "Zona berbahaya",
-    "deleteWarning": "Menghapus akun bersifat permanen. Keanggotaan Anda pada pohon yang tidak Anda miliki, undangan yang Anda buat, dan notifikasi Anda akan dihapus. Hapus dulu pohon yang Anda miliki.",
+    "deleteWarning": "Menghapus akun bersifat permanen. Keanggotaan Anda pada pohon yang tidak Anda miliki, undangan yang Anda buat, dan notifikasi Anda akan dihapus. Hapus dulu pohon yang Anda miliki; akun pemilik (owner) harus dialihkan oleh administrator server sebelum bisa dihapus.",
     "deletePasswordPlaceholder": "Ketik kata sandi untuk konfirmasi",
     "deleteAccount": "Hapus akun",
     "deleteFailed": "Gagal menghapus akun. Silakan coba lagi."
