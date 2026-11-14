@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Copy, Link2, QrCode, RefreshCw, Send, UserPlus, Users, X, AlertCircle, CheckCircle } from 'lucide-react';
 import QRCode from 'qrcode';
 import { useTranslation } from 'react-i18next';
-import { getInvitationAdminApi } from '../../lib/adapters';
+import { getAccountAdminApi, getInvitationAdminApi } from '../../lib/adapters';
 import type {
+  AdminAccount,
   CreatedInvitation,
   InvitationRecord,
   InvitationTypeValue,
@@ -42,6 +43,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
 }) => {
   const { t, i18n } = useTranslation();
   const invitationsApi = getInvitationAdminApi();
+  const accountsApi = getAccountAdminApi();
   const user = useAuthStore((state) => state.user);
 
   const [invitations, setInvitations] = useState<InvitationRecord[]>([]);
@@ -65,11 +67,18 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
   const [waPhone, setWaPhone] = useState('');
   const [isSharing, setIsSharing] = useState(false);
 
-  // Add-existing-user form state. Local only, like waPhone: the typed
+  // Add-existing-user form state. Local only, like waPhone: the chosen
   // email lives here until it is sent to the server (or the panel closes).
   const [addEmail, setAddEmail] = useState('');
   const [addRole, setAddRole] = useState<TreeRoleValue>('editor');
   const [isAdding, setIsAdding] = useState(false);
+
+  // Full account list for the add-existing-user dropdown. Non-null when the
+  // current user may list accounts (installation owner): the form then
+  // offers a themed dropdown of all users by default. Null (list fetch
+  // failed, e.g. a non-owner tree manager) falls back to the freeform
+  // email field, which the server still verifies.
+  const [accounts, setAccounts] = useState<AdminAccount[] | null>(null);
 
   // Pending role changes: membershipId -> chosen role. A select change only
   // updates this map; the server is touched exclusively by the Save button.
@@ -84,8 +93,26 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [qrFailed, setQrFailed] = useState(false);
 
+    // Fetch the account list for the add-existing-user dropdown. A null
+  // result (fetch failed, e.g. a non-owner tree manager) makes the form
+  // fall back to the freeform email field; the server verifies it either
+  // way. Kept independent of the main load: a 403 on the list must not
+  // fail the panel's invitations/members data.
+  const loadAccounts = useCallback(async () => {
+    // No api (non-server adapter): accounts stays null, which renders the
+    // freeform fallback. Both branches below set state only after an await,
+    // keeping the effect body free of synchronous setState.
+    if (!accountsApi) return;
+    try {
+      setAccounts(await accountsApi.listAccounts());
+    } catch {
+      setAccounts(null);
+    }
+  }, [accountsApi]);
+
   const load = useCallback(async () => {
     if (!invitationsApi) return;
+    void loadAccounts();
     try {
       const [invitationRows, memberRows] = await Promise.all([
         invitationsApi.listInvitations(treeId),
@@ -99,20 +126,24 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
     } finally {
       setIsLoading(false);
     }
-  }, [invitationsApi, treeId]);
+  }, [invitationsApi, treeId, loadAccounts]);
 
   useEffect(() => {
     if (!invitationsApi) return;
     let cancelled = false;
     (async () => {
       try {
-        const [invitationRows, memberRows] = await Promise.all([
+        // The account-list fetch is isolated (.catch -> null): a 403 for a
+        // non-owner must not fail the panel's main data.
+        const [invitationRows, memberRows, accountRows] = await Promise.all([
           invitationsApi.listInvitations(treeId),
           invitationsApi.listTreeMembership(treeId),
+          accountsApi ? accountsApi.listAccounts().catch(() => null) : Promise.resolve(null),
         ]);
         if (cancelled) return;
         setInvitations(invitationRows);
         setMembers(memberRows);
+        setAccounts(accountRows);
         setLoadFailed(false);
       } catch {
         if (!cancelled) setLoadFailed(true);
@@ -123,7 +154,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
     return () => {
       cancelled = true;
     };
-  }, [invitationsApi, treeId]);
+  }, [invitationsApi, treeId, accountsApi]);
 
   // A personal invitation always grants viewer; editor needs family.
   const handleTypeChange = (next: InvitationTypeValue) => {
@@ -280,7 +311,9 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
     if (!invitationsApi) return;
     const email = addEmail.trim();
     if (!email) {
-      setActionError(t('invitePanel.addExistingEmailRequired'));
+      setActionError(
+        accounts ? t('invitePanel.addExistingSelectRequired') : t('invitePanel.addExistingEmailRequired'),
+      );
       return;
     }
     setIsAdding(true);
@@ -296,6 +329,24 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
       setIsAdding(false);
     }
   };
+
+  // Dropdown options for the add-existing-user select: every account on the
+  // installation, sorted by display name. Label shows name (email) plus a
+  // status marker so pending/disabled accounts are recognizable. The value
+  // is the email, which is what the membership endpoint expects.
+  const accountOptions = useMemo(() => {
+    if (!accounts) return [];
+    return [...accounts]
+      .sort((a, b) => `${a.name || a.email}`.localeCompare(`${b.name || b.email}`))
+      .map((account) => {
+        const base = account.name && account.name.trim() ? `${account.name} (${account.email})` : account.email;
+        const status =
+          account.status === 'active'
+            ? ''
+            : ` · ${t(`invitePanel.addExistingStatus.${account.status}`)}`;
+        return { value: account.email, label: `${base}${status}` };
+      });
+  }, [accounts, t]);
 
   const handleCopy = async () => {
     if (!created) return;
@@ -698,9 +749,11 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
               </ul>
             )}
 
-            {/* Add an existing user (no invite link): the account must
-                already exist on this installation, which the server
-                verifies with a USER_NOT_FOUND answer. */}
+            {/* Add an existing user (no invite link). Owners of the
+                installation get a dropdown of every account (fetched via
+                the admin list); everyone else who can manage membership
+                falls back to the freeform email field. The server
+                verifies the choice either way (USER_NOT_FOUND). */}
             <form
               className="mt-3 flex flex-wrap items-end gap-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 p-3"
               onSubmit={(e) => {
@@ -712,15 +765,43 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                 {t('invitePanel.addExistingTitle')}
               </p>
               <label className="min-w-[200px] flex-1">
-                <span className="block text-xs text-gray-600 dark:text-gray-400">{t('invitePanel.addExistingEmail')}</span>
-                <input
-                  type="email"
-                  value={addEmail}
-                  onChange={(e) => setAddEmail(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 py-1.5 text-sm"
-                  autoComplete="off"
-                  data-testid="add-member-email"
-                />
+                {accounts ? (
+                  <>
+                    <span className="block text-xs text-gray-600 dark:text-gray-400">{t('invitePanel.addExistingSelect')}</span>
+                    {/* Dropdown of all accounts (default for installation owners),
+                        themed like the panel's other selects; the CSS in
+                        index.css keeps the native popup readable in dark mode. */}
+                    <select
+                      value={addEmail}
+                      onChange={(e) => setAddEmail(e.target.value)}
+                      disabled={isAdding}
+                      data-testid="add-member-select"
+                      className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 py-1.5 text-sm disabled:opacity-50"
+                    >
+                      <option value="" disabled>
+                        {t('invitePanel.addExistingSelectPlaceholder')}
+                      </option>
+                      {accountOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                ) : (
+                  <>
+                    <span className="block text-xs text-gray-600 dark:text-gray-400">{t('invitePanel.addExistingEmail')}</span>
+                    <input
+                      type="email"
+                      value={addEmail}
+                      onChange={(e) => setAddEmail(e.target.value)}
+                      disabled={isAdding}
+                      className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 py-1.5 text-sm"
+                      autoComplete="off"
+                      data-testid="add-member-email"
+                    />
+                  </>
+                )}
               </label>
               <label>
                 <span className="block text-xs text-gray-600 dark:text-gray-400">{t('invitePanel.addExistingRole')}</span>
@@ -743,7 +824,9 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                 <UserPlus className="h-4 w-4" />
                 <span>{isAdding ? t('invitePanel.creating') : t('invitePanel.addExistingAction')}</span>
               </button>
-              <p className="w-full text-xs text-gray-500 dark:text-gray-400">{t('invitePanel.addExistingHint')}</p>
+              <p className="w-full text-xs text-gray-500 dark:text-gray-400">
+                {accounts ? t('invitePanel.addExistingHintDropdown') : t('invitePanel.addExistingHint')}
+              </p>
             </form>
 
             <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">{t('invitePanel.membersHint')}</p>

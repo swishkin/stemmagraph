@@ -404,7 +404,15 @@
     "unsavedTitle": "Perubahan belum disimpan",
     "unsavedMessage": "Anda memiliki perubahan peran yang belum disimpan. Simpan sebelum menutup?",
     "discard": "Jangan simpan",
-    "stay": "Tetap"
+    "stay": "Tetap",
+    "addExistingSelect": "Pengguna",
+    "addExistingSelectPlaceholder": "Pilih pengguna…",
+    "addExistingSelectRequired": "Pilih pengguna terlebih dahulu.",
+    "addExistingStatus": {
+      "pending": "menunggu aktivasi",
+      "disabled": "dinonaktifkan"
+    },
+    "addExistingHintDropdown": "Menampilkan semua akun di instalasi ini; menambahkan anggota yang sudah ada akan memperbarui perannya."
   },
   "memberDetail": {
     "title": "Detail Anggota",

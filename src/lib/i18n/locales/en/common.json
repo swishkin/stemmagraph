@@ -404,7 +404,15 @@
     "unsavedTitle": "Unsaved changes",
     "unsavedMessage": "You have role changes that have not been saved yet. Save them before closing?",
     "discard": "Don't save",
-    "stay": "Stay"
+    "stay": "Stay",
+    "addExistingSelect": "User",
+    "addExistingSelectPlaceholder": "Select a user…",
+    "addExistingSelectRequired": "Please select a user.",
+    "addExistingStatus": {
+      "pending": "pending",
+      "disabled": "disabled"
+    },
+    "addExistingHintDropdown": "Lists every account on this installation; adding a current member updates their role."
   },
   "memberDetail": {
     "title": "Member Details",
