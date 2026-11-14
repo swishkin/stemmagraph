@@ -16,16 +16,27 @@ import { currentRoute, pushRoute } from './utils/routing';
 function App() {
   const { selectedMember, fetchMembers } = useFamilyStore();
   const { familyTrees, fetchTrees } = useDashboardStore();
-  const { isInitialized, initialize } = useAuthStore();
+  const { isInitialized, isAuthenticated, initialize } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'dashboard' | 'family-tree'>('dashboard');
   const [currentFamilyTreeName, setCurrentFamilyTreeName] = useState<string>('');
 
-  // Initialize auth + load trees on mount
+  // Initialize auth on mount. Trees are fetched by the effect below once
+  // auth is settled: at mount there is no token yet in a fresh browser, so
+  // an immediate fetch 401s and — with nothing re-fetching after login —
+  // the dashboard would stay empty until a manual page reload.
   useEffect(() => {
     initialize();
-    fetchTrees();
-  }, [initialize, fetchTrees]);
+  }, [initialize]);
+
+  // Fetch trees after auth is resolved: both a restored session and a fresh
+  // login flip isAuthenticated, which re-runs this effect and loads the
+  // caller's trees into the dashboard.
+  useEffect(() => {
+    if (isInitialized && isAuthenticated) {
+      fetchTrees();
+    }
+  }, [isInitialized, isAuthenticated, fetchTrees]);
 
   useEffect(() => {
     // Wait for trees to load before determining view
