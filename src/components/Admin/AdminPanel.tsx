@@ -25,6 +25,9 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [loadFailed, setLoadFailed] = useState(false);
   const [busyAccountId, setBusyAccountId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  // Account awaiting the in-app promotion confirmation (replaces the
+  // browser's window.confirm, which breaks the theme and flow).
+  const [promoteTarget, setPromoteTarget] = useState<AdminAccount | null>(null);
 
   const accountAdmin = getAccountAdminApi();
 
@@ -72,11 +75,18 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key !== 'Escape') return;
+      // Escape closes the topmost layer: the promotion confirmation first,
+      // the whole panel only when no confirmation is open.
+      if (promoteTarget) {
+        setPromoteTarget(null);
+      } else {
+        onClose();
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [onClose]);
+  }, [onClose, promoteTarget]);
 
   if (!accountAdmin) return null;
 
@@ -103,11 +113,14 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       ? 'text-red-700 dark:text-red-300 border-red-300 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
       : 'text-green-700 dark:text-green-300 border-green-300 dark:border-green-700 hover:bg-green-50 dark:hover:bg-green-900/20';
 
-  // Owner promotion: confirm, then flip the role. There is no demotion
-  // endpoint on purpose — an owner can still hand effective control over
-  // by promoting someone else (multiple owners are allowed).
-  const runPromote = async (account: AdminAccount) => {
-    if (!window.confirm(t('admin.makeOwnerConfirm', { name: account.name }))) return;
+  // Owner promotion executes only after the in-app confirmation dialog is
+  // accepted. There is no demotion endpoint on purpose — an owner can still
+  // hand effective control over by promoting someone else (multiple owners
+  // are allowed).
+  const confirmPromote = async () => {
+    const account = promoteTarget;
+    if (!account) return;
+    setPromoteTarget(null);
     setBusyAccountId(account.id);
     setActionError(null);
     try {
@@ -246,7 +259,7 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         ))}
                         {account.role !== 'owner' && (
                           <button
-                            onClick={() => void runPromote(account)}
+                            onClick={() => setPromoteTarget(account)}
                             disabled={busyAccountId !== null}
                             className="px-2.5 py-1 rounded border text-xs font-medium transition-colors disabled:opacity-50 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/20"
                           >
@@ -262,6 +275,47 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           </div>
         </div>
       </div>
+
+      {/* Promotion confirmation (in-app replacement for window.confirm).
+          Sits above the panel (z-50) so it is the topmost layer; its
+          backdrop and Escape cancel only the confirmation. */}
+      {promoteTarget && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <button
+            className="absolute inset-0 bg-black/50 cursor-default"
+            aria-label={t('admin.cancel')}
+            onClick={() => setPromoteTarget(null)}
+            style={{ outline: 'none' }}
+          />
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-label={t('admin.makeOwnerTitle')}
+            className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 p-5"
+          >
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+              {t('admin.makeOwnerTitle')}
+            </h3>
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+              {t('admin.makeOwnerConfirm', { name: promoteTarget.name })}
+            </p>
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                onClick={() => setPromoteTarget(null)}
+                className="rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                {t('admin.cancel')}
+              </button>
+              <button
+                onClick={() => void confirmPromote()}
+                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
+              >
+                {t('admin.confirm')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

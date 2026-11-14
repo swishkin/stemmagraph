@@ -83,7 +83,10 @@
     },
     "loadError": "Gagal memuat daftar akun.",
     "makeOwner": "Jadikan pemilik",
-    "makeOwnerConfirm": "Jadikan {{name}} pemilik instalasi ini? Mereka akan dapat mengelola semua akun."
+    "makeOwnerConfirm": "Jadikan {{name}} pemilik instalasi ini? Mereka akan dapat mengelola semua akun.",
+    "makeOwnerTitle": "Jadikan pemilik instalasi",
+    "confirm": "Konfirmasi",
+    "cancel": "Batal"
   },
   "app": {
     "brand": "FamilyTree"
@@ -392,7 +395,16 @@
     "addExistingEmail": "Email",
     "addExistingRole": "Peran",
     "addExistingAction": "Tambah ke pohon",
-    "addExistingEmailRequired": "Masukkan alamat email dari akun pengguna yang sudah ada"
+    "addExistingEmailRequired": "Masukkan alamat email dari akun pengguna yang sudah ada",
+    "qr": "Kode QR",
+    "qrAlt": "Kode QR untuk tautan undangan",
+    "qrFailed": "Kode QR tidak dapat dibuat.",
+    "saveChanges": "Simpan perubahan",
+    "saving": "Menyimpan…",
+    "unsavedTitle": "Perubahan belum disimpan",
+    "unsavedMessage": "Anda memiliki perubahan peran yang belum disimpan. Simpan sebelum menutup?",
+    "discard": "Jangan simpan",
+    "stay": "Tetap"
   },
   "memberDetail": {
     "title": "Detail Anggota",

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Copy, Link2, RefreshCw, Send, UserPlus, Users, X, AlertCircle, CheckCircle } from 'lucide-react';
+import { Copy, Link2, QrCode, RefreshCw, Send, UserPlus, Users, X, AlertCircle, CheckCircle } from 'lucide-react';
+import QRCode from 'qrcode';
 import { useTranslation } from 'react-i18next';
 import { getInvitationAdminApi } from '../../lib/adapters';
 import type {
@@ -70,6 +71,19 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
   const [addRole, setAddRole] = useState<TreeRoleValue>('editor');
   const [isAdding, setIsAdding] = useState(false);
 
+  // Pending role changes: membershipId -> chosen role. A select change only
+  // updates this map; the server is touched exclusively by the Save button.
+  // Closing the panel with pending changes prompts Save / Don't save / Stay.
+  const [pendingRoles, setPendingRoles] = useState<Record<string, TreeRoleValue>>({});
+  const [isSavingRoles, setIsSavingRoles] = useState(false);
+  const [showClosePrompt, setShowClosePrompt] = useState(false);
+
+  // QR code for the created link: generated locally on demand, never sent
+  // anywhere. Toggled inline below the link row.
+  const [qrOpen, setQrOpen] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  const [qrFailed, setQrFailed] = useState(false);
+
   const load = useCallback(async () => {
     if (!invitationsApi) return;
     try {
@@ -130,6 +144,10 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
           : { type: inviteType, grantedRole: 'viewer' as const, channel };
       const record = await invitationsApi.createInvitation(treeId, input);
       setCreated(record);
+      // A new link means the previous QR (if shown) is stale.
+      setQrOpen(false);
+      setQrDataUrl(null);
+      setQrFailed(false);
       setInvitations(await invitationsApi.listInvitations(treeId));
     } catch (err) {
       setActionError(err instanceof Error ? err.message : t('invitePanel.createFailed'));
@@ -149,15 +167,98 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
     }
   };
 
-  const handleRoleChange = async (membershipId: string, role: TreeRoleValue) => {
-    if (!invitationsApi) return;
+  // A select change only records the pending role — nothing hits the
+  // server until Save is pressed (user request: changes must not apply
+  // immediately on selection).
+  const handleRoleChange = (membershipId: string, role: TreeRoleValue, savedRole: TreeRoleValue) => {
+    setPendingRoles((prev) => {
+      if (role === savedRole) {
+        // Choosing the saved value again cancels the pending change.
+        if (!(membershipId in prev)) return prev;
+        const next = { ...prev };
+        delete next[membershipId];
+        return next;
+      }
+      if (prev[membershipId] === role) return prev;
+      return { ...prev, [membershipId]: role };
+    });
+  };
+
+  const hasUnsavedRoles = Object.keys(pendingRoles).length > 0;
+
+  // Applies every pending role change. Returns true when all of them were
+  // applied (the pending map is empty afterwards); on a failed update the
+  // server message is shown and the failing entry stays pending.
+  const savePendingRoles = async (): Promise<boolean> => {
+    if (!invitationsApi || !hasUnsavedRoles) return true;
+    setIsSavingRoles(true);
     setActionError(null);
+    let failed = false;
+    for (const [membershipId, role] of Object.entries(pendingRoles)) {
+      try {
+        await invitationsApi.updateTreeMembershipRole(treeId, membershipId, role);
+      } catch (err) {
+        failed = true;
+        // TREE_LAST_OWNER_GUARD and friends arrive as honest server text.
+        setActionError(err instanceof Error ? err.message : t('invitePanel.memberUpdateFailed'));
+        break;
+      }
+    }
+    const refreshed = await invitationsApi
+      .listTreeMembership(treeId)
+      .catch(() => null);
+    if (refreshed) {
+      setMembers(refreshed);
+      // Drop pending entries the server now agrees with; keep any that
+      // failed so they remain editable and re-savable.
+      setPendingRoles((prev) => {
+        const next: Record<string, TreeRoleValue> = {};
+        for (const [id, role] of Object.entries(prev)) {
+          const row = refreshed.find((r) => r.id === id);
+          if (!row || row.role !== role) next[id] = role;
+        }
+        return next;
+      });
+    }
+    setIsSavingRoles(false);
+    return !failed;
+  };
+
+  const handleSaveAndClose = async () => {
+    setShowClosePrompt(false);
+    const ok = await savePendingRoles();
+    if (ok) onClose();
+  };
+
+  // X close: with unsaved role changes, ask first (standard
+  // save / don't-save prompt) instead of silently discarding them.
+  const requestClose = () => {
+    if (hasUnsavedRoles) {
+      setShowClosePrompt(true);
+    } else {
+      onClose();
+    }
+  };
+
+  // QR code for the created link, generated locally (nothing leaves the
+  // browser). Generated on first open and cached until the link changes.
+  const handleToggleQr = async () => {
+    if (qrOpen) {
+      setQrOpen(false);
+      return;
+    }
+    if (!created) return;
+    setQrOpen(true);
+    if (qrDataUrl) return;
     try {
-      await invitationsApi.updateTreeMembershipRole(treeId, membershipId, role);
-      setMembers(await invitationsApi.listTreeMembership(treeId));
-    } catch (err) {
-      // TREE_LAST_OWNER_GUARD and friends arrive as honest server text.
-      setActionError(err instanceof Error ? err.message : t('invitePanel.memberUpdateFailed'));
+      const url = await QRCode.toDataURL(created.url, {
+        width: 220,
+        margin: 2,
+        color: { dark: '#111827', light: '#ffffff' },
+      });
+      setQrDataUrl(url);
+    } catch {
+      setQrFailed(true);
     }
   };
 
@@ -241,6 +342,10 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
       // P2-3 API as-is: the URL comes from the server response, never rebuilt here.
       const record = await invitationsApi.createInvitation(treeId, input);
       setCreated(record);
+      // A new link means the previous QR (if shown) is stale.
+      setQrOpen(false);
+      setQrDataUrl(null);
+      setQrFailed(false);
       setInvitations(await invitationsApi.listInvitations(treeId));
 
       const shareText = buildInvitationShareText({
@@ -316,7 +421,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
             </button>
             <button
               type="button"
-              onClick={onClose}
+              onClick={requestClose}
               aria-label={t('invitePanel.close')}
               className="rounded-lg p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
@@ -346,7 +451,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                 <select
                   value={inviteType}
                   onChange={(e) => handleTypeChange(e.target.value as InvitationTypeValue)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-2 text-sm"
+                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white text-gray-900 dark:bg-gray-900 dark:text-white px-2 py-2 text-sm"
                 >
                   <option value="personal">{t('invite.type.personal')}</option>
                   <option value="family">{t('invite.type.family')}</option>
@@ -358,7 +463,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                   value={grantedRole}
                   onChange={(e) => setGrantedRole(e.target.value as TreeRoleValue)}
                   disabled={inviteType === 'personal'}
-                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-2 text-sm disabled:bg-gray-100 dark:bg-gray-800"
+                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white text-gray-900 dark:bg-gray-900 dark:text-white px-2 py-2 text-sm disabled:bg-gray-100 disabled:text-gray-500 dark:disabled:bg-gray-800 dark:disabled:text-gray-400"
                 >
                   <option value="viewer">{t('invitePanel.role.viewer')}</option>
                   <option value="editor" disabled={inviteType === 'personal'}>
@@ -371,7 +476,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                 <select
                   value={channel}
                   onChange={(e) => setChannel(e.target.value as 'manual' | 'wa' | 'email')}
-                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-2 text-sm"
+                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white text-gray-900 dark:bg-gray-900 dark:text-white px-2 py-2 text-sm"
                 >
                   <option value="manual">{t('invitePanel.channel.manual')}</option>
                   <option value="wa">{t('invitePanel.channel.wa')}</option>
@@ -387,7 +492,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                     max={100}
                     value={maxUses}
                     onChange={(e) => setMaxUses(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-2 text-sm"
+                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white text-gray-900 dark:bg-gray-900 dark:text-white px-2 py-2 text-sm"
                   />
                 </label>
               )}
@@ -416,7 +521,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                     placeholder={t('invitePanel.waPhonePlaceholder')}
                     autoComplete="off"
                     data-testid="wa-phone-input"
-                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-2 text-sm"
+                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white text-gray-900 dark:bg-gray-900 dark:text-white px-2 py-2 text-sm"
                   />
                 </label>
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t('invitePanel.waPhoneNote')}</p>
@@ -452,7 +557,38 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                     <Copy className="h-3 w-3" />
                     <span>{copied ? t('invitePanel.copied') : t('invitePanel.copy')}</span>
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => void handleToggleQr()}
+                    aria-expanded={qrOpen}
+                    title={t('invitePanel.qr')}
+                    className="flex items-center space-x-1 rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-1 text-xs hover:bg-gray-50 dark:hover:bg-gray-800"
+                  >
+                    <QrCode className="h-3 w-3" />
+                    <span>{t('invitePanel.qr')}</span>
+                  </button>
                 </div>
+                {/* QR code expands inline below the link row (same inline-block
+                    pattern as the WhatsApp share block above). */}
+                {qrOpen && (
+                  <div
+                    className="mt-2 flex flex-col items-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-3"
+                    data-testid="qr-block"
+                  >
+                    {qrDataUrl ? (
+                      <>
+                        <img src={qrDataUrl} alt={t('invitePanel.qrAlt')} className="h-44 w-44" />
+                        <p className="mt-1 w-full max-w-[220px] truncate text-center text-[11px] text-gray-500 dark:text-gray-400">
+                          {created.url}
+                        </p>
+                      </>
+                    ) : qrFailed ? (
+                      <p className="text-xs text-red-600 dark:text-red-400">{t('invitePanel.qrFailed')}</p>
+                    ) : (
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{t('invitePanel.loading')}</p>
+                    )}
+                  </div>
+                )}
                 <p className="mt-2 text-xs text-green-800">{t('invitePanel.shareHint')}</p>
               </div>
             )}
@@ -501,10 +637,22 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
 
           {/* Tree membership */}
           <section>
-            <h3 className="mb-2 flex items-center space-x-2 text-sm font-semibold text-gray-900 dark:text-white">
-              <Users className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-              <span>{t('invitePanel.membersTitle')}</span>
-            </h3>
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <h3 className="flex items-center space-x-2 text-sm font-semibold text-gray-900 dark:text-white">
+                <Users className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                <span>{t('invitePanel.membersTitle')}</span>
+              </h3>
+              {/* Role selects only stage changes; this applies them. */}
+              <button
+                type="button"
+                onClick={() => void savePendingRoles()}
+                disabled={!hasUnsavedRoles || isSavingRoles}
+                data-testid="save-roles"
+                className="flex items-center space-x-1 rounded-lg bg-blue-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+              >
+                <span>{isSavingRoles ? t('invitePanel.saving') : t('invitePanel.saveChanges')}</span>
+              </button>
+            </div>
             {isLoading ? (
               <p className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">{t('invitePanel.loading')}</p>
             ) : (
@@ -522,9 +670,14 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                     </div>
                     <div className="flex shrink-0 items-center space-x-2">
                       <select
-                        value={member.role}
-                        onChange={(e) => handleRoleChange(member.id, e.target.value as TreeRoleValue)}
-                        className="rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-1 text-xs"
+                        value={pendingRoles[member.id] ?? member.role}
+                        onChange={(e) => handleRoleChange(member.id, e.target.value as TreeRoleValue, member.role)}
+                        disabled={isSavingRoles}
+                        className={`rounded-lg border px-2 py-1 text-xs bg-white text-gray-900 dark:bg-gray-900 dark:text-white disabled:opacity-50 ${
+                          pendingRoles[member.id]
+                            ? 'border-amber-400 dark:border-amber-500'
+                            : 'border-gray-300 dark:border-gray-700'
+                        }`}
                         title={t('invitePanel.changeRole')}
                       >
                         <option value="owner">{t('invitePanel.role.owner')}</option>
@@ -597,6 +750,61 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
           </section>
         </div>
       </div>
+
+      {/* Unsaved role changes prompt (X close while changes are staged).
+          Backdrop/Cancel keep the user on the panel — discarding data is
+          always an explicit choice. */}
+      {showClosePrompt && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <button
+            className="absolute inset-0 bg-black/50 cursor-default"
+            aria-label={t('invitePanel.stay')}
+            onClick={() => setShowClosePrompt(false)}
+            style={{ outline: 'none' }}
+          />
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-label={t('invitePanel.unsavedTitle')}
+            className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 p-5"
+          >
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+              {t('invitePanel.unsavedTitle')}
+            </h3>
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+              {t('invitePanel.unsavedMessage')}
+            </p>
+            <div className="mt-4 flex flex-wrap justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowClosePrompt(false)}
+                className="rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                {t('invitePanel.stay')}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPendingRoles({});
+                  setShowClosePrompt(false);
+                  onClose();
+                }}
+                className="rounded-lg border border-red-300 dark:border-red-800 px-4 py-2 text-sm font-medium text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              >
+                {t('invitePanel.discard')}
+              </button>
+              <button
+                type="button"
+                onClick={() => void handleSaveAndClose()}
+                disabled={isSavingRoles}
+                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+              >
+                {t('invitePanel.saveChanges')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

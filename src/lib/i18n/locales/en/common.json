@@ -83,7 +83,10 @@
     },
     "loadError": "Failed to load the account list.",
     "makeOwner": "Make owner",
-    "makeOwnerConfirm": "Make {{name}} the owner of this installation? They will be able to manage all accounts."
+    "makeOwnerConfirm": "Make {{name}} the owner of this installation? They will be able to manage all accounts.",
+    "makeOwnerTitle": "Make installation owner",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   },
   "app": {
     "brand": "FamilyTree"
@@ -392,7 +395,16 @@
     "addExistingEmail": "Email",
     "addExistingRole": "Role",
     "addExistingAction": "Add to tree",
-    "addExistingEmailRequired": "Enter the email address of the user existing account"
+    "addExistingEmailRequired": "Enter the email address of the user existing account",
+    "qr": "QR code",
+    "qrAlt": "QR code for the invitation link",
+    "qrFailed": "Could not generate the QR code.",
+    "saveChanges": "Save changes",
+    "saving": "Saving…",
+    "unsavedTitle": "Unsaved changes",
+    "unsavedMessage": "You have role changes that have not been saved yet. Save them before closing?",
+    "discard": "Don't save",
+    "stay": "Stay"
   },
   "memberDetail": {
     "title": "Member Details",
