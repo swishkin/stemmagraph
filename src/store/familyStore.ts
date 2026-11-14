@@ -100,6 +100,18 @@ interface FamilyStore {
   deleteMember: (id: string) => Promise<void>;
   /** S-14 fix: balikan id record dari adapter (bukan id lokal caller). */
   addMemberWithRelationship: (member: FamilyMember, relationshipType: string, targetMemberId: string) => Promise<string>;
+  /**
+   * Link two already-existing members. `direction` is relative to
+   * `memberId`: 'spouse' links a partner; 'parent' makes the related member
+   * a parent of the member; 'child' makes the related member a child. The
+   * related member's generation is aligned with the relationship so the
+   * tier layout stays consistent.
+   */
+  linkExistingMembers: (
+    memberId: string,
+    relatedMemberId: string,
+    direction: 'spouse' | 'parent' | 'child',
+  ) => Promise<void>;
 }
 
 function mapRelationshipType(uiType: string): MemberRelationship['type'] | null {
@@ -265,6 +277,9 @@ export const useFamilyStore = create<FamilyStore>((set, get) => ({
       deathDate: newMember.deathDate,
       generation: newMember.generation || 1,
       maritalStatus: newMember.maritalStatus || 'single',
+      photoUrl: newMember.photoUrl,
+      email: newMember.email,
+      phone: newMember.phone,
     });
 
     // Re-fetch to get hydrated members with relationships
@@ -331,7 +346,9 @@ export const useFamilyStore = create<FamilyStore>((set, get) => ({
       case 'grandfather':
       case 'grandmother':
       case 'both_parents':
-        newGeneration = targetMember.generation - 1;
+        // Clamped: generations start at 1 (a parent of the root generation
+        // stays in it, mirroring linkExistingMembers).
+        newGeneration = Math.max(1, targetMember.generation - 1);
         break;
       case 'biological_child':
       case 'step_child':
@@ -357,6 +374,9 @@ export const useFamilyStore = create<FamilyStore>((set, get) => ({
       deathDate: member.deathDate,
       generation: newGeneration,
       maritalStatus: member.maritalStatus || 'single',
+      photoUrl: member.photoUrl,
+      email: member.email,
+      phone: member.phone,
     });
 
     // Create relationship via adapter
@@ -377,5 +397,56 @@ export const useFamilyStore = create<FamilyStore>((set, get) => ({
     // S-14 fix (QA put-1 T1): kembalikan id record adapter, bukan id lokal
     // member payload. Rantai reveal modal bergantung pada nilai ini.
     return record.id;
+  },
+
+  linkExistingMembers: async (memberId, relatedMemberId, direction) => {
+    const adapter = getAdapter();
+    const treeId = get().currentFamilyTreeId;
+    if (!treeId) throw new Error('No active family tree. Please open or create a family tree first, then link the members again.');
+    if (memberId === relatedMemberId) {
+      throw new Error('A member cannot be linked to themselves.');
+    }
+
+    const { members, relationships } = get();
+    const member = members.find((m) => m.id === memberId);
+    const related = members.find((m) => m.id === relatedMemberId);
+    if (!member || !related) {
+      throw new Error('One of the members to link was not found. Refresh the family tree and try again.');
+    }
+
+    // A link of the same kind for the same pair (either direction) is a
+    // duplicate: connecting again changes nothing, so skip silently.
+    const alreadyLinked = relationships.some((rel) => {
+      const samePair =
+        (rel.memberId === memberId && rel.relatedId === relatedMemberId) ||
+        (rel.memberId === relatedMemberId && rel.relatedId === memberId);
+      return samePair && (direction === 'spouse' ? rel.type === 'spouse' : rel.type === 'parent');
+    });
+    if (alreadyLinked) return;
+
+    if (direction === 'spouse') {
+      await adapter.createRelationship(treeId, memberId, relatedMemberId, 'spouse');
+      // Spouses share a tier.
+      if (related.generation !== member.generation) {
+        await adapter.updateMember(relatedMemberId, { generation: member.generation });
+      }
+    } else if (direction === 'parent') {
+      // related is the parent: edge convention is parent -> child.
+      await adapter.createRelationship(treeId, relatedMemberId, memberId, 'parent');
+      const generation = Math.max(1, member.generation - 1);
+      if (related.generation !== generation) {
+        await adapter.updateMember(relatedMemberId, { generation });
+      }
+    } else {
+      // related is the child: edge convention is parent -> child.
+      await adapter.createRelationship(treeId, memberId, relatedMemberId, 'parent');
+      const generation = member.generation + 1;
+      if (related.generation !== generation) {
+        await adapter.updateMember(relatedMemberId, { generation });
+      }
+    }
+
+    // Re-fetch so members/relationships/hydration reflect the new edge.
+    await get().fetchMembers(treeId);
   },
 }));

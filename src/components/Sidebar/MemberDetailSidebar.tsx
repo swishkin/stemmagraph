@@ -3,13 +3,20 @@ import { useTranslation } from 'react-i18next';
 import { X, Phone, Mail, MapPin, Calendar, Briefcase, GraduationCap, Heart, MessageCircle, Edit } from 'lucide-react';
 import { useFamilyStore } from '../../store/familyStore';
 import { UnifiedMemberModal } from '../Forms/UnifiedMemberModal';
+import { memberAvatarSource } from '../../lib/avatar';
 
 export const MemberDetailSidebar: React.FC = () => {
   const { t } = useTranslation();
   const { selectedMember, setSelectedMember } = useFamilyStore();
   const [showEditModal, setShowEditModal] = useState(false);
+  // A gravatar (or bad photo URL) can 404: fall back to initials, tracked
+  // per member id so switching members doesn't inherit the fallback.
+  const [failedAvatarMemberId, setFailedAvatarMemberId] = useState<string | null>(null);
 
   if (!selectedMember) return null;
+
+  const avatarSource = memberAvatarSource(selectedMember);
+  const showAvatar = Boolean(avatarSource) && failedAvatarMemberId !== selectedMember.id;
 
   const calculateAge = (birthDate: string, deathDate?: string) => {
     const birth = new Date(birthDate);
@@ -50,11 +57,12 @@ export const MemberDetailSidebar: React.FC = () => {
         {/* Profile Photo */}
         <div className="text-center mb-6">
           <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800">
-            {selectedMember.photoUrl ? (
+            {showAvatar ? (
               <img
-                src={selectedMember.photoUrl}
+                src={avatarSource!}
                 alt={selectedMember.name}
                 className="w-full h-full object-cover"
+                onError={() => setFailedAvatarMemberId(selectedMember.id)}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-4xl font-bold">

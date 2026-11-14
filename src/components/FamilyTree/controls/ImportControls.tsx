@@ -22,12 +22,29 @@ import { extractGedcom } from '../../../lib/gedcom/importPipeline';
  * silently. The success summary reports created members, created
  * relations, and skipped/failed counts as reported by applyImportPlan.
  */
-export const ImportControls: React.FC = () => {
+interface ImportControlsProps {
+  /**
+   * Lets an outside caller (the right-click menu's Import item) open the
+   * panel and immediately pick a file.
+   */
+  openTriggerRef?: React.MutableRefObject<(() => void) | null>;
+}
+
+export const ImportControls: React.FC<ImportControlsProps> = ({ openTriggerRef }) => {
   const [isImporting, setIsImporting] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [errorKey, setErrorKey] = useState<string | null>(null);
   const [report, setReport] = useState<ImportApplyReport | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Programmatic open (context menu): show the panel so the import summary
+  // is visible, then open the file picker.
+  if (openTriggerRef) {
+    openTriggerRef.current = () => {
+      setShowPanel(true);
+      fileInputRef.current?.click();
+    };
+  }
   const { t } = useTranslation('common');
   const currentFamilyTreeId = useFamilyStore((s) => s.currentFamilyTreeId);
   const fetchMembers = useFamilyStore((s) => s.fetchMembers);
@@ -155,7 +172,7 @@ export const ImportControls: React.FC = () => {
             tabIndex={0}
           />
           <div
-            className="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50 py-2 px-3"
+            className="absolute top-full right-0 mt-2 w-72 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50 py-2 px-3"
             role="dialog"
             aria-label={t('import.button')}
           >

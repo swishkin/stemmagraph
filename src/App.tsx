@@ -3,10 +3,8 @@ import { ProtectedRoute } from './components/Auth/ProtectedRoute';
 import { Dashboard } from './components/Dashboard/Dashboard';
 import { Header } from './components/Header/Header';
 import { Toolbar } from './components/Toolbar/Toolbar';
-import { StatsSidebar } from './components/Sidebar/StatsSidebar';
 import { MemberDetailSidebar } from './components/Sidebar/MemberDetailSidebar';
 import { FamilyTreeView } from './components/FamilyTree/FamilyTreeView';
-import { BottomNavigation } from './components/BottomNavigation/BottomNavigation';
 
 import { useFamilyStore } from './store/familyStore';
 import { useDashboardStore } from './store/dashboardStore';
@@ -17,7 +15,6 @@ function App() {
   const { selectedMember, fetchMembers } = useFamilyStore();
   const { familyTrees, fetchTrees } = useDashboardStore();
   const { isInitialized, isAuthenticated, initialize } = useAuthStore();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'dashboard' | 'family-tree'>('dashboard');
   const [currentFamilyTreeName, setCurrentFamilyTreeName] = useState<string>('');
 
@@ -64,10 +61,6 @@ function App() {
     }
   }, [isInitialized, fetchMembers, familyTrees]);
 
-  const handleMenuToggle = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
   // Handle browser back/forward navigation
   useEffect(() => {
     const handlePopState = () => {
@@ -98,7 +91,7 @@ function App() {
       {currentView === 'dashboard' && <Dashboard />}
       {currentView === 'family-tree' && (
         <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
-          <Header onMenuToggle={handleMenuToggle} familyName={currentFamilyTreeName} />
+          <Header familyName={currentFamilyTreeName} />
 
           <Toolbar
             onBackToDashboard={() => {
@@ -108,18 +101,12 @@ function App() {
           />
 
           <div className="flex flex-1 overflow-hidden">
-            <div className={`${sidebarOpen ? 'block' : 'hidden'} lg:block`}>
-              <StatsSidebar />
-            </div>
-
             <div className="flex-1 flex flex-col">
               <FamilyTreeView />
             </div>
 
             {selectedMember && <MemberDetailSidebar />}
           </div>
-
-          <BottomNavigation />
         </div>
       )}
     </ProtectedRoute>

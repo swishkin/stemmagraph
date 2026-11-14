@@ -2,25 +2,28 @@ import React, { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import {
-  Edit,
-  Trash2,
-  UserPlus,
   Heart,
   MapPin,
   Briefcase,
   ChevronsDown
 } from 'lucide-react';
 import type { FamilyMember } from '../../../types/family';
+import { memberAvatarSource } from '../../../lib/avatar';
 
 // Type alias (bukan interface): React Flow v12 mensyaratkan data node memenuhi
 // Record<string, unknown>, yang hanya dipenuhi type alias via implicit index signature.
 export type FamilyMemberNodeData = {
   member: FamilyMember;
   onEdit: (member: FamilyMember) => void;
-  /** Optional: terpasang hanya bila host memberi prop onMemberDelete. */
-  onDelete?: (memberId: string) => void;
+  /**
+   * Right-click (or Shift+F10 / ContextMenu key) requests the tree-level
+   * context menu. The menu itself is rendered once by the tree component,
+   * anchored at the cursor; each node only reports that it was targeted.
+   */
+  onContextMenuRequest: (memberId: string, x: number, y: number) => void;
   onAddChild: (parentId: string) => void;
   onAddSpouse: (memberId: string) => void;
+  onAddParent: (memberId: string) => void;
   /** Optional fields stamped by the tier layout pass (layout/tierLayout). */
   tier?: number;
   generationY?: number;
@@ -35,9 +38,13 @@ export type FamilyMemberNodeData = {
 export type FamilyMemberFlowNode = Node<FamilyMemberNodeData, 'familyMember'>;
 
 export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMemberFlowNode>) => {
-  const { member, onEdit, onDelete, onAddChild, onAddSpouse } = data;
+  const { member, onEdit, onContextMenuRequest } = data;
   const { t } = useTranslation('canvas');
-  const [showContextMenu, setShowContextMenu] = useState(false);
+  // Gravatar (or a bad photo URL) can 404: fall back to initials instead of
+  // a broken image. Reset when the source changes.
+  const avatarSource = memberAvatarSource(member);
+  const [avatarFailed, setAvatarFailed] = useState(false);
+  const showAvatar = avatarSource && !avatarFailed;
 
   const calculateAge = () => {
     const birthYear = new Date(member.birthDate).getFullYear();
@@ -54,7 +61,7 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
   const getYearDisplay = () => {
     const birthYear = new Date(member.birthDate).getFullYear();
     const deathYear = member.deathDate ? new Date(member.deathDate).getFullYear() : null;
-    
+
     if (deathYear) {
       return `(${birthYear}-${deathYear})`;
     }
@@ -63,7 +70,8 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    setShowContextMenu(!showContextMenu);
+    e.stopPropagation();
+    onContextMenuRequest(member.id, e.clientX, e.clientY);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -71,18 +79,22 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
       e.preventDefault();
       onEdit(member);
     } else if (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')) {
+      // No cursor position for keyboard users: open at the card's corner.
       e.preventDefault();
-      setShowContextMenu(!showContextMenu);
+      const rect = e.currentTarget.getBoundingClientRect();
+      onContextMenuRequest(member.id, rect.right - 8, rect.bottom - 8);
     }
   };
 
-  // Helper function to get card border class
+  // Helper function to get card border class. The hover lift lives on the
+  // WRAPPER below (card + corner badges move as one unit, so the badges
+  // never shift relative to the card).
   const getCardBorderClass = () => {
-    const baseClasses = 'w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border-2 transition-all duration-200 cursor-pointer group transform hover:-translate-y-1';
+    const baseClasses = 'w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border-2 transition-all duration-200 cursor-pointer group';
     const selectedClass = selected ? 'border-blue-500 shadow-xl' : 'border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-600';
     const genderClass = member.gender === 'male' ? 'border-l-4 border-l-blue-500' : 'border-l-4 border-l-pink-500';
     const aliveClass = !member.isAlive ? 'opacity-75 bg-gray-50 dark:bg-gray-800' : '';
-    
+
     return `${baseClasses} ${selectedClass} ${genderClass} ${aliveClass}`;
   };
 
@@ -103,7 +115,7 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
 
   /**
    * Gets the complete CSS class string for the avatar container
-   * @returns Complete CSS class string including all avatar styles
+   * @returns Complete CSS class string including avatar styles
    */
   const getAvatarContainerClass = (): string => {
     const baseClasses = 'w-full h-full flex items-center justify-center text-white font-bold text-xl';
@@ -113,56 +125,134 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
 
   return (
     <div className="relative">
-      {/* Connection handles - positioned for bracket connections */}
+      {/* Connection handles - positioned for bracket + side connections.
+          Handle ids let the tree decide what a dragged connection means:
+          right→left links two same-tier people (spouse); bottom→top links
+          a parent tier to a child tier. */}
       <Handle
+        id="top"
         type="target"
         position={Position.Top}
         className="w-4 h-4 bg-gray-400 border-2 border-white"
         style={{ top: -8 }}
       />
       <Handle
+        id="bottom"
         type="source"
         position={Position.Bottom}
         className="w-4 h-4 bg-gray-400 border-2 border-white"
         style={{ bottom: -8 }}
       />
       <Handle
+        id="left"
         type="target"
         position={Position.Left}
         className="w-4 h-4 bg-gray-400 border-2 border-white"
         style={{ left: -8 }}
       />
       <Handle
+        id="right"
         type="source"
         position={Position.Right}
         className="w-4 h-4 bg-gray-400 border-2 border-white"
         style={{ right: -8 }}
       />
 
-      {/* Main card */}
-      <button
-        type="button"
-        className={getCardBorderClass()}
-        onContextMenu={handleContextMenu}
-        onDoubleClick={() => onEdit(member)}
-        onKeyDown={handleKeyDown}
-        aria-label={[
-          t('node.ariaFamilyMember', { name: member.name }),
-          t('node.ariaYearsOld', { age: calculateAge() }),
-          t('node.ariaGeneration', { generation: member.generation }),
-          member.profession ?? null
-        ].filter(Boolean).join(', ')}
-        aria-describedby={`member-details-${member.id}`}
-        tabIndex={0}
-      >
-        {/* Generation badge - Moved to top left corner */}
+      {/* Card + corner badges share one hover transform: the badges lift
+          with the card and never shrink inward relative to it. */}
+      <div className="relative transition-all duration-200 hover:-translate-y-1">
+        {/* Main card */}
+        <button
+          type="button"
+          className={getCardBorderClass()}
+          onContextMenu={handleContextMenu}
+          onDoubleClick={() => onEdit(member)}
+          onKeyDown={handleKeyDown}
+          aria-label={[
+            t('node.ariaFamilyMember', { name: member.name }),
+            t('node.ariaYearsOld', { age: calculateAge() }),
+            t('node.ariaGeneration', { generation: member.generation }),
+            member.profession ?? null
+          ].filter(Boolean).join(', ')}
+          aria-describedby={`member-details-${member.id}`}
+          tabIndex={0}
+        >
+          {/* Photo and basic info - Updated layout */}
+          <div className="p-4">
+            {/* Photo */}
+            <div className="flex justify-center mb-3">
+              <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 shadow-xs">
+                {showAvatar ? (
+                  <img
+                    src={avatarSource!}
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                    onError={() => setAvatarFailed(true)}
+                  />
+                ) : (
+                  <div className={getAvatarContainerClass()}>
+                    {member.name.charAt(0)}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Member info - New layout as per image */}
+            <div className="text-center space-y-1" id={`member-details-${member.id}`}>
+              {/* Nickname first (if exists) */}
+              {member.nickname && (
+                <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                  ({member.nickname})
+                </p>
+              )}
+
+              {/* Full name */}
+              <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-tight">
+                {member.name}
+              </h3>
+
+              {/* Birth year and age */}
+              <div className="space-y-0.5">
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  {getYearDisplay()}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {calculateAge()} years
+                </p>
+              </div>
+            </div>
+
+            {/* Additional info (profession/location) - Enhanced spacing */}
+            {(member.profession || member.currentLocation) && (
+              <div className="mt-3 pt-2 border-t border-gray-100 dark:border-gray-800">
+                <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400 text-center">
+                  {member.profession && (
+                    <div className="flex items-center justify-center space-x-1">
+                      <Briefcase className="w-3 h-3" />
+                      <span className="truncate max-w-32">{member.profession}</span>
+                    </div>
+                  )}
+
+                  {member.currentLocation && (
+                    <div className="flex items-center justify-center space-x-1">
+                      <MapPin className="w-3 h-3" />
+                      <span className="truncate max-w-32">{member.currentLocation}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </button>
+
+        {/* Generation badge - top left corner (inside the hover unit) */}
         <div className="absolute -top-2 -left-2">
           <div className={getGenerationBadgeClass()}>
             {member.generation}
           </div>
         </div>
 
-        {/* Status indicators - Keep in top right */}
+        {/* Status indicators - top right (inside the hover unit) */}
         <div className="absolute -top-2 -right-2 flex space-x-1">
           {member.maritalStatus === 'married' && (
             <div className="w-6 h-6 bg-yellow-400 rounded-full border-2 border-white flex items-center justify-center">
@@ -175,73 +265,7 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
             </div>
           )}
         </div>
-
-        {/* Photo and basic info - Updated layout */}
-        <div className="p-4">
-          {/* Photo */}
-          <div className="flex justify-center mb-3">
-            <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 shadow-xs">
-              {member.photoUrl ? (
-                <img
-                  src={member.photoUrl}
-                  alt={member.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className={getAvatarContainerClass()}>
-                  {member.name.charAt(0)}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Member info - New layout as per image */}
-          <div className="text-center space-y-1" id={`member-details-${member.id}`}>
-            {/* Nickname first (if exists) */}
-            {member.nickname && (
-              <p className="text-sm text-gray-500 dark:text-gray-400 italic">
-                ({member.nickname})
-              </p>
-            )}
-            
-            {/* Full name */}
-            <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-tight">
-              {member.name}
-            </h3>
-            
-            {/* Birth year and age */}
-            <div className="space-y-0.5">
-              <p className="text-xs text-gray-600 dark:text-gray-400">
-                {getYearDisplay()}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {calculateAge()} years
-              </p>
-            </div>
-          </div>
-
-          {/* Additional info (profession/location) - Enhanced spacing */}
-          {(member.profession || member.currentLocation) && (
-            <div className="mt-3 pt-2 border-t border-gray-100 dark:border-gray-800">
-              <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400 text-center">
-                {member.profession && (
-                  <div className="flex items-center justify-center space-x-1">
-                    <Briefcase className="w-3 h-3" />
-                    <span className="truncate max-w-32">{member.profession}</span>
-                  </div>
-                )}
-                
-                {member.currentLocation && (
-                  <div className="flex items-center justify-center space-x-1">
-                    <MapPin className="w-3 h-3" />
-                    <span className="truncate max-w-32">{member.currentLocation}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      </button>
+      </div>
 
       {/* S-09 AC2: indikator keturunan tersembunyi + kontrol expand per cabang */}
       {typeof data.hiddenDescendantCount === 'number' &&
@@ -261,73 +285,6 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
             {data.hiddenDescendantCount}
           </button>
         )}
-
-      {/* Context menu */}
-      {showContextMenu && (
-        <>
-          <button
-            type="button"
-            className="fixed inset-0 z-40 bg-transparent cursor-default border-none p-0 m-0 outline-hidden"
-            onClick={() => setShowContextMenu(false)}
-            onKeyDown={(e) => {
-              if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
-                setShowContextMenu(false);
-              }
-            }}
-            aria-label={t('contextMenu.close')}
-            tabIndex={0}
-          />
-          <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50 py-2">
-            <button
-              onClick={() => {
-                onEdit(member);
-                setShowContextMenu(false);
-              }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
-            >
-              <Edit className="w-4 h-4" />
-              <span>{t('node.editProfile')}</span>
-            </button>
-            
-            <button
-              onClick={() => {
-                onAddChild(member.id);
-                setShowContextMenu(false);
-              }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
-            >
-              <UserPlus className="w-4 h-4" />
-              <span>{t('node.addChild')}</span>
-            </button>
-            
-            <button
-              onClick={() => {
-                onAddSpouse(member.id);
-                setShowContextMenu(false);
-              }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
-            >
-              <Heart className="w-4 h-4" />
-              <span>{t('node.addSpouse')}</span>
-            </button>
-            
-            <hr className="my-2" />
-            
-            <button
-              onClick={() => {
-                if (confirm(t('node.confirmDelete'))) {
-                  onDelete?.(member.id);
-                }
-                setShowContextMenu(false);
-              }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 dark:text-red-400 transition-colors flex items-center space-x-2"
-            >
-              <Trash2 className="w-4 h-4" />
-              <span>{t('node.delete')}</span>
-            </button>
-          </div>
-        </>
-      )}
     </div>
   );
 });

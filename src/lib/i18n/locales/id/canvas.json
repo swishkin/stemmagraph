@@ -1,6 +1,10 @@
 {
   "contextMenu": {
-    "close": "Tutup menu konteks"
+    "addMember": "Tambah anggota",
+    "close": "Tutup menu konteks",
+    "export": "Ekspor",
+    "import": "Impor",
+    "title": "Opsi untuk {{name}}"
   },
   "controls": {
     "miniMap": "Peta Mini",
@@ -68,13 +72,16 @@
   },
   "node": {
     "addChild": "Tambah Anak",
+    "addParent": "Tambah orang tua",
     "addSpouse": "Tambah Pasangan",
-    "editProfile": "Edit Profil",
-    "delete": "Hapus",
     "ariaFamilyMember": "Anggota keluarga {{name}}",
-    "ariaYearsOld": "{{age}} tahun",
     "ariaGeneration": "generasi {{generation}}",
-    "confirmDelete": "Yakin ingin menghapus anggota keluarga ini? Tindakan ini tidak dapat dibatalkan."
+    "ariaYearsOld": "{{age}} tahun",
+    "confirmDelete": "Yakin ingin menghapus anggota keluarga ini? Tindakan ini tidak dapat dibatalkan.",
+    "delete": "Hapus",
+    "deleteCancel": "Batal",
+    "deleteTitle": "Hapus anggota",
+    "editProfile": "Edit Profil"
   },
   "relationship": {
     "selectType": "Pilih jenis hubungan:",

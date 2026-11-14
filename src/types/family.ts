@@ -11,6 +11,12 @@ export interface FamilyMember {
   gender: 'male' | 'female';
   photoUrl?: string;
   spouseId?: string;
+  /**
+   * Add-parent marker (UI only, not persisted): when set on an add request
+   * the new member is the PARENT of this member (relationship target id).
+   * Distinct from parentIds (which list this member's own parents).
+   */
+  parentId?: string;
   /** QA put-1 Temuan-3: semua pasangan dari rel spouse adapter; spouseId legacy = elemen pertama. */
   spouseIds?: string[];
   parentIds?: string[];

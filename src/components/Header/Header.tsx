@@ -1,28 +1,20 @@
 import React from 'react';
-import { Search, Menu, TreePine } from 'lucide-react';
+import { Search, TreePine } from 'lucide-react';
 import { useFamilyStore } from '../../store/familyStore';
 import { useTranslation } from 'react-i18next';
 import { UserChrome } from './UserChrome';
 
 interface HeaderProps {
-  onMenuToggle: () => void;
   familyName: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onMenuToggle, familyName }) => {
+export const Header: React.FC<HeaderProps> = ({ familyName }) => {
   const { searchQuery, setSearchQuery } = useFamilyStore();
   const { t } = useTranslation();
 
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-3 flex items-center justify-between">
       <div className="flex items-center space-x-4">
-        <button
-          onClick={onMenuToggle}
-          className="lg:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-        >
-          <Menu className="w-5 h-5" />
-        </button>
-        
         <div className="flex items-center space-x-2">
           <TreePine className="w-8 h-8 text-green-600" />
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">

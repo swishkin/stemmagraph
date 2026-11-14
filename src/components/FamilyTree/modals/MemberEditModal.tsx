@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, User, Calendar, MapPin, Briefcase, Phone } from 'lucide-react';
 import type { FamilyMember } from '../../../types/family';
+import { AvatarEditor } from '../../Forms/AvatarEditor';
 
 interface MemberEditModalProps {
   member: FamilyMember;
@@ -89,6 +90,19 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          {/* Photo / avatar */}
+          <div>
+            <AvatarEditor
+              photoUrl={formData.photoUrl}
+              email={formData.email}
+              name={formData.name}
+              gender={formData.gender}
+              onPhotoUrlChange={(url) =>
+                setFormData((prev) => ({ ...prev, photoUrl: url ?? undefined }))
+              }
+            />
+          </div>
+
           {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Full Name */}

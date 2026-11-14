@@ -100,6 +100,10 @@ export interface CreateMemberInput {
   generation?: number;
   maritalStatus?: 'single' | 'married' | 'divorced' | 'widowed';
   privacyStatus?: 'shared' | 'private';
+  /** Avatar (URL or small data URL); the server persists it verbatim. */
+  photoUrl?: string;
+  email?: string;
+  phone?: string;
 }
 
 export interface MemberRelationship {

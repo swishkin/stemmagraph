@@ -4,6 +4,7 @@ import { useFamilyStore } from '../../store/familyStore';
 import { MapPin, Briefcase, Calendar, Phone, Mail, Edit, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { UnifiedMemberModal } from '../Forms/UnifiedMemberModal';
+import { memberAvatarSource } from '../../lib/avatar';
 
 interface GridMemberCardProps {
   member: FamilyMember;
@@ -22,6 +23,10 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddChildModal, setShowAddChildModal] = useState(false);
+  // Gravatar (or a bad photo URL) can 404: fall back to initials.
+  const [avatarFailed, setAvatarFailed] = useState(false);
+  const avatarSource = memberAvatarSource(member);
+  const showAvatar = Boolean(avatarSource) && !avatarFailed;
 
   const handleClick = () => {
     setSelectedMember(member);
@@ -151,12 +156,13 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
         {/* Photo */}
         <div className="p-4 pb-2">
           <div className="w-16 h-16 lg:w-20 lg:h-20 mx-auto rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 mb-3">
-            {member.photoUrl ? (
+            {showAvatar ? (
               <img
-                src={member.photoUrl}
+                src={avatarSource!}
                 alt={member.name}
                 className="w-full h-full object-cover"
                 loading="lazy"
+                onError={() => setAvatarFailed(true)}
               />
             ) : (
               <div 

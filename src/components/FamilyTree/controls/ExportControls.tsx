@@ -61,9 +61,20 @@ function downloadBlob(blob: Blob, filename: string): void {
   URL.revokeObjectURL(url);
 }
 
-export const ExportControls: React.FC = () => {
+interface ExportControlsProps {
+  /**
+   * Lets an outside caller (the right-click menu's Export item) open the
+   * export dropdown.
+   */
+  openTriggerRef?: React.MutableRefObject<(() => void) | null>;
+}
+
+export const ExportControls: React.FC<ExportControlsProps> = ({ openTriggerRef }) => {
   const [isExporting, setIsExporting] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  if (openTriggerRef) {
+    openTriggerRef.current = () => setShowDropdown(true);
+  }
   // Privacy mode for the GEDCOM/GEDZIP paths (S-06 Wave 1). Default is
   // the clean share export; the full archive requires an explicit
   // checkbox confirmation before its download buttons unlock.

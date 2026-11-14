@@ -5,6 +5,7 @@ import type { FamilyMember } from '../../types/family';
 import { useFamilyStore } from '../../store/familyStore';
 import { useDashboardStore } from '../../store/dashboardStore';
 import { getChangeReviewApi } from '../../lib/adapters';
+import { AvatarEditor } from './AvatarEditor';
 
 const buildInitialFormData = (editingMember?: FamilyMember): FormData => {
   if (!editingMember) return initialFormData;
@@ -17,6 +18,8 @@ const buildInitialFormData = (editingMember?: FamilyMember): FormData => {
     isAlive: editingMember.isAlive ?? true,
     deathDate: editingMember.deathDate ?? '',
     role: 'myself',
+    photoUrl: editingMember.photoUrl ?? '',
+    email: editingMember.email ?? '',
   };
 };
 
@@ -45,6 +48,10 @@ interface FormData {
   isAlive: boolean;
   deathDate: string;
   role?: 'myself' | 'parent' | 'grandparent' | 'other'; // Only for first member
+  /** Avatar (URL or uploaded data URL). */
+  photoUrl: string;
+  /** Email; also drives the Gravatar preview when no photo is set. */
+  email: string;
 }
 
 const initialFormData: FormData = {
@@ -55,7 +62,9 @@ const initialFormData: FormData = {
   birthPlace: '',
   isAlive: true,
   deathDate: '',
-  role: 'myself'
+  role: 'myself',
+  photoUrl: '',
+  email: ''
 };
 
 export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
@@ -162,7 +171,9 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
         birthDate: formData.birthDate || undefined,
         birthPlace: formData.birthPlace.trim() || undefined,
         isAlive: formData.isAlive,
-        deathDate: !formData.isAlive ? formData.deathDate || undefined : undefined
+        deathDate: !formData.isAlive ? formData.deathDate || undefined : undefined,
+        photoUrl: formData.photoUrl.trim() || undefined,
+        email: formData.email.trim() || undefined
       };
 
       if (editingMember) {
@@ -179,6 +190,10 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
             birthPlace: formData.birthPlace.trim() || null,
             isAlive: formData.isAlive,
             deathDate: !formData.isAlive ? formData.deathDate || null : null,
+            // photoUrl/email are part of the member proposal contract, so
+            // avatar changes made by editors also travel through the gate.
+            photoUrl: formData.photoUrl.trim() || null,
+            email: formData.email.trim() || null,
           };
           await changeApi.createChangeProposal(currentFamilyTreeId, {
             targetType: 'member',
@@ -204,6 +219,8 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
           birthPlace: formData.birthPlace.trim() || undefined,
           isAlive: formData.isAlive,
           deathDate: !formData.isAlive ? formData.deathDate || undefined : undefined,
+          photoUrl: formData.photoUrl.trim() || undefined,
+          email: formData.email.trim() || undefined,
           // Smart generation assignment based on role for first member
           generation: isFirstMember ? getGenerationFromRole(formData.role) : 1,
           maritalStatus: 'single' // Default marital status
@@ -324,6 +341,36 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
           )}
 
           <div className="space-y-6">
+            {/* Photo / avatar + email (the Gravatar source) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="md:col-span-2">
+                <AvatarEditor
+                  photoUrl={formData.photoUrl}
+                  email={formData.email}
+                  name={formData.name}
+                  gender={formData.gender}
+                  onPhotoUrlChange={(url) => updateFormData({ photoUrl: url ?? '' })}
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label htmlFor="member-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('memberModal.email')}
+                </label>
+                <input
+                  id="member-email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => updateFormData({ email: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder={t('memberModal.emailPlaceholder')}
+                  disabled={isSubmitting}
+                />
+              </div>
+            </div>
+
             {/* Basic Information Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Full Name */}

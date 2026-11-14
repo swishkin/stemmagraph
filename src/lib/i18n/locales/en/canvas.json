@@ -1,6 +1,10 @@
 {
   "contextMenu": {
-    "close": "Close context menu"
+    "addMember": "Add member",
+    "close": "Close context menu",
+    "export": "Export",
+    "import": "Import",
+    "title": "Options for {{name}}"
   },
   "controls": {
     "miniMap": "Mini Map",
@@ -68,13 +72,16 @@
   },
   "node": {
     "addChild": "Add Child",
+    "addParent": "Add parent",
     "addSpouse": "Add Spouse",
-    "editProfile": "Edit Profile",
-    "delete": "Delete",
     "ariaFamilyMember": "Family member {{name}}",
-    "ariaYearsOld": "{{age}} years old",
     "ariaGeneration": "generation {{generation}}",
-    "confirmDelete": "Are you sure you want to delete this family member? This cannot be undone."
+    "ariaYearsOld": "{{age}} years old",
+    "confirmDelete": "Are you sure you want to delete this family member? This cannot be undone.",
+    "delete": "Delete",
+    "deleteCancel": "Cancel",
+    "deleteTitle": "Delete member",
+    "editProfile": "Edit Profile"
   },
   "relationship": {
     "selectType": "Select relationship type:",

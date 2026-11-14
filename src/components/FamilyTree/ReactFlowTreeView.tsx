@@ -34,6 +34,13 @@ export const ReactFlowTreeView: React.FC = () => {
         relationshipType: 'partner',
         targetMemberId: newMember.spouseId,
       });
+    } else if (newMember.parentId) {
+      // Add-parent: the new member is the parent of `parentId`. 'father'
+      // maps to the parent relationship type and generation target-1.
+      setAddContext({
+        relationshipType: 'father',
+        targetMemberId: newMember.parentId,
+      });
     } else {
       setAddContext(undefined);
     }
@@ -51,6 +58,7 @@ export const ReactFlowTreeView: React.FC = () => {
         onMemberUpdate={handleMemberUpdate}
         onMemberAdd={handleMemberAdd}
         onMemberDelete={handleMemberDelete}
+        onAddMember={() => handleMemberAdd({})}
         revealMemberId={revealMemberId}
         onMemberRevealed={() => setRevealMemberId(null)}
       />

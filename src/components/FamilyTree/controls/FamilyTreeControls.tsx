@@ -22,6 +22,11 @@ interface FamilyTreeControlsProps {
   showGrid?: boolean;
   onGridTypeChange?: (type: BackgroundVariant) => void;
   onGridToggle?: (show: boolean) => void;
+  /**
+   * Render without the card chrome: the host supplies the container
+   * (used when embedded in the Tree Settings dropdown).
+   */
+  embedded?: boolean;
 }
 
 export const FamilyTreeControls: React.FC<FamilyTreeControlsProps> = ({
@@ -33,6 +38,7 @@ export const FamilyTreeControls: React.FC<FamilyTreeControlsProps> = ({
   showGrid = true,
   onGridTypeChange,
   onGridToggle,
+  embedded = false,
 }) => {
   const { t } = useTranslation('canvas');
   /**
@@ -46,7 +52,13 @@ export const FamilyTreeControls: React.FC<FamilyTreeControlsProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-2 space-y-2">
+    <div
+      className={
+        embedded
+          ? 'space-y-2 p-1'
+          : 'bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-2 space-y-2'
+      }
+    >
       <div className="text-xs font-medium text-gray-700 dark:text-gray-300 px-2">{t('controls.layoutControls')}</div>
       
       {/* Layout direction buttons */}
