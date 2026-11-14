@@ -577,7 +577,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                   >
                     {qrDataUrl ? (
                       <>
-                        <img src={qrDataUrl} alt={t('invitePanel.qrAlt')} className="h-44 w-44" />
+                        <img src={qrDataUrl} alt={t('invitePanel.qrAlt')} className="h-[220px] w-[220px]" />
                         <p className="mt-1 w-full max-w-[220px] truncate text-center text-[11px] text-gray-500 dark:text-gray-400">
                           {created.url}
                         </p>
