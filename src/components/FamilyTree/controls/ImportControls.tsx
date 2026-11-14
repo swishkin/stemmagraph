@@ -121,7 +121,7 @@ export const ImportControls: React.FC = () => {
       <button
         onClick={handleDropdownToggle}
         disabled={isImporting}
-        className="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg shadow-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+        className="flex items-center space-x-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
         aria-label={t('import.button')}
         aria-expanded={showPanel}
         aria-haspopup="dialog"
@@ -155,18 +155,18 @@ export const ImportControls: React.FC = () => {
             tabIndex={0}
           />
           <div
-            className="absolute top-full left-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2 px-3"
+            className="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50 py-2 px-3"
             role="dialog"
             aria-label={t('import.button')}
           >
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {t('import.hint')}
             </p>
 
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={isImporting || !currentFamilyTreeId}
-              className="mt-2 w-full text-left px-3 py-2 text-sm rounded border border-gray-200 hover:bg-gray-50 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-2 w-full text-left px-3 py-2 text-sm rounded border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               data-testid="import-choose-file"
             >
               <Upload className="w-4 h-4" />
@@ -180,17 +180,17 @@ export const ImportControls: React.FC = () => {
             )}
 
             {errorKey && currentFamilyTreeId && (
-              <p className="mt-2 text-xs text-red-600" role="alert">
+              <p className="mt-2 text-xs text-red-600 dark:text-red-400" role="alert">
                 {t(errorKey)}
               </p>
             )}
 
             {report && (
               <div
-                className="mt-2 text-xs text-gray-700 space-y-1"
+                className="mt-2 text-xs text-gray-700 dark:text-gray-300 space-y-1"
                 data-testid="import-summary"
               >
-                <p className="font-semibold text-gray-800">
+                <p className="font-semibold text-gray-800 dark:text-gray-200">
                   {t('import.summary.title')}
                 </p>
                 <p>
@@ -211,7 +211,7 @@ export const ImportControls: React.FC = () => {
                   </p>
                 )}
                 {report.failedMembers.length > 0 && (
-                  <p className="text-red-600">
+                  <p className="text-red-600 dark:text-red-400">
                     {t('import.summary.failed', {
                       count: report.failedMembers.length,
                     })}

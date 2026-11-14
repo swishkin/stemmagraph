@@ -1,4 +1,7 @@
 {
+  "contextMenu": {
+    "close": "Close context menu"
+  },
   "controls": {
     "miniMap": "Mini Map",
     "legend": "Legend",
@@ -11,59 +14,66 @@
     "female": "Female",
     "deceased": "Deceased",
     "familyRelationship": "Family Relationship",
-    "married": "Married"
+    "married": "Married",
+    "layoutControls": "Layout Controls",
+    "tierLayout": "Tier Layout (Generations neatly arranged)",
+    "freeLayout": "Free Layout (Free arrangement)",
+    "tierModeHint": "Tier mode: drag left-right only",
+    "gridPattern": "Grid Pattern",
+    "showGrid": "Show Grid",
+    "hideGrid": "Hide Grid",
+    "dotsGrid": "Dot Grid",
+    "linesGrid": "Line Grid",
+    "crossGrid": "Cross Grid",
+    "autoLayout": "Auto Layout",
+    "fitView": "Fit to View",
+    "miniMapTab": "Mini Map",
+    "legendTab": "Legend",
+    "memberGen": "{{name}} (Gen {{generation}})"
   },
-  "table": {
-    "columns": {
-      "photo": "Photo",
-      "name": "Name",
-      "relationship": "Relationship",
-      "birth": "Birth",
-      "age": "Age",
-      "status": "Status",
-      "location": "Location",
-      "contact": "Contact"
-    },
-    "living": "Living",
-    "deceased": "Deceased",
-    "ageYears": "{{age}} yrs",
-    "whatsapp": "WhatsApp",
-    "email": "Email",
-    "detail": "Detail",
-    "selected_one": "{{count}} member selected",
-    "selected_other": "{{count}} members selected",
-    "export": "Export",
-    "sendMessage": "Send Message",
-    "group": "Group",
-    "delete": "Delete",
-    "clearSelection": "Clear Selection",
-    "membersTitle_one": "{{count}} Family Member",
-    "membersTitle_other": "{{count}} Family Members",
-    "searchResultsFor": "Search results for \"{{query}}\"",
-    "show": "Show:",
-    "all": "All",
-    "columnsButton": "Columns",
-    "showColumns": "Show Columns:",
-    "filterName": "Filter by name...",
-    "filterLocation": "Filter by location...",
-    "childOf": "Child of {{name}}",
-    "child": "Child",
-    "grandparent": "Grandparent",
-    "parent": "Parent",
-    "descendant": "Descendant",
+  "generations": {
+    "limitNotice": "Generation limit active: first {{shown}} of {{total}} generations",
+    "hiddenDescendants_one": "{{count}} descendant hidden",
+    "hiddenDescendants_other": "{{count}} descendants hidden",
+    "expandBranch": "Expand {{count}} descendants",
+    "expandAll": "Show all generations",
+    "expandAllWarning": "The whole tree will be rendered ({{count}} individuals) and may be heavy on slow devices. Continue?",
+    "collapse": "Restore generation limit",
+    "tierIndicator": "{{count}} generations • Drag horizontally only"
+  },
+  "grid": {
     "noMembers": "No members found",
-    "noMembersHint": "Try adjusting the filters or search keywords",
-    "showing": "Showing {{from}}-{{to}} of {{total}} members",
-    "previous": "Previous",
-    "next": "Next"
+    "noMembersDesc": "Try adjusting the filters or search keywords",
+    "sortName": "Name",
+    "sortAge": "Age",
+    "sortLocation": "Location",
+    "sortGeneration": "Generation",
+    "membersCount_one": "{{count}} Family Member",
+    "membersCount_other": "{{count}} Family Members",
+    "searchResults": "Search results for \"{{query}}\"",
+    "sortBy": "Sort by: {{label}}",
+    "showing": "Showing {{shown}} of {{total}} members"
   },
   "memberCard": {
     "editProfile": "Edit Profile",
     "addChild": "Add Child",
-    "shareProfile": "Share Profile"
+    "shareProfile": "Share Profile",
+    "duplicate": "Duplicate",
+    "move": "Move",
+    "delete": "Delete",
+    "edit": "Edit",
+    "ariaEditHint": "click to edit or right-click for more options",
+    "ariaSelectHint": "click to select",
+    "statusIndicators": "Status indicators"
   },
-  "contextMenu": {
-    "close": "Close context menu"
+  "node": {
+    "addChild": "Add Child",
+    "addSpouse": "Add Spouse",
+    "editProfile": "Edit Profile",
+    "delete": "Delete",
+    "ariaFamilyMember": "Family member {{name}}",
+    "ariaYearsOld": "{{age}} years old",
+    "ariaGeneration": "generation {{generation}}"
   },
   "relationship": {
     "selectType": "Select relationship type:",
@@ -137,14 +147,48 @@
       }
     }
   },
-  "generations": {
-    "limitNotice": "Generation limit active: first {{shown}} of {{total}} generations",
-    "hiddenDescendants_one": "{{count}} descendant hidden",
-    "hiddenDescendants_other": "{{count}} descendants hidden",
-    "expandBranch": "Expand {{count}} descendants",
-    "expandAll": "Show all generations",
-    "expandAllWarning": "The whole tree will be rendered ({{count}} individuals) and may be heavy on slow devices. Continue?",
-    "collapse": "Restore generation limit",
-    "tierIndicator": "{{count}} generations • Drag horizontally only"
+  "table": {
+    "columns": {
+      "photo": "Photo",
+      "name": "Name",
+      "relationship": "Relationship",
+      "birth": "Birth",
+      "age": "Age",
+      "status": "Status",
+      "location": "Location",
+      "contact": "Contact"
+    },
+    "living": "Living",
+    "deceased": "Deceased",
+    "ageYears": "{{age}} yrs",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "detail": "Detail",
+    "selected_one": "{{count}} member selected",
+    "selected_other": "{{count}} members selected",
+    "export": "Export",
+    "sendMessage": "Send Message",
+    "group": "Group",
+    "delete": "Delete",
+    "clearSelection": "Clear Selection",
+    "membersTitle_one": "{{count}} Family Member",
+    "membersTitle_other": "{{count}} Family Members",
+    "searchResultsFor": "Search results for \"{{query}}\"",
+    "show": "Show:",
+    "all": "All",
+    "columnsButton": "Columns",
+    "showColumns": "Show Columns:",
+    "filterName": "Filter by name...",
+    "filterLocation": "Filter by location...",
+    "childOf": "Child of {{name}}",
+    "child": "Child",
+    "grandparent": "Grandparent",
+    "parent": "Parent",
+    "descendant": "Descendant",
+    "noMembers": "No members found",
+    "noMembersHint": "Try adjusting the filters or search keywords",
+    "showing": "Showing {{from}}-{{to}} of {{total}} members",
+    "previous": "Previous",
+    "next": "Next"
   }
 }

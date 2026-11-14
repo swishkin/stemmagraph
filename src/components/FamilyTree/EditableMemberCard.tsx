@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import type { FamilyMember } from '../../types/family';
+import { useTranslation } from 'react-i18next';
 import { useFamilyStore } from '../../store/familyStore';
 import { 
   ArrowUp, 
@@ -43,7 +44,7 @@ const DirectionalPlusButton: React.FC<DirectionalPlusButtonProps> = ({
       e.stopPropagation();
       onDirectionalAdd(direction);
     }}
-    className={`absolute w-10 h-10 bg-white border-2 border-blue-500 rounded-full flex items-center justify-center text-blue-600 hover:bg-blue-50 hover:scale-110 transition-all duration-200 shadow-lg hover:shadow-xl group ${className}`}
+    className={`absolute w-10 h-10 bg-white dark:bg-gray-900 border-2 border-blue-500 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 hover:bg-blue-50 hover:scale-110 transition-all duration-200 shadow-lg hover:shadow-xl group ${className}`}
     title={tooltip}
   >
     <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white">
@@ -59,6 +60,7 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
   member, 
   position 
 }: EditableMemberCardProps) => {
+  const { t } = useTranslation('canvas');
   const { setSelectedMember, selectedMember, editMode } = useFamilyStore();
   const [showRelationshipModal, setShowRelationshipModal] = useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
@@ -127,9 +129,9 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
   // Replace nested ternary for border color
   let borderColorClass = '';
   if (editMode) {
-    borderColorClass = 'border-blue-500 bg-blue-50 border-4 cursor-pointer';
+    borderColorClass = 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 border-4 cursor-pointer';
   } else if (member.gender === 'male') {
-    borderColorClass = 'border-blue-200 hover:border-blue-400';
+    borderColorClass = 'border-blue-200 dark:border-blue-800 hover:border-blue-400';
   } else {
     borderColorClass = 'border-pink-200 hover:border-pink-400';
   }
@@ -171,13 +173,13 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
               handleContextMenu(event as React.MouseEvent);
             }
           }}
-          aria-label={`${member.name} family member card${editMode ? ' - click to edit or right-click for more options' : ' - click to select'}`}
+          aria-label={`${t('node.ariaFamilyMember', { name: member.name })}${editMode ? ' - ' + t('memberCard.ariaEditHint') : ' - ' + t('memberCard.ariaSelectHint')}`}
           aria-describedby={`member-info-${member.id}`}
         />
         
         <div
           id={`member-info-${member.id}`}
-          className={`w-40 h-48 bg-white rounded-xl shadow-md hover:shadow-lg border-2 transition-all duration-200 ${borderColorClass} ${selectedBorderClass} ${!member.isAlive ? 'border-gray-400 bg-gray-50' : ''} relative overflow-hidden`}
+          className={`w-40 h-48 bg-white dark:bg-gray-900 rounded-xl shadow-md hover:shadow-lg border-2 transition-all duration-200 ${borderColorClass} ${selectedBorderClass} ${!member.isAlive ? 'border-gray-400 dark:border-gray-600 bg-gray-50 dark:bg-gray-800' : ''} relative overflow-hidden`}
         >
           {/* Generation badge - Moved to top left corner */}
           <div className="absolute -top-2 -left-2">
@@ -191,7 +193,7 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
           {/* Status Indicators - Keep in top right */}
           <output
             className="absolute -top-2 -right-2 flex space-x-1 z-20"
-            aria-label="Status indicators"
+            aria-label={t('memberCard.statusIndicators')}
           >
             {member.maritalStatus === 'married' && (
               <div className="w-5 h-5 bg-yellow-400 rounded-full border-2 border-white flex items-center justify-center shadow-xs">
@@ -241,7 +243,7 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
 
           {/* Photo */}
           <div className="p-4 pb-2">
-            <div className="w-16 h-16 mx-auto rounded-full overflow-hidden bg-gray-200 shadow-xs">
+            <div className="w-16 h-16 mx-auto rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 shadow-xs">
               {member.photoUrl ? (
                 <img
                   src={member.photoUrl}
@@ -264,30 +266,30 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
           <div className="px-3 pb-4 text-center">
             {/* Nickname first (if exists) */}
             {member.nickname && (
-              <p className="text-xs text-gray-500 mb-1 italic">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 italic">
                 ({member.nickname})
               </p>
             )}
             
             {/* Full name */}
-            <h3 className="font-bold text-gray-900 text-sm leading-tight mb-1 truncate">
+            <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-tight mb-1 truncate">
               {member.name}
             </h3>
             
             {/* Birth year and age */}
             <div className="space-y-0.5">
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-gray-600 dark:text-gray-400">
                 {getYearDisplay()}
               </p>
               {/* Show age calculation */}
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {calculateAge()} tahun
               </p>
             </div>
             
             {/* Profession (if exists) */}
             {member.profession && (
-              <p className="text-xs text-gray-500 mt-1 truncate">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
                 {member.profession}
               </p>
             )}
@@ -307,7 +309,7 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
           <button
             type="button"
             className="fixed inset-0 z-40 bg-transparent p-0 m-0 border-none outline-hidden"
-            aria-label="Close context menu"
+            aria-label={t('contextMenu.close')}
             tabIndex={0}
             onClick={() => setShowContextMenu(false)}
             onKeyDown={e => {
@@ -316,7 +318,7 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
             style={{ cursor: 'default' }}
           />
           <div 
-            className="fixed bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50 min-w-48"
+            className="fixed bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg py-2 z-50 min-w-48"
             style={{
               left: contextMenuPosition.x,
               top: contextMenuPosition.y,
@@ -327,10 +329,10 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
                 setShowEditModal(true);
                 setShowContextMenu(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
             >
               <Edit className="w-4 h-4" />
-              <span>Edit</span>
+              <span>{t('memberCard.edit')}</span>
             </button>
 
             <button 
@@ -338,10 +340,10 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
                 // Handle duplicate
                 setShowContextMenu(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
             >
               <Copy className="w-4 h-4" />
-              <span>Duplikasi</span>
+              <span>{t('memberCard.duplicate')}</span>
             </button>
 
             <button 
@@ -349,10 +351,10 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
                 // Handle move
                 setShowContextMenu(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
             >
               <Move className="w-4 h-4" />
-              <span>Pindahkan</span>
+              <span>{t('memberCard.move')}</span>
             </button>
             
             <hr className="my-2" />
@@ -364,10 +366,10 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
                 }
                 setShowContextMenu(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 dark:text-red-400 transition-colors flex items-center space-x-2"
             >
               <Trash2 className="w-4 h-4" />
-              <span>Delete</span>
+              <span>{t('memberCard.delete')}</span>
             </button>
           </div>
         </>

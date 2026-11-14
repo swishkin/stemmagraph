@@ -603,6 +603,25 @@ app.post('/api/v1/admin/accounts/:id/enable', requireAuth, requireOwner, async (
   }
 });
 
+// Promote an existing account to installation owner. Promotion only:
+// there is deliberately no demotion endpoint, and adding an owner can
+// never orphan the installation (the last-owner guard on disable is the
+// only owner-count invariant).
+app.post('/api/v1/admin/accounts/:id/owner', requireAuth, requireOwner, async (req: AuthenticatedRequest<{ id: string }>, res) => {
+  try {
+    const target = await prisma.user.findUnique({ where: { id: req.params.id } });
+    if (!target) return res.status(404).json({ code: 'NOT_FOUND', message: 'Account not found' });
+    if (target.role === 'owner') {
+      return res.status(409).json({ code: 'ALREADY_OWNER', message: 'This account is already an installation owner' });
+    }
+
+    const updated = await prisma.user.update({ where: { id: target.id }, data: { role: 'owner' } });
+    res.json({ account: formatAccount(updated) });
+  } catch (e) {
+    res.status(500).json({ code: 'ADMIN_ERROR', message: (e as Error).message });
+  }
+});
+
 // ─── Event store (read-only, P2-2) ───────────────────────
 // Append-only audit surface for owners: the 50 most recent events, with an
 // optional exact type filter. There is deliberately no UI, no update
@@ -1705,6 +1724,42 @@ app.get('/api/v1/trees/:treeId/membership', requireAuth, async (req: Authenticat
       include: { user: { select: { id: true, email: true, name: true, status: true } } },
     });
     res.json({ members: rows.map((row) => formatTreeMembership(row, row.user)) });
+  } catch (e) {
+    res.status(500).json({ code: 'MEMBERSHIP_ERROR', message: (e as Error).message });
+  }
+});
+
+// Add an already-registered user to this tree with a chosen role.
+// Distinct from the FamilyMember endpoints below, which create tree
+// nodes; this one manages human accounts on the tree.
+app.post('/api/v1/trees/:treeId/membership', requireAuth, async (req: AuthenticatedRequest<{ treeId: string }>, res) => {
+  try {
+    const guard = await guardTreeAction(req.userId!, req.params.treeId, 'manage_membership');
+    if (!guard.ok) return res.status(guard.statusCode).json({ code: guard.code, message: guard.message });
+
+    const { email, role } = (req.body ?? {}) as { email?: unknown; role?: unknown };
+    if (typeof email !== 'string' || !email.trim()) {
+      return res.status(400).json({ code: 'VALIDATION_ERROR', message: 'email is required' });
+    }
+    if (!isTreeRole(role)) {
+      return res.status(400).json({ code: 'VALIDATION_ERROR', message: 'role must be "owner", "editor", or "viewer"' });
+    }
+
+    const user = await prisma.user.findUnique({ where: { email: email.trim().toLowerCase() } });
+    if (!user) {
+      return res.status(404).json({ code: 'USER_NOT_FOUND', message: 'No account exists with that email on this installation' });
+    }
+
+    const existing = await prisma.treeMember.findUnique({
+      where: { treeId_userId: { treeId: req.params.treeId, userId: user.id } },
+    });
+    const membership = await prisma.treeMember.upsert({
+      where: { treeId_userId: { treeId: req.params.treeId, userId: user.id } },
+      update: { role },
+      create: { treeId: req.params.treeId, userId: user.id, role },
+      include: { user: { select: { id: true, email: true, name: true, status: true } } },
+    });
+    res.status(existing ? 200 : 201).json({ membership: formatTreeMembership(membership, membership.user) });
   } catch (e) {
     res.status(500).json({ code: 'MEMBERSHIP_ERROR', message: (e as Error).message });
   }

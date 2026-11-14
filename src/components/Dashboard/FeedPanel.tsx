@@ -146,14 +146,14 @@ export const FeedPanel: React.FC = () => {
   const renderBody = (): React.ReactNode => {
     if (!feedApi) {
       return (
-        <div className="text-center py-12 text-gray-500" data-testid="feed-unavailable">
+        <div className="text-center py-12 text-gray-500 dark:text-gray-400" data-testid="feed-unavailable">
           <p>{t('activityFeed.unavailable')}</p>
         </div>
       );
     }
     if (isLoading) {
       return (
-        <div className="text-center py-12 text-gray-500" data-testid="feed-loading">
+        <div className="text-center py-12 text-gray-500 dark:text-gray-400" data-testid="feed-loading">
           <p>{t('activityFeed.loading')}</p>
         </div>
       );
@@ -162,10 +162,10 @@ export const FeedPanel: React.FC = () => {
       return (
         <div className="text-center py-12" data-testid="feed-error">
           <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
-          <p className="text-gray-700 mb-4">{t('activityFeed.loadFailed')}</p>
+          <p className="text-gray-700 dark:text-gray-300 mb-4">{t('activityFeed.loadFailed')}</p>
           <button
             onClick={handleRetry}
-            className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm font-medium"
           >
             <RefreshCw className="w-4 h-4" />
             <span>{t('activityFeed.retry')}</span>
@@ -176,7 +176,7 @@ export const FeedPanel: React.FC = () => {
     if (items.length === 0) {
       return (
         <div className="text-center py-12" data-testid="feed-empty">
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-400">
             {filter === 'all' ? t('activityFeed.empty') : t('activityFeed.emptyFiltered')}
           </p>
         </div>
@@ -184,15 +184,15 @@ export const FeedPanel: React.FC = () => {
     }
     return (
       <div>
-        <ul className="divide-y divide-gray-100" data-testid="feed-items">
+        <ul className="divide-y divide-gray-100 dark:divide-gray-800" data-testid="feed-items">
           {items.map((item) => (
             <li key={item.id} className="flex items-start space-x-3 py-3">
-              <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 shrink-0">
+              <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 shrink-0">
                 {iconFor(item)}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm text-gray-900 break-words">{labelFor(item)}</p>
-                <time dateTime={item.createdAt} className="text-xs text-gray-400">
+                <p className="text-sm text-gray-900 dark:text-white break-words">{labelFor(item)}</p>
+                <time dateTime={item.createdAt} className="text-xs text-gray-400 dark:text-gray-500">
                   {formatDate(item.createdAt, i18n.language)}
                 </time>
               </div>
@@ -204,7 +204,7 @@ export const FeedPanel: React.FC = () => {
             <button
               onClick={handleLoadMore}
               disabled={isLoadingMore}
-              className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               data-testid="feed-load-more"
             >
               <ChevronDown className="w-4 h-4" />
@@ -217,13 +217,13 @@ export const FeedPanel: React.FC = () => {
   };
 
   return (
-    <section className="bg-white rounded-xl shadow-xs border border-gray-200" data-testid="feed-panel" aria-label={t('activityFeed.title')}>
-      <div className="p-6 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-100">
+    <section className="bg-white dark:bg-gray-900 rounded-xl shadow-xs border border-gray-200 dark:border-gray-800" data-testid="feed-panel" aria-label={t('activityFeed.title')}>
+      <div className="p-6 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-100 dark:border-gray-800">
         <div>
-          <h3 className="text-lg font-bold text-gray-900">{t('activityFeed.title')}</h3>
-          <p className="text-sm text-gray-500">{t('activityFeed.subtitle')}</p>
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t('activityFeed.title')}</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t('activityFeed.subtitle')}</p>
         </div>
-        <label className="flex items-center space-x-2 text-sm text-gray-600">
+        <label className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
           <span className="whitespace-nowrap">{t('activityFeed.filterLabel')}</span>
           <select
             value={filter}
@@ -232,7 +232,7 @@ export const FeedPanel: React.FC = () => {
               setIsLoading(true);
               setLoadFailed(false);
             }}
-            className="border border-gray-300 rounded-lg px-3 py-1.5 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label={t('activityFeed.filterLabel')}
             data-testid="feed-filter"
           >

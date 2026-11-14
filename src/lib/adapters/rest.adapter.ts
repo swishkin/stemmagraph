@@ -317,6 +317,14 @@ export class RestAdapter implements DataAdapter, AccountAdminApi, InvitationAdmi
     return body.account;
   }
 
+  async promoteToOwner(id: string): Promise<AdminAccount> {
+    const body = await this.request<{ account: AdminAccount }>(
+      'POST',
+      `/admin/accounts/${id}/owner`,
+    );
+    return body.account;
+  }
+
   // ── Invitations and tree membership (P2-3) ──────────────
   // Pure routing: every authorization decision lives in the server
   // (FORBIDDEN_TREE, TREE_LAST_OWNER_GUARD, INVITATION_* codes).
@@ -374,6 +382,15 @@ export class RestAdapter implements DataAdapter, AccountAdminApi, InvitationAdmi
 
   async removeTreeMembership(treeId: string, membershipId: string): Promise<void> {
     await this.request<void>('DELETE', `/trees/${treeId}/membership/${membershipId}`);
+  }
+
+  async addTreeMember(treeId: string, email: string, role: TreeRoleValue): Promise<TreeMembershipRecord> {
+    const body = await this.request<{ membership: TreeMembershipRecord }>(
+      'POST',
+      `/trees/${treeId}/membership`,
+      { email, role },
+    );
+    return body.membership;
   }
 
   // ── Activity feed (P2-6, ADR 0006) ─────────────────────

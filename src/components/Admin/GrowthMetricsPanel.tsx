@@ -59,9 +59,9 @@ export const GrowthMetricsPanel: React.FC = () => {
 
   if (!growthApi) {
     return (
-      <section className="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-xl">
-        <h3 className="text-sm font-bold text-gray-900">{t('growthMetrics.title')}</h3>
-        <p className="mt-1 text-xs text-gray-500">{t('growthMetrics.unavailable')}</p>
+      <section className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-800 rounded-xl">
+        <h3 className="text-sm font-bold text-gray-900 dark:text-white">{t('growthMetrics.title')}</h3>
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t('growthMetrics.unavailable')}</p>
       </section>
     );
   }
@@ -72,18 +72,18 @@ export const GrowthMetricsPanel: React.FC = () => {
   const formatRate = (value: number) => String(value);
 
   return (
-    <section className="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-xl" aria-label={t('growthMetrics.title')}>
-      <h3 className="text-sm font-bold text-gray-900">{t('growthMetrics.title')}</h3>
-      <p className="mt-0.5 text-xs text-gray-500">{t('growthMetrics.subtitle')}</p>
+    <section className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-800 rounded-xl" aria-label={t('growthMetrics.title')}>
+      <h3 className="text-sm font-bold text-gray-900 dark:text-white">{t('growthMetrics.title')}</h3>
+      <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">{t('growthMetrics.subtitle')}</p>
 
-      {isLoading && <p className="mt-3 text-sm text-gray-500">{t('growthMetrics.loading')}</p>}
+      {isLoading && <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">{t('growthMetrics.loading')}</p>}
 
       {loadFailed && (
         <div className="mt-3">
-          <p className="text-sm text-red-600">{t('growthMetrics.loadFailed')}</p>
+          <p className="text-sm text-red-600 dark:text-red-400">{t('growthMetrics.loadFailed')}</p>
           <button
             onClick={() => void load()}
-            className="mt-2 px-3 py-1 rounded border border-gray-300 text-xs font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+            className="mt-2 px-3 py-1 rounded border border-gray-300 dark:border-gray-700 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             {t('growthMetrics.retry')}
           </button>
@@ -92,17 +92,17 @@ export const GrowthMetricsPanel: React.FC = () => {
 
       {!isLoading && !loadFailed && (
         <>
-          <p className="mt-3 text-xs text-gray-600">
+          <p className="mt-3 text-xs text-gray-600 dark:text-gray-400">
             {t('growthMetrics.treesWithActiveEditor', { pct: String(snapshot?.treesWithActiveEditorPct ?? 0) })}
           </p>
 
           {isEmpty ? (
-            <p className="mt-3 text-sm text-gray-500">{t('growthMetrics.empty')}</p>
+            <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">{t('growthMetrics.empty')}</p>
           ) : (
             <div className="mt-3 overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-xs text-gray-500 uppercase border-b border-gray-200">
+                  <tr className="text-left text-xs text-gray-500 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-800">
                     <th className="py-2 pr-3 font-semibold">{t('growthMetrics.table.week')}</th>
                     <th className="py-2 pr-3 font-semibold">{t('growthMetrics.table.e1')}</th>
                     <th className="py-2 pr-3 font-semibold">{t('growthMetrics.table.e2')}</th>
@@ -114,14 +114,14 @@ export const GrowthMetricsPanel: React.FC = () => {
                 </thead>
                 <tbody>
                   {weeks.map((week) => (
-                    <tr key={week.isoWeek} className="border-b border-gray-100 last:border-b-0">
-                      <td className="py-2 pr-3 font-medium text-gray-900 whitespace-nowrap">{week.isoWeek}</td>
-                      <td className="py-2 pr-3 text-gray-700">{week.e1}</td>
-                      <td className="py-2 pr-3 text-gray-700">{week.e2}</td>
-                      <td className="py-2 pr-3 text-gray-700">{week.e3}</td>
-                      <td className="py-2 pr-3 text-gray-900">{formatRate(week.k)}</td>
-                      <td className="py-2 pr-3 text-gray-700">{formatRate(week.pakaiRate)}</td>
-                      <td className="py-2 text-gray-700">{formatRate(week.aktivasiRate)}</td>
+                    <tr key={week.isoWeek} className="border-b border-gray-100 dark:border-gray-800 last:border-b-0">
+                      <td className="py-2 pr-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{week.isoWeek}</td>
+                      <td className="py-2 pr-3 text-gray-700 dark:text-gray-300">{week.e1}</td>
+                      <td className="py-2 pr-3 text-gray-700 dark:text-gray-300">{week.e2}</td>
+                      <td className="py-2 pr-3 text-gray-700 dark:text-gray-300">{week.e3}</td>
+                      <td className="py-2 pr-3 text-gray-900 dark:text-white">{formatRate(week.k)}</td>
+                      <td className="py-2 pr-3 text-gray-700 dark:text-gray-300">{formatRate(week.pakaiRate)}</td>
+                      <td className="py-2 text-gray-700 dark:text-gray-300">{formatRate(week.aktivasiRate)}</td>
                     </tr>
                   ))}
                 </tbody>

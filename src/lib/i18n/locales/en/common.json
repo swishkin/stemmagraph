@@ -1,162 +1,92 @@
 {
-  "app": {
-    "brand": "FamilyTree"
-  },
-  "header": {
-    "language": "Language",
-    "nav": {
-      "dashboard": "Dashboard",
-      "familyTree": "Family Tree"
+  "activityFeed": {
+    "tab": "Activity",
+    "title": "Activity feed",
+    "subtitle": "What happened in your trees and your account.",
+    "filterLabel": "Activity type",
+    "filterAll": "All activity",
+    "types": {
+      "ACCOUNT_PENDING_CREATED": "Registration created",
+      "ACCOUNT_ACTIVATED": "Account activated",
+      "ACCOUNT_DISABLED": "Account disabled",
+      "ACCOUNT_ENABLED": "Account enabled",
+      "INVITATION_CREATED": "Invitation created",
+      "INVITATION_USED": "Invitation used",
+      "INVITATION_REVOKED": "Invitation revoked"
     },
-    "searchPlaceholder": "Search family members..."
-  },
-  "userMenu": {
-    "close": "Close user menu",
-    "profile": "Profile",
-    "settings": "Settings",
-    "admin": "Manage Accounts",
-    "signOut": "Sign Out"
-  },
-  "bottomNav": {
-    "generation": "Generation:",
-    "addMember": "Add Member",
-    "export": "Export",
-    "print": "Print",
-    "share": "Share"
-  },
-  "export": {
-    "privacy": {
-      "title": "Export Privacy",
-      "modeClean": "Clean private copy (safe to share)",
-      "modeFull": "Full private archive",
-      "report": "{{total}} people: {{redacted}} living redacted, {{full}} living in full, {{deceased}} deceased",
-      "cleanNote": "Living members' data is redacted automatically in GEDCOM and GEDZIP files.",
-      "warning": "Warning: this file contains full data about living family members (names, birth dates, contact details). Use it only for your own private archive.",
-      "confirmLabel": "I understand and still want to download the full data"
-    }
-  },
-  "import": {
-    "button": "Import",
-    "busy": "Importing...",
-    "close": "Close import menu",
-    "hint": "Load a GEDCOM 7.0 (.ged) or GEDZIP (.gedzip) file into the current tree. The file type is detected automatically.",
-    "chooseFile": "Choose a .ged or .gedzip file",
-    "summary": {
-      "title": "Import complete",
-      "members": "{{count}} members created",
-      "relations": "{{count}} relationships created",
-      "skipped": "{{count}} relationships skipped (unknown references)",
-      "failed": "{{count}} members failed to save"
+    "items": {
+      "accountPendingCreated": "Your registration was created and is waiting for owner activation.",
+      "accountActivated": {
+        "asSubject": "Your account was activated.",
+        "asActor": "You activated an account."
+      },
+      "accountDisabled": {
+        "asSubject": "Your account was disabled.",
+        "asActor": "You disabled an account."
+      },
+      "accountEnabled": {
+        "asSubject": "Your account was enabled again.",
+        "asActor": "You enabled an account."
+      },
+      "invitationCreated": "Invitation link created via {{channel}} ({{invitationType}}).",
+      "invitationUsed": {
+        "success": "An invitation link was used: registration succeeded.",
+        "failure": "An invitation link was used: the attempt failed."
+      },
+      "invitationRevoked": "Invitation link revoked ({{invitationType}})."
     },
-    "errors": {
-      "noTree": "No active family tree. Open or create a tree first.",
-      "unreadable": "The file could not be read as GEDCOM or GEDZIP.",
-      "empty": "No individual records were found in this file.",
-      "generic": "Import failed. Check the file and try again."
-    }
-  },
-  "profile": {
-    "close": "Close profile",
-    "title": "Your Account",
-    "unavailable": "Account management isn't available with the current data adapter.",
-    "sectionProfile": "Profile",
-    "name": "First name",
-    "familyName": "Family name",
-    "email": "Email",
-    "avatar": "Avatar URL",
-    "save": "Save changes",
-    "saveFailed": "Failed to save. Please try again.",
-    "saved": "Profile saved.",
-    "sectionPassword": "Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordMismatch": "New passwords do not match.",
-    "passwordChanged": "Password changed.",
-    "changePassword": "Change password",
-    "sectionDanger": "Danger zone",
-    "deleteWarning": "Deleting your account is permanent. Your membership in trees you don't own, the invitations you created, and your notifications will be removed. You must delete any trees you own first; owner accounts must be handed over by the server administrator before they can be deleted.",
-    "deletePasswordPlaceholder": "Type your password to confirm",
-    "deleteAccount": "Delete account",
-    "deleteFailed": "Failed to delete the account. Please try again."
-  },
-  "settings": {
-    "title": "Settings",
-    "close": "Close settings",
-    "appearance": "Appearance",
-    "light": "Light",
-    "dark": "Dark",
-    "language": "Language",
-    "scopeNote": "Theme and language are saved in this browser only."
-  },
-  "toolbar": {
-    "dashboard": "Dashboard",
-    "unsavedConfirm": "You have unsaved changes. Are you sure you want to exit edit mode?",
-    "view": "View:",
-    "viewMode": {
-      "tree": "Tree",
-      "card": "Card",
-      "list": "List"
+    "invitationType": {
+      "personal": "personal",
+      "family": "family"
     },
-    "mode": "Mode:",
-    "editMode": "Edit Mode",
-    "viewModeLabel": "View Mode",
-    "filter": "Filter:",
-    "allGenerations": "All Generations",
-    "generationN": "Generation {{n}}",
-    "living": "Living",
-    "deceased": "Deceased",
-    "saveAll": "Save All",
-    "exitEdit": "Exit Edit",
-    "editActive": "Edit Mode Active - Click a card to edit, use the + icon to add a member",
-    "editTip": "Tip: Click an empty area to exit edit mode"
+    "channel": {
+      "manual": "manual link",
+      "wa": "WhatsApp",
+      "email": "email"
+    },
+    "loadMore": "Load more",
+    "loading": "Loading activity...",
+    "empty": "No activity yet. Actions in your trees will appear here.",
+    "emptyFiltered": "No activity of this type.",
+    "unavailable": "The activity feed needs the server backend. Start the app with the REST adapter to see it.",
+    "loadFailed": "Loading the activity feed failed.",
+    "retry": "Retry"
   },
-  "dashboard": {
-    "nav": "Dashboard",
-    "cardView": "Card View",
-    "listView": "List View",
-    "treeCount_one": "{{count}} Family Tree (Development Mode)",
-    "treeCount_other": "{{count}} Family Trees (Development Mode)",
-    "memberCount_one": "{{count}} Member",
-    "memberCount_other": "{{count}} Members",
-    "familyTreesTitle": "Family Trees",
-    "familyTreesSubtitle": "Manage and explore your family trees",
-    "createNew": "Create New Family Tree",
-    "createNewDesc": "Start building a new family tree",
-    "members_one": "{{count}} member",
-    "members_other": "{{count}} members",
-    "generations_one": "{{count}} generation",
-    "generations_other": "{{count}} generations",
-    "updated": "Updated: {{date}}",
-    "open": "OPEN",
+  "admin": {
+    "title": "Manage Accounts",
+    "subtitle": "Activate pending registrations, disable, or restore accounts according to their status.",
+    "close": "Close account management panel",
+    "refresh": "Reload account list",
+    "accounts_one": "{{count}} account",
+    "accounts_other": "{{count}} accounts",
     "table": {
-      "name": "Family Tree Name",
-      "members": "Members",
-      "generations": "Generations",
-      "lastUpdated": "Last Updated",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "createdAt": "Created",
       "actions": "Actions"
     },
-    "created": "Created {{date}}",
-    "emptyTitle": "No Family Tree Yet",
-    "emptyDesc": "Start by creating your first family tree",
-    "createFirst": "Create First Family Tree"
-  },
-  "createModal": {
-    "title": "Create New Family Tree",
-    "nameLabel": "Family Name",
-    "placeholder": "e.g., The Sutrisno Family, The Handayani Family",
-    "errorRequired": "Family name is required",
-    "errorMinLength": "Family name must be at least 3 characters",
-    "errorFailed": "Failed to create family tree. Please try again.",
-    "tipsTitle": "Naming Tips:",
-    "tips": {
-      "surname": "Use a surname or extended family name",
-      "examples": "Examples: \"The Wijaya Family\", \"The Sitorus Clan\"",
-      "avoidSpecific": "Avoid overly specific names"
+    "role": {
+      "owner": "Owner",
+      "member": "Member"
     },
-    "cancel": "CANCEL",
-    "creating": "CREATING...",
-    "create": "CREATE"
+    "status": {
+      "pending": "Pending",
+      "active": "Active",
+      "disabled": "Disabled"
+    },
+    "action": {
+      "activate": "Activate",
+      "disable": "Disable",
+      "enable": "Enable"
+    },
+    "loadError": "Failed to load the account list.",
+    "makeOwner": "Make owner",
+    "makeOwnerConfirm": "Make {{name}} the owner of this installation? They will be able to manage all accounts."
+  },
+  "app": {
+    "brand": "FamilyTree"
   },
   "auth": {
     "signinTitle": "Sign In to Your Family Tree",
@@ -198,50 +128,189 @@
     "loginDisabledTitle": "Account disabled",
     "loginDisabledBody": "The installation owner disabled this account. Contact the owner if you believe this is a mistake."
   },
-  "notifications": {
-    "ariaLabel": "Notifications ({{count}} unread)",
-    "title": "Notifications",
-    "close": "Close notifications",
-    "refresh": "Reload notifications",
-    "markAllRead": "Mark all as read",
-    "empty": "No notifications",
-    "loadError": "Failed to load notifications.",
-    "items": {
-      "pendingCreated": "{{name}} ({{email}}) registered and is waiting for activation.",
-      "activated": "Your account has been activated. Enjoy building your family tree.",
-      "unknown": "New notification: {{type}}"
-    }
+  "bottomNav": {
+    "generation": "Generation:",
+    "addMember": "Add Member",
+    "export": "Export",
+    "print": "Print",
+    "share": "Share"
   },
-  "admin": {
-    "title": "Manage Accounts",
-    "subtitle": "Activate pending registrations, disable, or restore accounts according to their status.",
-    "close": "Close account management panel",
-    "refresh": "Reload account list",
-    "accounts_one": "{{count}} account",
-    "accounts_other": "{{count}} accounts",
+  "changeReview": {
+    "open": "Change proposals",
+    "title": "Change proposals: {{treeName}}",
+    "close": "Close",
+    "refresh": "Refresh",
+    "unavailable": "Change proposals need the REST backend (VITE_API_BASE_URL).",
+    "loading": "Loading proposals...",
+    "loadFailed": "Failed to load proposals.",
+    "ownerTitle": "Waiting for your decision",
+    "editorTitle": "Your proposals",
+    "emptyOwner": "No proposals are waiting for your decision.",
+    "emptyEditor": "You have not proposed anything on this tree yet.",
+    "targetType": {
+      "member": "Member",
+      "relationship": "Relationship"
+    },
+    "state": {
+      "pending": "Waiting",
+      "rejected": "Rejected",
+      "distinct": "Marked distinct"
+    },
+    "reasonLabel": "Proposer's reason",
+    "beforeLabel": "Current values",
+    "afterLabel": "Proposed values",
+    "proposedAt": "Proposed {{date}}",
+    "decidedAt": "Decided {{date}}",
+    "decisionNoteLabel": "Decision note",
+    "actionAccept": "Accept and apply",
+    "actionReject": "Reject",
+    "actionDistinct": "Mark distinct permanently",
+    "cancelReject": "Cancel",
+    "rejectNotePlaceholder": "Write the rejection reason for the proposer...",
+    "rejectNoteRequired": "A rejection note is required.",
+    "distinctNotePlaceholder": "Additional note (optional)",
+    "distinctHint": "Marking distinct refuses this exact content for this record forever.",
+    "actionFailed": "Action failed.",
+    "acceptDone": "Proposal accepted and applied.",
+    "proposeBanner": "Your edit will be sent to the tree owner for review instead of being saved directly.",
+    "reasonNoteLabel": "Reason for the change",
+    "reasonNotePlaceholder": "Explain why this change is needed...",
+    "reasonNoteRequired": "A reason is required (3-500 characters).",
+    "submitPropose": "Send proposal",
+    "proposeSent": "Proposal sent and waiting for the owner's decision.",
+    "proposeFailed": "Failed to send the proposal."
+  },
+  "createModal": {
+    "title": "Create New Family Tree",
+    "nameLabel": "Family Name",
+    "placeholder": "e.g., The Sutrisno Family, The Handayani Family",
+    "errorRequired": "Family name is required",
+    "errorMinLength": "Family name must be at least 3 characters",
+    "errorFailed": "Failed to create family tree. Please try again.",
+    "tipsTitle": "Naming Tips:",
+    "tips": {
+      "surname": "Use a surname or extended family name",
+      "examples": "Examples: \"The Wijaya Family\", \"The Sitorus Clan\"",
+      "avoidSpecific": "Avoid overly specific names"
+    },
+    "cancel": "CANCEL",
+    "creating": "CREATING...",
+    "create": "CREATE"
+  },
+  "dashboard": {
+    "nav": "Dashboard",
+    "cardView": "Card View",
+    "listView": "List View",
+    "treeCount_one": "{{count}} Family Tree (Development Mode)",
+    "treeCount_other": "{{count}} Family Trees (Development Mode)",
+    "memberCount_one": "{{count}} Member",
+    "memberCount_other": "{{count}} Members",
+    "familyTreesTitle": "Family Trees",
+    "familyTreesSubtitle": "Manage and explore your family trees",
+    "createNew": "Create New Family Tree",
+    "createNewDesc": "Start building a new family tree",
+    "members_one": "{{count}} member",
+    "members_other": "{{count}} members",
+    "generations_one": "{{count}} generation",
+    "generations_other": "{{count}} generations",
+    "updated": "Updated: {{date}}",
+    "open": "OPEN",
     "table": {
-      "name": "Name",
-      "email": "Email",
-      "role": "Role",
-      "status": "Status",
-      "createdAt": "Created",
+      "name": "Family Tree Name",
+      "members": "Members",
+      "generations": "Generations",
+      "lastUpdated": "Last Updated",
       "actions": "Actions"
     },
-    "role": {
-      "owner": "Owner",
-      "member": "Member"
+    "created": "Created {{date}}",
+    "emptyTitle": "No Family Tree Yet",
+    "emptyDesc": "Start by creating your first family tree",
+    "createFirst": "Create First Family Tree"
+  },
+  "digest": {
+    "title": "Weekly email digest",
+    "subtitle": "One email per week with what happened on your trees. Off until you switch it on.",
+    "optInLabel": "Send me the weekly digest",
+    "optInHint": "Switch it off any time; future emails stop immediately.",
+    "saving": "Saving...",
+    "saveFailed": "Saving the preference failed. Nothing changed on the server.",
+    "loading": "Loading digest preview...",
+    "loadFailed": "Loading the digest preview failed.",
+    "retry": "Retry",
+    "unavailable": "The weekly digest needs the server backend. Start the app with the REST adapter to use it.",
+    "previewTitle": "Last week in preview",
+    "windowLabel": "Window: {{start}} to {{end}}",
+    "previewEmpty": "Nothing happened on your trees last week, so there is no digest to show."
+  },
+  "export": {
+    "privacy": {
+      "title": "Export Privacy",
+      "modeClean": "Clean private copy (safe to share)",
+      "modeFull": "Full private archive",
+      "report": "{{total}} people: {{redacted}} living redacted, {{full}} living in full, {{deceased}} deceased",
+      "cleanNote": "Living members' data is redacted automatically in GEDCOM and GEDZIP files.",
+      "warning": "Warning: this file contains full data about living family members (names, birth dates, contact details). Use it only for your own private archive.",
+      "confirmLabel": "I understand and still want to download the full data"
     },
-    "status": {
-      "pending": "Pending",
-      "active": "Active",
-      "disabled": "Disabled"
+    "asGedcom": "Export as GEDCOM 7.0 (.ged)",
+    "asGedzip": "Export as GEDZIP (.gedzip)",
+    "asJpg": "Export as JPG",
+    "asPdf": "Export as PDF",
+    "asPng": "Export as PNG",
+    "print": "Print",
+    "ariaExport": "Export family tree",
+    "ariaClose": "Close export menu",
+    "ariaOptions": "Export options",
+    "button": "Export",
+    "exporting": "Exporting...",
+    "gedzipTooLarge": "This tree is too large for a GEDZIP archive (over the ZIP 4 GB limit). Downloading the plain GEDCOM (.ged) file instead."
+  },
+  "growthMetrics": {
+    "title": "Growth metrics",
+    "subtitle": "Weekly invitation funnel and k-factor. Internal owner view, never exported.",
+    "treesWithActiveEditor": "Trees with an active editor: {{pct}}%",
+    "loading": "Loading growth metrics...",
+    "table": {
+      "week": "Week",
+      "e1": "E1 invitations",
+      "e2": "E2 registrations",
+      "e3": "E3 activations",
+      "k": "K",
+      "pakaiRate": "Use rate",
+      "aktivasiRate": "Activation rate"
     },
-    "action": {
-      "activate": "Activate",
-      "disable": "Disable",
-      "enable": "Enable"
+    "empty": "No growth data in this window. Metrics appear once invitations and registrations exist.",
+    "unavailable": "Growth metrics need the server backend. Start the app with the REST adapter to see them.",
+    "loadFailed": "Loading growth metrics failed.",
+    "retry": "Retry"
+  },
+  "header": {
+    "language": "Language",
+    "nav": {
+      "dashboard": "Dashboard",
+      "familyTree": "Family Tree"
     },
-    "loadError": "Failed to load the account list."
+    "searchPlaceholder": "Search family members..."
+  },
+  "import": {
+    "button": "Import",
+    "busy": "Importing...",
+    "close": "Close import menu",
+    "hint": "Load a GEDCOM 7.0 (.ged) or GEDZIP (.gedzip) file into the current tree. The file type is detected automatically.",
+    "chooseFile": "Choose a .ged or .gedzip file",
+    "summary": {
+      "title": "Import complete",
+      "members": "{{count}} members created",
+      "relations": "{{count}} relationships created",
+      "skipped": "{{count}} relationships skipped (unknown references)",
+      "failed": "{{count}} members failed to save"
+    },
+    "errors": {
+      "noTree": "No active family tree. Open or create a tree first.",
+      "unreadable": "The file could not be read as GEDCOM or GEDZIP.",
+      "empty": "No individual records were found in this file.",
+      "generic": "Import failed. Check the file and try again."
+    }
   },
   "invite": {
     "contextTitle": "You are invited to {{treeName}}",
@@ -317,143 +386,202 @@
       "pending": "pending",
       "active": "active",
       "disabled": "disabled"
-    }
+    },
+    "addExistingTitle": "Add an existing user",
+    "addExistingHint": "The person must already have an account on this installation.",
+    "addExistingEmail": "Email",
+    "addExistingRole": "Role",
+    "addExistingAction": "Add to tree",
+    "addExistingEmailRequired": "Enter the email address of the user existing account"
   },
-  "activityFeed": {
-    "tab": "Activity",
-    "title": "Activity feed",
-    "subtitle": "What happened in your trees and your account.",
-    "filterLabel": "Activity type",
-    "filterAll": "All activity",
-    "types": {
-      "ACCOUNT_PENDING_CREATED": "Registration created",
-      "ACCOUNT_ACTIVATED": "Account activated",
-      "ACCOUNT_DISABLED": "Account disabled",
-      "ACCOUNT_ENABLED": "Account enabled",
-      "INVITATION_CREATED": "Invitation created",
-      "INVITATION_USED": "Invitation used",
-      "INVITATION_REVOKED": "Invitation revoked"
-    },
-    "items": {
-      "accountPendingCreated": "Your registration was created and is waiting for owner activation.",
-      "accountActivated": {
-        "asSubject": "Your account was activated.",
-        "asActor": "You activated an account."
-      },
-      "accountDisabled": {
-        "asSubject": "Your account was disabled.",
-        "asActor": "You disabled an account."
-      },
-      "accountEnabled": {
-        "asSubject": "Your account was enabled again.",
-        "asActor": "You enabled an account."
-      },
-      "invitationCreated": "Invitation link created via {{channel}} ({{invitationType}}).",
-      "invitationUsed": {
-        "success": "An invitation link was used: registration succeeded.",
-        "failure": "An invitation link was used: the attempt failed."
-      },
-      "invitationRevoked": "Invitation link revoked ({{invitationType}})."
-    },
-    "invitationType": {
-      "personal": "personal",
-      "family": "family"
-    },
-    "channel": {
-      "manual": "manual link",
-      "wa": "WhatsApp",
-      "email": "email"
-    },
-    "loadMore": "Load more",
-    "loading": "Loading activity...",
-    "empty": "No activity yet. Actions in your trees will appear here.",
-    "emptyFiltered": "No activity of this type.",
-    "unavailable": "The activity feed needs the server backend. Start the app with the REST adapter to see it.",
-    "loadFailed": "Loading the activity feed failed.",
-    "retry": "Retry"
-  },
-  "growthMetrics": {
-    "title": "Growth metrics",
-    "subtitle": "Weekly invitation funnel and k-factor. Internal owner view, never exported.",
-    "treesWithActiveEditor": "Trees with an active editor: {{pct}}%",
-    "loading": "Loading growth metrics...",
-    "table": {
-      "week": "Week",
-      "e1": "E1 invitations",
-      "e2": "E2 registrations",
-      "e3": "E3 activations",
-      "k": "K",
-      "pakaiRate": "Use rate",
-      "aktivasiRate": "Activation rate"
-    },
-    "empty": "No growth data in this window. Metrics appear once invitations and registrations exist.",
-    "unavailable": "Growth metrics need the server backend. Start the app with the REST adapter to see them.",
-    "loadFailed": "Loading growth metrics failed.",
-    "retry": "Retry"
-  },
-  "digest": {
-    "title": "Weekly email digest",
-    "subtitle": "One email per week with what happened on your trees. Off until you switch it on.",
-    "optInLabel": "Send me the weekly digest",
-    "optInHint": "Switch it off any time; future emails stop immediately.",
-    "saving": "Saving...",
-    "saveFailed": "Saving the preference failed. Nothing changed on the server.",
-    "loading": "Loading digest preview...",
-    "loadFailed": "Loading the digest preview failed.",
-    "retry": "Retry",
-    "unavailable": "The weekly digest needs the server backend. Start the app with the REST adapter to use it.",
-    "previewTitle": "Last week in preview",
-    "windowLabel": "Window: {{start}} to {{end}}",
-    "previewEmpty": "Nothing happened on your trees last week, so there is no digest to show."
-  },
-  "changeReview": {
-    "open": "Change proposals",
-    "title": "Change proposals: {{treeName}}",
-    "close": "Close",
-    "refresh": "Refresh",
-    "unavailable": "Change proposals need the REST backend (VITE_API_BASE_URL).",
-    "loading": "Loading proposals...",
-    "loadFailed": "Failed to load proposals.",
-    "ownerTitle": "Waiting for your decision",
-    "editorTitle": "Your proposals",
-    "emptyOwner": "No proposals are waiting for your decision.",
-    "emptyEditor": "You have not proposed anything on this tree yet.",
-    "targetType": {
-      "member": "Member",
-      "relationship": "Relationship"
-    },
-    "state": {
-      "pending": "Waiting",
-      "rejected": "Rejected",
-      "distinct": "Marked distinct"
-    },
-    "reasonLabel": "Proposer's reason",
-    "beforeLabel": "Current values",
-    "afterLabel": "Proposed values",
-    "proposedAt": "Proposed {{date}}",
-    "decidedAt": "Decided {{date}}",
-    "decisionNoteLabel": "Decision note",
-    "actionAccept": "Accept and apply",
-    "actionReject": "Reject",
-    "actionDistinct": "Mark distinct permanently",
-    "cancelReject": "Cancel",
-    "rejectNotePlaceholder": "Write the rejection reason for the proposer...",
-    "rejectNoteRequired": "A rejection note is required.",
-    "distinctNotePlaceholder": "Additional note (optional)",
-    "distinctHint": "Marking distinct refuses this exact content for this record forever.",
-    "actionFailed": "Action failed.",
-    "acceptDone": "Proposal accepted and applied.",
-    "proposeBanner": "Your edit will be sent to the tree owner for review instead of being saved directly.",
-    "reasonNoteLabel": "Reason for the change",
-    "reasonNotePlaceholder": "Explain why this change is needed...",
-    "reasonNoteRequired": "A reason is required (3-500 characters).",
-    "submitPropose": "Send proposal",
-    "proposeSent": "Proposal sent and waiting for the owner's decision.",
-    "proposeFailed": "Failed to send the proposal."
+  "memberDetail": {
+    "title": "Member Details",
+    "edit": "Edit",
+    "close": "Close member details",
+    "birthDate": "Birth Date",
+    "age": "Age",
+    "years": "{{age}} years",
+    "birthPlace": "Birth Place",
+    "currentLocation": "Current Location",
+    "profession": "Profession",
+    "education": "Education",
+    "maritalStatus": "Marital Status",
+    "married": "Married",
+    "single": "Single",
+    "divorced": "Divorced",
+    "widowed": "Widowed",
+    "contact": "Contact",
+    "editProfile": "Edit Profile",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "shareProfile": "Share Profile",
+    "dec": " (deceased)"
   },
   "memberEdit": {
     "privacyStatus": "Privacy Status",
     "privacyShared": "Shared, include in public tree exports",
-    "privacyPrivate": "Private, redact in public tree exports"
+    "privacyPrivate": "Private, redact in public tree exports",
+    "title": "Edit Member Profile",
+    "fullName": "Full Name",
+    "nickname": "Nickname",
+    "gender": "Gender",
+    "selectGender": "Select gender",
+    "male": "Male",
+    "female": "Female",
+    "generation": "Generation",
+    "birthInfo": "Birth Information",
+    "birthDate": "Birth Date",
+    "birthPlace": "Birth Place",
+    "living": "Living",
+    "deathDate": "Death Date",
+    "locInfo": "Location Information",
+    "currentLocation": "Current Location",
+    "profInfo": "Professional Information",
+    "profession": "Profession/Occupation",
+    "education": "Education",
+    "contactInfo": "Contact Information",
+    "phone": "Phone Number",
+    "email": "Email",
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "placeholderName": "Enter full name",
+    "placeholderNickname": "Daily nickname",
+    "placeholderBirthPlace": "City/place of birth",
+    "placeholderProfession": "Occupation or profession",
+    "placeholderEducation": "Latest education",
+    "placeholderLocation": "Current city/area of residence",
+    "errorNameRequired": "Name is required",
+    "errorBirthDateRequired": "Birth date is required",
+    "errorBirthPlaceRequired": "Birth place is required",
+    "errorGenderRequired": "Gender must be selected",
+    "closeModal": "Close modal"
+  },
+  "memberModal": {
+    "titleAdd": "Add Family Member",
+    "titleEdit": "Edit Family Member",
+    "titleFirst": "First Family Member",
+    "subtitleEdit": "Edit family member details",
+    "subtitleAdd": "Enter new member details",
+    "rootQuestion": "Who will be the <strong>\"root\"</strong> of this family tree?",
+    "errorNameRequired": "Full name is required",
+    "errorNameShort": "Name must be at least 2 characters",
+    "errorBirthDate": "Invalid birth date format",
+    "errorDeathBeforeBirth": "Death date cannot be earlier than birth date",
+    "errorSaveFailed": "Failed to save member data. Please try again.",
+    "fullName": "Full Name",
+    "nickname": "Nickname",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "birthDate": "Birth Date",
+    "birthPlace": "Birth Place",
+    "status": "Status",
+    "living": "Living",
+    "deceased": "Deceased",
+    "deathDate": "Death Date",
+    "roleLabel": "Role",
+    "roleMyself": "Myself",
+    "roleMyselfDesc": "I will be the center of the family tree",
+    "roleParent": "My parent",
+    "roleParentDesc": "Father or mother as the family root",
+    "roleGrandparent": "Grandparent",
+    "roleGrandparentDesc": "Oldest known generation",
+    "roleOther": "Other",
+    "roleOtherDesc": "Another family member",
+    "cancel": "CANCEL",
+    "saving": "SAVING...",
+    "update": "UPDATE",
+    "save": "SAVE",
+    "placeholderName": "e.g., John Smith, Jane Doe",
+    "placeholderNickname": "Nickname or alias",
+    "placeholderBirthPlace": "City/Town"
+  },
+  "notifications": {
+    "ariaLabel": "Notifications ({{count}} unread)",
+    "title": "Notifications",
+    "close": "Close notifications",
+    "refresh": "Reload notifications",
+    "markAllRead": "Mark all as read",
+    "empty": "No notifications",
+    "loadError": "Failed to load notifications.",
+    "items": {
+      "pendingCreated": "{{name}} ({{email}}) registered and is waiting for activation.",
+      "activated": "Your account has been activated. Enjoy building your family tree.",
+      "unknown": "New notification: {{type}}"
+    }
+  },
+  "profile": {
+    "close": "Close profile",
+    "title": "Your Account",
+    "unavailable": "Account management isn't available with the current data adapter.",
+    "sectionProfile": "Profile",
+    "name": "First name",
+    "familyName": "Family name",
+    "email": "Email",
+    "avatar": "Avatar URL",
+    "save": "Save changes",
+    "saveFailed": "Failed to save. Please try again.",
+    "saved": "Profile saved.",
+    "sectionPassword": "Password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "passwordMismatch": "New passwords do not match.",
+    "passwordChanged": "Password changed.",
+    "changePassword": "Change password",
+    "sectionDanger": "Danger zone",
+    "deleteWarning": "Deleting your account is permanent. Your membership in trees you don't own, the invitations you created, and your notifications will be removed. You must delete any trees you own first; owner accounts must be handed over by the server administrator before they can be deleted.",
+    "deletePasswordPlaceholder": "Type your password to confirm",
+    "deleteAccount": "Delete account",
+    "deleteFailed": "Failed to delete the account. Please try again."
+  },
+  "settings": {
+    "title": "Settings",
+    "close": "Close settings",
+    "appearance": "Appearance",
+    "light": "Light",
+    "dark": "Dark",
+    "language": "Language",
+    "scopeNote": "Theme and language are saved in this browser only."
+  },
+  "statsSidebar": {
+    "title": "Family Statistics",
+    "totalMembers": "Total Members",
+    "generations": "Generations",
+    "genderDistribution": "Gender Distribution",
+    "male": "Male",
+    "female": "Female",
+    "ageDistribution": "Age Distribution",
+    "years": "{{range}} years",
+    "locations": "Locations"
+  },
+  "toolbar": {
+    "dashboard": "Dashboard",
+    "unsavedConfirm": "You have unsaved changes. Are you sure you want to exit edit mode?",
+    "view": "View:",
+    "viewMode": {
+      "tree": "Tree",
+      "card": "Card",
+      "list": "List"
+    },
+    "mode": "Mode:",
+    "editMode": "Edit Mode",
+    "viewModeLabel": "View Mode",
+    "filter": "Filter:",
+    "allGenerations": "All Generations",
+    "generationN": "Generation {{n}}",
+    "living": "Living",
+    "deceased": "Deceased",
+    "saveAll": "Save All",
+    "exitEdit": "Exit Edit",
+    "editActive": "Edit Mode Active - Click a card to edit, use the + icon to add a member",
+    "editTip": "Tip: Click an empty area to exit edit mode"
+  },
+  "userMenu": {
+    "close": "Close user menu",
+    "profile": "Profile",
+    "settings": "Settings",
+    "admin": "Manage Accounts",
+    "signOut": "Sign Out"
   }
 }

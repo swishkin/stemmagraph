@@ -186,6 +186,7 @@ export interface AccountAdminApi {
   markAllNotificationsRead(): Promise<number>;
   listAccounts(): Promise<AdminAccount[]>;
   setAccountStatus(id: string, action: AccountStatusAction): Promise<AdminAccount>;
+  promoteToOwner(id: string): Promise<AdminAccount>;
 }
 
 // ─── Invitations and tree membership (P2-3) ───────────────
@@ -261,6 +262,7 @@ export interface InvitationAdminApi {
   listTreeMembership(treeId: string): Promise<TreeMembershipRecord[]>;
   updateTreeMembershipRole(treeId: string, membershipId: string, role: TreeRoleValue): Promise<TreeMembershipRecord>;
   removeTreeMembership(treeId: string, membershipId: string): Promise<void>;
+  addTreeMember(treeId: string, email: string, role: TreeRoleValue): Promise<TreeMembershipRecord>;
 }
 
 // ─── Activity feed (P2-6, ADR 0006) ──────────────────────

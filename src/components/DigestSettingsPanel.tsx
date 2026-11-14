@@ -97,9 +97,9 @@ export const DigestSettingsPanel: React.FC = () => {
 
   if (view.state === 'unavailable') {
     return (
-      <section className="mt-8 p-4 bg-gray-50 border border-gray-200 rounded-xl">
-        <h3 className="text-sm font-bold text-gray-900">{t('digest.title')}</h3>
-        <p className="mt-1 text-xs text-gray-500">{t('digest.unavailable')}</p>
+      <section className="mt-8 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-800 rounded-xl">
+        <h3 className="text-sm font-bold text-gray-900 dark:text-white">{t('digest.title')}</h3>
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t('digest.unavailable')}</p>
       </section>
     );
   }
@@ -107,9 +107,9 @@ export const DigestSettingsPanel: React.FC = () => {
   const switchOn = optIn ?? false;
 
   return (
-    <section className="mt-8 p-4 bg-gray-50 border border-gray-200 rounded-xl" aria-label={t('digest.title')}>
-      <h3 className="text-sm font-bold text-gray-900">{t('digest.title')}</h3>
-      <p className="mt-0.5 text-xs text-gray-500">{t('digest.subtitle')}</p>
+    <section className="mt-8 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-800 rounded-xl" aria-label={t('digest.title')}>
+      <h3 className="text-sm font-bold text-gray-900 dark:text-white">{t('digest.title')}</h3>
+      <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">{t('digest.subtitle')}</p>
 
       {/* Consent switch: PUT /api/v1/digest/preferences */}
       <div className="mt-3 flex items-start space-x-3">
@@ -121,32 +121,32 @@ export const DigestSettingsPanel: React.FC = () => {
           disabled={optIn === null || saving}
           onClick={() => void handleToggle()}
           className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
-            switchOn ? 'bg-green-600' : 'bg-gray-300'
+            switchOn ? 'bg-green-600' : 'bg-gray-300 dark:bg-gray-600'
           } ${optIn === null || saving ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer hover:bg-green-500'}`}
         >
           <span
-            className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+            className={`inline-block h-4 w-4 transform rounded-full bg-white dark:bg-gray-900 shadow transition-transform ${
               switchOn ? 'translate-x-6' : 'translate-x-1'
             }`}
           />
         </button>
         <div>
-          <p className="text-sm font-medium text-gray-900">{t('digest.optInLabel')}</p>
-          <p className="text-xs text-gray-500">{t('digest.optInHint')}</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-white">{t('digest.optInLabel')}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{t('digest.optInHint')}</p>
         </div>
       </div>
 
-      {saving && <p className="mt-2 text-xs text-gray-500">{t('digest.saving')}</p>}
-      {saveFailed && <p className="mt-2 text-xs text-red-600">{t('digest.saveFailed')}</p>}
+      {saving && <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">{t('digest.saving')}</p>}
+      {saveFailed && <p className="mt-2 text-xs text-red-600 dark:text-red-400">{t('digest.saveFailed')}</p>}
 
-      {view.state === 'loading' && <p className="mt-3 text-sm text-gray-500">{t('digest.loading')}</p>}
+      {view.state === 'loading' && <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">{t('digest.loading')}</p>}
 
       {view.state === 'loadFailed' && (
         <div className="mt-3">
-          <p className="text-sm text-red-600">{t('digest.loadFailed')}</p>
+          <p className="text-sm text-red-600 dark:text-red-400">{t('digest.loadFailed')}</p>
           <button
             onClick={() => void load()}
-            className="mt-2 px-3 py-1 rounded border border-gray-300 text-xs font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+            className="mt-2 px-3 py-1 rounded border border-gray-300 dark:border-gray-700 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             {t('digest.retry')}
           </button>
@@ -155,18 +155,18 @@ export const DigestSettingsPanel: React.FC = () => {
 
       {view.state === 'empty' && (
         <div className="mt-3">
-          <p className="text-sm font-medium text-gray-900">{t('digest.previewTitle')}</p>
-          {windowLabel !== null && <p className="mt-1 text-xs text-gray-600">{windowLabel}</p>}
-          <p className="mt-1 text-sm text-gray-500">{t('digest.previewEmpty')}</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-white">{t('digest.previewTitle')}</p>
+          {windowLabel !== null && <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">{windowLabel}</p>}
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('digest.previewEmpty')}</p>
         </div>
       )}
 
       {view.state === 'ready' && (
         <div className="mt-3">
-          <p className="text-sm font-medium text-gray-900">{t('digest.previewTitle')}</p>
-          {windowLabel !== null && <p className="mt-1 text-xs text-gray-600">{windowLabel}</p>}
-          <p className="mt-2 text-xs font-medium text-gray-700">{view.subject}</p>
-          <pre className="mt-1 p-3 bg-white border border-gray-200 rounded-lg text-xs text-gray-700 whitespace-pre-wrap font-mono">
+          <p className="text-sm font-medium text-gray-900 dark:text-white">{t('digest.previewTitle')}</p>
+          {windowLabel !== null && <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">{windowLabel}</p>}
+          <p className="mt-2 text-xs font-medium text-gray-700 dark:text-gray-300">{view.subject}</p>
+          <pre className="mt-1 p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">
             {view.body}
           </pre>
         </div>

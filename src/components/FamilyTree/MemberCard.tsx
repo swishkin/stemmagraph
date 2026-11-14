@@ -69,19 +69,19 @@ export const MemberCard: React.FC<MemberCardProps> = ({
   const cardSize = getCardSize();
 
   const getBorderColor = () => {
-    if (!member.isAlive) return 'border-gray-400';
+    if (!member.isAlive) return 'border-gray-400 dark:border-gray-600';
     if (isSelected || selectedMember?.id === member.id) {
       return member.gender === 'male' ? 'border-blue-500' : 'border-pink-500';
     }
-    return member.gender === 'male' ? 'border-blue-200' : 'border-pink-200';
+    return member.gender === 'male' ? 'border-blue-200 dark:border-blue-800' : 'border-pink-200';
   };
 
   const getBackgroundColor = () => {
-    if (!member.isAlive) return 'bg-gray-50';
+    if (!member.isAlive) return 'bg-gray-50 dark:bg-gray-800';
     if (isSelected || selectedMember?.id === member.id) {
-      return member.gender === 'male' ? 'bg-blue-50' : 'bg-pink-50';
+      return member.gender === 'male' ? 'bg-blue-50 dark:bg-blue-900/20' : 'bg-pink-50 dark:bg-pink-900/20';
     }
-    return 'bg-white';
+    return 'bg-white dark:bg-gray-900';
   };
 
   const getPhotoBackgroundColor = () => {
@@ -150,7 +150,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
 
         {/* Photo */}
         <div className="p-4 pb-2">
-          <div className={`${cardSize.photo} mx-auto rounded-full overflow-hidden bg-gray-200 shadow-xs`}>
+          <div className={`${cardSize.photo} mx-auto rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 shadow-xs`}>
             {member.photoUrl ? (
               <img
                 src={member.photoUrl}
@@ -173,29 +173,29 @@ export const MemberCard: React.FC<MemberCardProps> = ({
         <div className="px-3 pb-4 text-center">
           {/* Nickname first (if exists) */}
           {member.nickname && (
-            <p className="text-xs text-gray-500 mb-1 italic">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 italic">
               ({member.nickname})
             </p>
           )}
           
           {/* Full name */}
-          <h3 className={`font-bold text-gray-900 ${cardSize.text} leading-tight mb-1 truncate`}>
+          <h3 className={`font-bold text-gray-900 dark:text-white ${cardSize.text} leading-tight mb-1 truncate`}>
             {member.name}
           </h3>
           
           {/* Birth year and age */}
           <div className="space-y-0.5">
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-gray-600 dark:text-gray-400">
               {getYearDisplay()}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               {calculateAge()} tahun
             </p>
           </div>
           
           {/* Profession (if exists and space allows) */}
           {member.profession && size !== 'small' && (
-            <p className="text-xs text-gray-500 mt-1 truncate">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
               {member.profession}
             </p>
           )}
@@ -205,16 +205,16 @@ export const MemberCard: React.FC<MemberCardProps> = ({
         {showConnections && (
           <>
             {/* Top connection point (for parents) */}
-            <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border-2 border-white" />
+            <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border-2 border-white" />
             
             {/* Bottom connection point (for children) */}
-            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border-2 border-white" />
+            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border-2 border-white" />
             
             {/* Left connection point (for spouse/siblings) */}
-            <div className="absolute top-1/2 -left-1 transform -translate-y-1/2 w-3 h-3 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border-2 border-white" />
+            <div className="absolute top-1/2 -left-1 transform -translate-y-1/2 w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border-2 border-white" />
             
             {/* Right connection point (for spouse/siblings) */}
-            <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 w-3 h-3 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border-2 border-white" />
+            <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border-2 border-white" />
           </>
         )}
       </button>

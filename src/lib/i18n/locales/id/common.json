@@ -1,162 +1,92 @@
 {
-  "app": {
-    "brand": "FamilyTree"
-  },
-  "header": {
-    "language": "Bahasa",
-    "nav": {
-      "dashboard": "Dasbor",
-      "familyTree": "Silsilah Keluarga"
+  "activityFeed": {
+    "tab": "Aktivitas",
+    "title": "Feed aktivitas",
+    "subtitle": "Apa yang terjadi di pohon keluarga dan akun Anda.",
+    "filterLabel": "Jenis aktivitas",
+    "filterAll": "Semua aktivitas",
+    "types": {
+      "ACCOUNT_PENDING_CREATED": "Pendaftaran dibuat",
+      "ACCOUNT_ACTIVATED": "Akun diaktifkan",
+      "ACCOUNT_DISABLED": "Akun dinonaktifkan",
+      "ACCOUNT_ENABLED": "Akun diaktifkan kembali",
+      "INVITATION_CREATED": "Undangan dibuat",
+      "INVITATION_USED": "Undangan dipakai",
+      "INVITATION_REVOKED": "Undangan dicabut"
     },
-    "searchPlaceholder": "Cari anggota keluarga..."
-  },
-  "userMenu": {
-    "close": "Tutup menu pengguna",
-    "profile": "Profil",
-    "settings": "Pengaturan",
-    "admin": "Kelola Akun",
-    "signOut": "Keluar"
-  },
-  "bottomNav": {
-    "generation": "Generasi:",
-    "addMember": "Tambah Anggota",
-    "export": "Ekspor",
-    "print": "Cetak",
-    "share": "Bagikan"
-  },
-  "export": {
-    "privacy": {
-      "title": "Privasi Ekspor",
-      "modeClean": "Privat bersih (siap dibagikan)",
-      "modeFull": "Arsip pribadi penuh",
-      "report": "{{total}} orang: {{redacted}} hidup disamarkan, {{full}} hidup lengkap, {{deceased}} wafat",
-      "cleanNote": "Data anggota yang masih hidup otomatis disamarkan pada file GEDCOM dan GEDZIP.",
-      "warning": "Peringatan: file ini memuat data lengkap anggota yang masih hidup (nama, tanggal lahir, kontak). Gunakan hanya untuk arsip pribadi Anda.",
-      "confirmLabel": "Saya mengerti dan tetap mengunduh data lengkap"
-    }
-  },
-  "import": {
-    "button": "Impor",
-    "busy": "Mengimpor...",
-    "close": "Tutup menu impor",
-    "hint": "Muat file GEDCOM 7.0 (.ged) atau GEDZIP (.gedzip) ke pohon aktif. Jenis file dikenali otomatis.",
-    "chooseFile": "Pilih file .ged atau .gedzip",
-    "summary": {
-      "title": "Impor selesai",
-      "members": "{{count}} anggota dibuat",
-      "relations": "{{count}} relasi dibuat",
-      "skipped": "{{count}} relasi dilewati (rujukan tak dikenal)",
-      "failed": "{{count}} anggota gagal disimpan"
+    "items": {
+      "accountPendingCreated": "Pendaftaran Anda dibuat dan menunggu aktivasi oleh owner.",
+      "accountActivated": {
+        "asSubject": "Akun Anda diaktifkan.",
+        "asActor": "Anda mengaktifkan sebuah akun."
+      },
+      "accountDisabled": {
+        "asSubject": "Akun Anda dinonaktifkan.",
+        "asActor": "Anda menonaktifkan sebuah akun."
+      },
+      "accountEnabled": {
+        "asSubject": "Akun Anda diaktifkan kembali.",
+        "asActor": "Anda mengaktifkan kembali sebuah akun."
+      },
+      "invitationCreated": "Tautan undangan dibuat via {{channel}} ({{invitationType}}).",
+      "invitationUsed": {
+        "success": "Sebuah tautan undangan dipakai: pendaftaran berhasil.",
+        "failure": "Sebuah tautan undangan dipakai: percobaan gagal."
+      },
+      "invitationRevoked": "Tautan undangan dicabut ({{invitationType}})."
     },
-    "errors": {
-      "noTree": "Tidak ada pohon keluarga aktif. Buka atau buat pohon dulu.",
-      "unreadable": "File tidak dapat dibaca sebagai GEDCOM atau GEDZIP.",
-      "empty": "Tidak ada data individu pada file ini.",
-      "generic": "Impor gagal. Periksa file lalu coba lagi."
-    }
-  },
-  "profile": {
-    "close": "Tutup profil",
-    "title": "Akun Anda",
-    "unavailable": "Manajemen akun tidak tersedia dengan adapter data ini.",
-    "sectionProfile": "Profil",
-    "name": "Nama",
-    "familyName": "Nama keluarga",
-    "email": "Email",
-    "avatar": "URL avatar",
-    "save": "Simpan perubahan",
-    "saveFailed": "Gagal menyimpan. Silakan coba lagi.",
-    "saved": "Profil disimpan.",
-    "sectionPassword": "Kata sandi",
-    "currentPassword": "Kata sandi saat ini",
-    "newPassword": "Kata sandi baru",
-    "confirmPassword": "Ulangi kata sandi baru",
-    "passwordMismatch": "Kata sandi baru tidak sama.",
-    "passwordChanged": "Kata sandi berhasil diubah.",
-    "changePassword": "Ubah kata sandi",
-    "sectionDanger": "Zona berbahaya",
-    "deleteWarning": "Menghapus akun bersifat permanen. Keanggotaan Anda pada pohon yang tidak Anda miliki, undangan yang Anda buat, dan notifikasi Anda akan dihapus. Hapus dulu pohon yang Anda miliki; akun pemilik (owner) harus dialihkan oleh administrator server sebelum bisa dihapus.",
-    "deletePasswordPlaceholder": "Ketik kata sandi untuk konfirmasi",
-    "deleteAccount": "Hapus akun",
-    "deleteFailed": "Gagal menghapus akun. Silakan coba lagi."
-  },
-  "settings": {
-    "title": "Pengaturan",
-    "close": "Tutup pengaturan",
-    "appearance": "Tampilan",
-    "light": "Terang",
-    "dark": "Gelap",
-    "language": "Bahasa",
-    "scopeNote": "Tema dan bahasa disimpan di peramban ini saja."
-  },
-  "toolbar": {
-    "dashboard": "Dasbor",
-    "unsavedConfirm": "Ada perubahan yang belum disimpan. Yakin ingin keluar dari mode edit?",
-    "view": "Tampilan:",
-    "viewMode": {
-      "tree": "Pohon",
-      "card": "Kartu",
-      "list": "Daftar"
+    "invitationType": {
+      "personal": "personal",
+      "family": "keluarga"
     },
-    "mode": "Mode:",
-    "editMode": "Mode Edit",
-    "viewModeLabel": "Mode Lihat",
-    "filter": "Filter:",
-    "allGenerations": "Semua Generasi",
-    "generationN": "Generasi {{n}}",
-    "living": "Hidup",
-    "deceased": "Wafat",
-    "saveAll": "Simpan Semua",
-    "exitEdit": "Keluar Edit",
-    "editActive": "Mode edit aktif. Klik kartu untuk mengedit, gunakan ikon + untuk menambah anggota",
-    "editTip": "Tips: klik area kosong untuk keluar dari mode edit"
+    "channel": {
+      "manual": "tautan manual",
+      "wa": "WhatsApp",
+      "email": "email"
+    },
+    "loadMore": "Muat lagi",
+    "loading": "Memuat aktivitas...",
+    "empty": "Belum ada aktivitas. Aksi di pohon keluarga Anda akan tampil di sini.",
+    "emptyFiltered": "Tidak ada aktivitas jenis ini.",
+    "unavailable": "Feed aktivitas butuh backend server. Jalankan aplikasi dengan adapter REST untuk melihatnya.",
+    "loadFailed": "Memuat feed aktivitas gagal.",
+    "retry": "Coba lagi"
   },
-  "dashboard": {
-    "nav": "Dasbor",
-    "cardView": "Tampilan Kartu",
-    "listView": "Tampilan Daftar",
-    "treeCount_one": "{{count}} Silsilah Keluarga (Mode Pengembangan)",
-    "treeCount_other": "{{count}} Silsilah Keluarga (Mode Pengembangan)",
-    "memberCount_one": "{{count}} Anggota",
-    "memberCount_other": "{{count}} Anggota",
-    "familyTreesTitle": "Silsilah Keluarga",
-    "familyTreesSubtitle": "Kelola dan jelajahi silsilah keluarga Anda",
-    "createNew": "Buat Silsilah Keluarga Baru",
-    "createNewDesc": "Mulai bangun silsilah keluarga baru",
-    "members_one": "{{count}} anggota",
-    "members_other": "{{count}} anggota",
-    "generations_one": "{{count}} generasi",
-    "generations_other": "{{count}} generasi",
-    "updated": "Diperbarui: {{date}}",
-    "open": "BUKA",
+  "admin": {
+    "title": "Kelola Akun",
+    "subtitle": "Aktifkan pendaftaran baru, nonaktifkan, atau pulihkan akun sesuai statusnya.",
+    "close": "Tutup panel kelola akun",
+    "refresh": "Muat ulang daftar akun",
+    "accounts_one": "{{count}} akun",
+    "accounts_other": "{{count}} akun",
     "table": {
-      "name": "Nama Silsilah",
-      "members": "Anggota",
-      "generations": "Generasi",
-      "lastUpdated": "Terakhir Diperbarui",
+      "name": "Nama",
+      "email": "Email",
+      "role": "Peran",
+      "status": "Status",
+      "createdAt": "Dibuat",
       "actions": "Aksi"
     },
-    "created": "Dibuat {{date}}",
-    "emptyTitle": "Belum Ada Silsilah",
-    "emptyDesc": "Mulai dengan membuat silsilah pertama Anda",
-    "createFirst": "Buat Silsilah Pertama"
-  },
-  "createModal": {
-    "title": "Buat Silsilah Keluarga Baru",
-    "nameLabel": "Nama Keluarga",
-    "placeholder": "cth. Keluarga Sutrisno, Keluarga Handayani",
-    "errorRequired": "Nama keluarga wajib diisi",
-    "errorMinLength": "Nama keluarga minimal 3 karakter",
-    "errorFailed": "Gagal membuat silsilah. Silakan coba lagi.",
-    "tipsTitle": "Tips Penamaan:",
-    "tips": {
-      "surname": "Gunakan nama marga atau nama keluarga besar",
-      "examples": "Contoh: \"Keluarga Wijaya\", \"Klan Sitorus\"",
-      "avoidSpecific": "Hindari nama yang terlalu spesifik"
+    "role": {
+      "owner": "Pemilik",
+      "member": "Anggota"
     },
-    "cancel": "BATAL",
-    "creating": "MEMBUAT...",
-    "create": "BUAT"
+    "status": {
+      "pending": "Menunggu",
+      "active": "Aktif",
+      "disabled": "Nonaktif"
+    },
+    "action": {
+      "activate": "Aktifkan",
+      "disable": "Nonaktifkan",
+      "enable": "Pulihkan"
+    },
+    "loadError": "Gagal memuat daftar akun.",
+    "makeOwner": "Jadikan pemilik",
+    "makeOwnerConfirm": "Jadikan {{name}} pemilik instalasi ini? Mereka akan dapat mengelola semua akun."
+  },
+  "app": {
+    "brand": "FamilyTree"
   },
   "auth": {
     "signinTitle": "Masuk ke Silsilah Keluarga Anda",
@@ -198,50 +128,189 @@
     "loginDisabledTitle": "Akun dinonaktifkan",
     "loginDisabledBody": "Pemilik instalasi menonaktifkan akun ini. Hubungi pemilik bila Anda merasa ini keliru."
   },
-  "notifications": {
-    "ariaLabel": "Notifikasi ({{count}} belum dibaca)",
-    "title": "Notifikasi",
-    "close": "Tutup notifikasi",
-    "refresh": "Muat ulang notifikasi",
-    "markAllRead": "Tandai semua dibaca",
-    "empty": "Tidak ada notifikasi",
-    "loadError": "Gagal memuat notifikasi.",
-    "items": {
-      "pendingCreated": "{{name}} ({{email}}) mendaftar dan menunggu aktivasi.",
-      "activated": "Akun Anda sudah diaktifkan. Selamat menyusun silsilah.",
-      "unknown": "Notifikasi baru: {{type}}"
-    }
+  "bottomNav": {
+    "generation": "Generasi:",
+    "addMember": "Tambah Anggota",
+    "export": "Ekspor",
+    "print": "Cetak",
+    "share": "Bagikan"
   },
-  "admin": {
-    "title": "Kelola Akun",
-    "subtitle": "Aktifkan pendaftaran baru, nonaktifkan, atau pulihkan akun sesuai statusnya.",
-    "close": "Tutup panel kelola akun",
-    "refresh": "Muat ulang daftar akun",
-    "accounts_one": "{{count}} akun",
-    "accounts_other": "{{count}} akun",
+  "changeReview": {
+    "open": "Usulan perubahan",
+    "title": "Usulan perubahan: {{treeName}}",
+    "close": "Tutup",
+    "refresh": "Muat ulang",
+    "unavailable": "Fitur usulan perubahan memerlukan backend REST (VITE_API_BASE_URL).",
+    "loading": "Memuat usulan...",
+    "loadFailed": "Gagal memuat usulan.",
+    "ownerTitle": "Menunggu keputusan Anda",
+    "editorTitle": "Usulan Anda",
+    "emptyOwner": "Tidak ada usulan yang menunggu keputusan.",
+    "emptyEditor": "Anda belum mengajukan usulan apa pun di pohon ini.",
+    "targetType": {
+      "member": "Anggota",
+      "relationship": "Relasi"
+    },
+    "state": {
+      "pending": "Menunggu",
+      "rejected": "Ditolak",
+      "distinct": "Ditandai beda"
+    },
+    "reasonLabel": "Alasan pengusul",
+    "beforeLabel": "Nilai sekarang",
+    "afterLabel": "Nilai usulan",
+    "proposedAt": "Diajukan {{date}}",
+    "decidedAt": "Diputuskan {{date}}",
+    "decisionNoteLabel": "Catatan keputusan",
+    "actionAccept": "Terima dan terapkan",
+    "actionReject": "Tolak",
+    "actionDistinct": "Tandai beda secara permanen",
+    "cancelReject": "Batal",
+    "rejectNotePlaceholder": "Tulis alasan penolakan untuk pengusul...",
+    "rejectNoteRequired": "Catatan penolakan wajib diisi.",
+    "distinctNotePlaceholder": "Catatan tambahan (opsional)",
+    "distinctHint": "Tandai beda menolak isi yang sama untuk rekaman ini selamanya.",
+    "actionFailed": "Aksi gagal.",
+    "acceptDone": "Usulan diterima dan diterapkan.",
+    "proposeBanner": "Perubahan Anda akan dikirim ke pemilik pohon untuk ditinjau, bukan langsung disimpan.",
+    "reasonNoteLabel": "Alasan perubahan",
+    "reasonNotePlaceholder": "Jelaskan mengapa perubahan ini perlu...",
+    "reasonNoteRequired": "Alasan perubahan wajib diisi (3-500 karakter).",
+    "submitPropose": "Kirim usulan",
+    "proposeSent": "Usulan terkirim dan menunggu keputusan pemilik.",
+    "proposeFailed": "Gagal mengirim usulan."
+  },
+  "createModal": {
+    "title": "Buat Silsilah Keluarga Baru",
+    "nameLabel": "Nama Keluarga",
+    "placeholder": "cth. Keluarga Sutrisno, Keluarga Handayani",
+    "errorRequired": "Nama keluarga wajib diisi",
+    "errorMinLength": "Nama keluarga minimal 3 karakter",
+    "errorFailed": "Gagal membuat silsilah. Silakan coba lagi.",
+    "tipsTitle": "Tips Penamaan:",
+    "tips": {
+      "surname": "Gunakan nama marga atau nama keluarga besar",
+      "examples": "Contoh: \"Keluarga Wijaya\", \"Klan Sitorus\"",
+      "avoidSpecific": "Hindari nama yang terlalu spesifik"
+    },
+    "cancel": "BATAL",
+    "creating": "MEMBUAT...",
+    "create": "BUAT"
+  },
+  "dashboard": {
+    "nav": "Dasbor",
+    "cardView": "Tampilan Kartu",
+    "listView": "Tampilan Daftar",
+    "treeCount_one": "{{count}} Silsilah Keluarga (Mode Pengembangan)",
+    "treeCount_other": "{{count}} Silsilah Keluarga (Mode Pengembangan)",
+    "memberCount_one": "{{count}} Anggota",
+    "memberCount_other": "{{count}} Anggota",
+    "familyTreesTitle": "Silsilah Keluarga",
+    "familyTreesSubtitle": "Kelola dan jelajahi silsilah keluarga Anda",
+    "createNew": "Buat Silsilah Keluarga Baru",
+    "createNewDesc": "Mulai bangun silsilah keluarga baru",
+    "members_one": "{{count}} anggota",
+    "members_other": "{{count}} anggota",
+    "generations_one": "{{count}} generasi",
+    "generations_other": "{{count}} generasi",
+    "updated": "Diperbarui: {{date}}",
+    "open": "BUKA",
     "table": {
-      "name": "Nama",
-      "email": "Email",
-      "role": "Peran",
-      "status": "Status",
-      "createdAt": "Dibuat",
+      "name": "Nama Silsilah",
+      "members": "Anggota",
+      "generations": "Generasi",
+      "lastUpdated": "Terakhir Diperbarui",
       "actions": "Aksi"
     },
-    "role": {
-      "owner": "Pemilik",
-      "member": "Anggota"
+    "created": "Dibuat {{date}}",
+    "emptyTitle": "Belum Ada Silsilah",
+    "emptyDesc": "Mulai dengan membuat silsilah pertama Anda",
+    "createFirst": "Buat Silsilah Pertama"
+  },
+  "digest": {
+    "title": "Ringkasan email mingguan",
+    "subtitle": "Satu email per minggu berisi kejadian di pohon Anda. Nonaktif sampai Anda menyalakannya.",
+    "optInLabel": "Kirimkan saya ringkasan mingguan",
+    "optInHint": "Matikan kapan saja; email berikutnya langsung berhenti.",
+    "saving": "Menyimpan...",
+    "saveFailed": "Menyimpan preferensi gagal. Tidak ada yang berubah di server.",
+    "loading": "Memuat pratinjau ringkasan...",
+    "loadFailed": "Memuat pratinjau ringkasan gagal.",
+    "retry": "Coba lagi",
+    "unavailable": "Ringkasan mingguan butuh backend server. Jalankan aplikasi dengan adapter REST untuk memakainya.",
+    "previewTitle": "Pratinjau minggu lalu",
+    "windowLabel": "Jendela: {{start}} sampai {{end}}",
+    "previewEmpty": "Tidak ada kejadian di pohon Anda minggu lalu, jadi tidak ada ringkasan untuk ditampilkan."
+  },
+  "export": {
+    "privacy": {
+      "title": "Privasi Ekspor",
+      "modeClean": "Privat bersih (siap dibagikan)",
+      "modeFull": "Arsip pribadi penuh",
+      "report": "{{total}} orang: {{redacted}} hidup disamarkan, {{full}} hidup lengkap, {{deceased}} wafat",
+      "cleanNote": "Data anggota yang masih hidup otomatis disamarkan pada file GEDCOM dan GEDZIP.",
+      "warning": "Peringatan: file ini memuat data lengkap anggota yang masih hidup (nama, tanggal lahir, kontak). Gunakan hanya untuk arsip pribadi Anda.",
+      "confirmLabel": "Saya mengerti dan tetap mengunduh data lengkap"
     },
-    "status": {
-      "pending": "Menunggu",
-      "active": "Aktif",
-      "disabled": "Nonaktif"
+    "asGedcom": "Ekspor sebagai GEDCOM 7.0 (.ged)",
+    "asGedzip": "Ekspor sebagai GEDZIP (.gedzip)",
+    "asJpg": "Ekspor sebagai JPG",
+    "asPdf": "Ekspor sebagai PDF",
+    "asPng": "Ekspor sebagai PNG",
+    "print": "Cetak",
+    "ariaExport": "Ekspor pohon keluarga",
+    "ariaClose": "Tutup menu ekspor",
+    "ariaOptions": "Opsi ekspor",
+    "button": "Ekspor",
+    "exporting": "Mengekspor...",
+    "gedzipTooLarge": "Pohon ini terlalu besar untuk arsip GEDZIP (melebihi batas ZIP 4 GB). Mengunduh file GEDCOM biasa (.ged) sebagai gantinya."
+  },
+  "growthMetrics": {
+    "title": "Metrik pertumbuhan",
+    "subtitle": "Funnel undangan mingguan dan k-factor. Tampilan internal owner, tidak pernah diekspor.",
+    "treesWithActiveEditor": "Pohon dengan editor aktif: {{pct}}%",
+    "loading": "Memuat metrik pertumbuhan...",
+    "table": {
+      "week": "Minggu",
+      "e1": "E1 undangan",
+      "e2": "E2 pendaftaran",
+      "e3": "E3 aktivasi",
+      "k": "K",
+      "pakaiRate": "Rate pemakaian",
+      "aktivasiRate": "Rate aktivasi"
     },
-    "action": {
-      "activate": "Aktifkan",
-      "disable": "Nonaktifkan",
-      "enable": "Pulihkan"
+    "empty": "Belum ada data pertumbuhan di jendela ini. Metrik muncul setelah ada undangan dan pendaftaran.",
+    "unavailable": "Metrik pertumbuhan butuh backend server. Jalankan aplikasi dengan adapter REST untuk melihatnya.",
+    "loadFailed": "Memuat metrik pertumbuhan gagal.",
+    "retry": "Coba lagi"
+  },
+  "header": {
+    "language": "Bahasa",
+    "nav": {
+      "dashboard": "Dasbor",
+      "familyTree": "Silsilah Keluarga"
     },
-    "loadError": "Gagal memuat daftar akun."
+    "searchPlaceholder": "Cari anggota keluarga..."
+  },
+  "import": {
+    "button": "Impor",
+    "busy": "Mengimpor...",
+    "close": "Tutup menu impor",
+    "hint": "Muat file GEDCOM 7.0 (.ged) atau GEDZIP (.gedzip) ke pohon aktif. Jenis file dikenali otomatis.",
+    "chooseFile": "Pilih file .ged atau .gedzip",
+    "summary": {
+      "title": "Impor selesai",
+      "members": "{{count}} anggota dibuat",
+      "relations": "{{count}} relasi dibuat",
+      "skipped": "{{count}} relasi dilewati (rujukan tak dikenal)",
+      "failed": "{{count}} anggota gagal disimpan"
+    },
+    "errors": {
+      "noTree": "Tidak ada pohon keluarga aktif. Buka atau buat pohon dulu.",
+      "unreadable": "File tidak dapat dibaca sebagai GEDCOM atau GEDZIP.",
+      "empty": "Tidak ada data individu pada file ini.",
+      "generic": "Impor gagal. Periksa file lalu coba lagi."
+    }
   },
   "invite": {
     "contextTitle": "Anda diundang ke {{treeName}}",
@@ -317,143 +386,202 @@
       "pending": "menunggu",
       "active": "aktif",
       "disabled": "nonaktif"
-    }
+    },
+    "addExistingTitle": "Tambah pengguna yang sudah ada",
+    "addExistingHint": "Pengguna harus sudah memiliki akun di instalasi ini.",
+    "addExistingEmail": "Email",
+    "addExistingRole": "Peran",
+    "addExistingAction": "Tambah ke pohon",
+    "addExistingEmailRequired": "Masukkan alamat email dari akun pengguna yang sudah ada"
   },
-  "activityFeed": {
-    "tab": "Aktivitas",
-    "title": "Feed aktivitas",
-    "subtitle": "Apa yang terjadi di pohon keluarga dan akun Anda.",
-    "filterLabel": "Jenis aktivitas",
-    "filterAll": "Semua aktivitas",
-    "types": {
-      "ACCOUNT_PENDING_CREATED": "Pendaftaran dibuat",
-      "ACCOUNT_ACTIVATED": "Akun diaktifkan",
-      "ACCOUNT_DISABLED": "Akun dinonaktifkan",
-      "ACCOUNT_ENABLED": "Akun diaktifkan kembali",
-      "INVITATION_CREATED": "Undangan dibuat",
-      "INVITATION_USED": "Undangan dipakai",
-      "INVITATION_REVOKED": "Undangan dicabut"
-    },
-    "items": {
-      "accountPendingCreated": "Pendaftaran Anda dibuat dan menunggu aktivasi oleh owner.",
-      "accountActivated": {
-        "asSubject": "Akun Anda diaktifkan.",
-        "asActor": "Anda mengaktifkan sebuah akun."
-      },
-      "accountDisabled": {
-        "asSubject": "Akun Anda dinonaktifkan.",
-        "asActor": "Anda menonaktifkan sebuah akun."
-      },
-      "accountEnabled": {
-        "asSubject": "Akun Anda diaktifkan kembali.",
-        "asActor": "Anda mengaktifkan kembali sebuah akun."
-      },
-      "invitationCreated": "Tautan undangan dibuat via {{channel}} ({{invitationType}}).",
-      "invitationUsed": {
-        "success": "Sebuah tautan undangan dipakai: pendaftaran berhasil.",
-        "failure": "Sebuah tautan undangan dipakai: percobaan gagal."
-      },
-      "invitationRevoked": "Tautan undangan dicabut ({{invitationType}})."
-    },
-    "invitationType": {
-      "personal": "personal",
-      "family": "keluarga"
-    },
-    "channel": {
-      "manual": "tautan manual",
-      "wa": "WhatsApp",
-      "email": "email"
-    },
-    "loadMore": "Muat lagi",
-    "loading": "Memuat aktivitas...",
-    "empty": "Belum ada aktivitas. Aksi di pohon keluarga Anda akan tampil di sini.",
-    "emptyFiltered": "Tidak ada aktivitas jenis ini.",
-    "unavailable": "Feed aktivitas butuh backend server. Jalankan aplikasi dengan adapter REST untuk melihatnya.",
-    "loadFailed": "Memuat feed aktivitas gagal.",
-    "retry": "Coba lagi"
-  },
-  "growthMetrics": {
-    "title": "Metrik pertumbuhan",
-    "subtitle": "Funnel undangan mingguan dan k-factor. Tampilan internal owner, tidak pernah diekspor.",
-    "treesWithActiveEditor": "Pohon dengan editor aktif: {{pct}}%",
-    "loading": "Memuat metrik pertumbuhan...",
-    "table": {
-      "week": "Minggu",
-      "e1": "E1 undangan",
-      "e2": "E2 pendaftaran",
-      "e3": "E3 aktivasi",
-      "k": "K",
-      "pakaiRate": "Rate pemakaian",
-      "aktivasiRate": "Rate aktivasi"
-    },
-    "empty": "Belum ada data pertumbuhan di jendela ini. Metrik muncul setelah ada undangan dan pendaftaran.",
-    "unavailable": "Metrik pertumbuhan butuh backend server. Jalankan aplikasi dengan adapter REST untuk melihatnya.",
-    "loadFailed": "Memuat metrik pertumbuhan gagal.",
-    "retry": "Coba lagi"
-  },
-  "digest": {
-    "title": "Ringkasan email mingguan",
-    "subtitle": "Satu email per minggu berisi kejadian di pohon Anda. Nonaktif sampai Anda menyalakannya.",
-    "optInLabel": "Kirimkan saya ringkasan mingguan",
-    "optInHint": "Matikan kapan saja; email berikutnya langsung berhenti.",
-    "saving": "Menyimpan...",
-    "saveFailed": "Menyimpan preferensi gagal. Tidak ada yang berubah di server.",
-    "loading": "Memuat pratinjau ringkasan...",
-    "loadFailed": "Memuat pratinjau ringkasan gagal.",
-    "retry": "Coba lagi",
-    "unavailable": "Ringkasan mingguan butuh backend server. Jalankan aplikasi dengan adapter REST untuk memakainya.",
-    "previewTitle": "Pratinjau minggu lalu",
-    "windowLabel": "Jendela: {{start}} sampai {{end}}",
-    "previewEmpty": "Tidak ada kejadian di pohon Anda minggu lalu, jadi tidak ada ringkasan untuk ditampilkan."
-  },
-  "changeReview": {
-    "open": "Usulan perubahan",
-    "title": "Usulan perubahan: {{treeName}}",
-    "close": "Tutup",
-    "refresh": "Muat ulang",
-    "unavailable": "Fitur usulan perubahan memerlukan backend REST (VITE_API_BASE_URL).",
-    "loading": "Memuat usulan...",
-    "loadFailed": "Gagal memuat usulan.",
-    "ownerTitle": "Menunggu keputusan Anda",
-    "editorTitle": "Usulan Anda",
-    "emptyOwner": "Tidak ada usulan yang menunggu keputusan.",
-    "emptyEditor": "Anda belum mengajukan usulan apa pun di pohon ini.",
-    "targetType": {
-      "member": "Anggota",
-      "relationship": "Relasi"
-    },
-    "state": {
-      "pending": "Menunggu",
-      "rejected": "Ditolak",
-      "distinct": "Ditandai beda"
-    },
-    "reasonLabel": "Alasan pengusul",
-    "beforeLabel": "Nilai sekarang",
-    "afterLabel": "Nilai usulan",
-    "proposedAt": "Diajukan {{date}}",
-    "decidedAt": "Diputuskan {{date}}",
-    "decisionNoteLabel": "Catatan keputusan",
-    "actionAccept": "Terima dan terapkan",
-    "actionReject": "Tolak",
-    "actionDistinct": "Tandai beda secara permanen",
-    "cancelReject": "Batal",
-    "rejectNotePlaceholder": "Tulis alasan penolakan untuk pengusul...",
-    "rejectNoteRequired": "Catatan penolakan wajib diisi.",
-    "distinctNotePlaceholder": "Catatan tambahan (opsional)",
-    "distinctHint": "Tandai beda menolak isi yang sama untuk rekaman ini selamanya.",
-    "actionFailed": "Aksi gagal.",
-    "acceptDone": "Usulan diterima dan diterapkan.",
-    "proposeBanner": "Perubahan Anda akan dikirim ke pemilik pohon untuk ditinjau, bukan langsung disimpan.",
-    "reasonNoteLabel": "Alasan perubahan",
-    "reasonNotePlaceholder": "Jelaskan mengapa perubahan ini perlu...",
-    "reasonNoteRequired": "Alasan perubahan wajib diisi (3-500 karakter).",
-    "submitPropose": "Kirim usulan",
-    "proposeSent": "Usulan terkirim dan menunggu keputusan pemilik.",
-    "proposeFailed": "Gagal mengirim usulan."
+  "memberDetail": {
+    "title": "Detail Anggota",
+    "edit": "Edit",
+    "close": "Tutup detail anggota",
+    "birthDate": "Tanggal lahir",
+    "age": "Usia",
+    "years": "{{age}} tahun",
+    "birthPlace": "Tempat lahir",
+    "currentLocation": "Lokasi saat ini",
+    "profession": "Profesi",
+    "education": "Pendidikan",
+    "maritalStatus": "Status Perkawinan",
+    "married": "Menikah",
+    "single": "Belum menikah",
+    "divorced": "Cerai",
+    "widowed": "Duda/janda",
+    "contact": "Kontak",
+    "editProfile": "Edit Profil",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "shareProfile": "Bagikan Profil",
+    "dec": " (meninggal)"
   },
   "memberEdit": {
     "privacyStatus": "Status Privasi",
     "privacyShared": "Dibagikan, sertakan dalam ekspor silsilah publik",
-    "privacyPrivate": "Privat, samarkan dalam ekspor silsilah publik"
+    "privacyPrivate": "Privat, samarkan dalam ekspor silsilah publik",
+    "title": "Edit Profil Anggota",
+    "fullName": "Nama lengkap",
+    "nickname": "Nama panggilan",
+    "gender": "Jenis kelamin",
+    "selectGender": "Pilih jenis kelamin",
+    "male": "Laki-laki",
+    "female": "Perempuan",
+    "generation": "Generasi",
+    "birthInfo": "Informasi Lahir",
+    "birthDate": "Tanggal lahir",
+    "birthPlace": "Tempat lahir",
+    "living": "Hidup",
+    "deathDate": "Tanggal wafat",
+    "locInfo": "Informasi Lokasi",
+    "currentLocation": "Lokasi saat ini",
+    "profInfo": "Informasi Profesional",
+    "profession": "Profesi/pekerjaan",
+    "education": "Pendidikan",
+    "contactInfo": "Informasi Kontak",
+    "phone": "Nomor telepon",
+    "email": "Email",
+    "save": "Simpan Perubahan",
+    "cancel": "Batal",
+    "placeholderName": "Masukkan nama lengkap",
+    "placeholderNickname": "Nama panggilan sehari-hari",
+    "placeholderBirthPlace": "Kota/tempat lahir",
+    "placeholderProfession": "Pekerjaan atau profesi",
+    "placeholderEducation": "Pendidikan terakhir",
+    "placeholderLocation": "Kota/daerah tempat tinggal saat ini",
+    "errorNameRequired": "Nama wajib diisi",
+    "errorBirthDateRequired": "Tanggal lahir wajib diisi",
+    "errorBirthPlaceRequired": "Tempat lahir wajib diisi",
+    "errorGenderRequired": "Jenis kelamin harus dipilih",
+    "closeModal": "Tutup modal"
+  },
+  "memberModal": {
+    "titleAdd": "Tambah Anggota Keluarga",
+    "titleEdit": "Edit Anggota Keluarga",
+    "titleFirst": "Anggota Keluarga Pertama",
+    "subtitleEdit": "Ubah detail anggota keluarga",
+    "subtitleAdd": "Masukkan detail anggota baru",
+    "rootQuestion": "Siapa yang akan menjadi <strong>\"akar\"</strong> dari pohon keluarga ini?",
+    "errorNameRequired": "Nama lengkap wajib diisi",
+    "errorNameShort": "Nama minimal 2 karakter",
+    "errorBirthDate": "Format tanggal lahir tidak valid",
+    "errorDeathBeforeBirth": "Tanggal wafat tidak boleh sebelum tanggal lahir",
+    "errorSaveFailed": "Gagal menyimpan data anggota. Silakan coba lagi.",
+    "fullName": "Nama lengkap",
+    "nickname": "Nama panggilan",
+    "gender": "Jenis kelamin",
+    "male": "Laki-laki",
+    "female": "Perempuan",
+    "birthDate": "Tanggal lahir",
+    "birthPlace": "Tempat lahir",
+    "status": "Status",
+    "living": "Hidup",
+    "deceased": "Meninggal",
+    "deathDate": "Tanggal wafat",
+    "roleLabel": "Peran",
+    "roleMyself": "Diri saya",
+    "roleMyselfDesc": "Saya akan menjadi pusat pohon keluarga",
+    "roleParent": "Orang tua saya",
+    "roleParentDesc": "Ayah atau ibu sebagai akar keluarga",
+    "roleGrandparent": "Kakek/nenek",
+    "roleGrandparentDesc": "Generasi tertua yang diketahui",
+    "roleOther": "Lainnya",
+    "roleOtherDesc": "Anggota keluarga lain",
+    "cancel": "BATAL",
+    "saving": "MENSIMPAN...",
+    "update": "PERBARUI",
+    "save": "SIMPAN",
+    "placeholderName": "cth., Budi Santoso, Siti Aminah",
+    "placeholderNickname": "Nama panggilan atau julukan",
+    "placeholderBirthPlace": "Kota/kabupaten"
+  },
+  "notifications": {
+    "ariaLabel": "Notifikasi ({{count}} belum dibaca)",
+    "title": "Notifikasi",
+    "close": "Tutup notifikasi",
+    "refresh": "Muat ulang notifikasi",
+    "markAllRead": "Tandai semua dibaca",
+    "empty": "Tidak ada notifikasi",
+    "loadError": "Gagal memuat notifikasi.",
+    "items": {
+      "pendingCreated": "{{name}} ({{email}}) mendaftar dan menunggu aktivasi.",
+      "activated": "Akun Anda sudah diaktifkan. Selamat menyusun silsilah.",
+      "unknown": "Notifikasi baru: {{type}}"
+    }
+  },
+  "profile": {
+    "close": "Tutup profil",
+    "title": "Akun Anda",
+    "unavailable": "Manajemen akun tidak tersedia dengan adapter data ini.",
+    "sectionProfile": "Profil",
+    "name": "Nama",
+    "familyName": "Nama keluarga",
+    "email": "Email",
+    "avatar": "URL avatar",
+    "save": "Simpan perubahan",
+    "saveFailed": "Gagal menyimpan. Silakan coba lagi.",
+    "saved": "Profil disimpan.",
+    "sectionPassword": "Kata sandi",
+    "currentPassword": "Kata sandi saat ini",
+    "newPassword": "Kata sandi baru",
+    "confirmPassword": "Ulangi kata sandi baru",
+    "passwordMismatch": "Kata sandi baru tidak sama.",
+    "passwordChanged": "Kata sandi berhasil diubah.",
+    "changePassword": "Ubah kata sandi",
+    "sectionDanger": "Zona berbahaya",
+    "deleteWarning": "Menghapus akun bersifat permanen. Keanggotaan Anda pada pohon yang tidak Anda miliki, undangan yang Anda buat, dan notifikasi Anda akan dihapus. Hapus dulu pohon yang Anda miliki; akun pemilik (owner) harus dialihkan oleh administrator server sebelum bisa dihapus.",
+    "deletePasswordPlaceholder": "Ketik kata sandi untuk konfirmasi",
+    "deleteAccount": "Hapus akun",
+    "deleteFailed": "Gagal menghapus akun. Silakan coba lagi."
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "close": "Tutup pengaturan",
+    "appearance": "Tampilan",
+    "light": "Terang",
+    "dark": "Gelap",
+    "language": "Bahasa",
+    "scopeNote": "Tema dan bahasa disimpan di peramban ini saja."
+  },
+  "statsSidebar": {
+    "title": "Statistik Keluarga",
+    "totalMembers": "Total Anggota",
+    "generations": "Generasi",
+    "genderDistribution": "Distribusi Jenis Kelamin",
+    "male": "Laki-laki",
+    "female": "Perempuan",
+    "ageDistribution": "Distribusi Usia",
+    "years": "{{range}} tahun",
+    "locations": "Lokasi"
+  },
+  "toolbar": {
+    "dashboard": "Dasbor",
+    "unsavedConfirm": "Ada perubahan yang belum disimpan. Yakin ingin keluar dari mode edit?",
+    "view": "Tampilan:",
+    "viewMode": {
+      "tree": "Pohon",
+      "card": "Kartu",
+      "list": "Daftar"
+    },
+    "mode": "Mode:",
+    "editMode": "Mode Edit",
+    "viewModeLabel": "Mode Lihat",
+    "filter": "Filter:",
+    "allGenerations": "Semua Generasi",
+    "generationN": "Generasi {{n}}",
+    "living": "Hidup",
+    "deceased": "Wafat",
+    "saveAll": "Simpan Semua",
+    "exitEdit": "Keluar Edit",
+    "editActive": "Mode edit aktif. Klik kartu untuk mengedit, gunakan ikon + untuk menambah anggota",
+    "editTip": "Tips: klik area kosong untuk keluar dari mode edit"
+  },
+  "userMenu": {
+    "close": "Tutup menu pengguna",
+    "profile": "Profil",
+    "settings": "Pengaturan",
+    "admin": "Kelola Akun",
+    "signOut": "Keluar"
   }
 }

@@ -149,10 +149,7 @@ export const ExportControls: React.FC = () => {
       // limits). Tell the user plainly, then deliver the plain GEDCOM
       // instead of failing silently.
       console.warn('GEDZIP export blocked by guard:', result.error);
-      window.alert(
-        'This tree is too large for a GEDZIP archive (over the ZIP 4 GB ' +
-        'limit). Downloading the plain GEDCOM (.ged) file instead.'
-      );
+      window.alert(t('export.gedzipTooLarge'));
       const blob = new Blob([result.gedcom], {
         type: `${GEDCOM_MIME}; charset=utf-8`,
       });
@@ -276,13 +273,13 @@ export const ExportControls: React.FC = () => {
       <button
         onClick={handleDropdownToggle}
         disabled={isExporting}
-        className="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg shadow-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
-        aria-label="Export family tree"
+        className="flex items-center space-x-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
+        aria-label={t('export.ariaExport')}
         aria-expanded={showDropdown}
         aria-haspopup="menu"
       >
         <Download className="w-4 h-4" />
-        <span>{isExporting ? 'Exporting...' : 'Export'}</span>
+        <span>{isExporting ? t('export.exporting') : t('export.button')}</span>
         <ChevronDown className="w-4 h-4" />
       </button>
 
@@ -294,24 +291,24 @@ export const ExportControls: React.FC = () => {
             className="fixed inset-0 z-40 bg-transparent border-none outline-hidden cursor-default"
             onClick={handleDropdownClose}
             onKeyDown={handleKeyDown}
-            aria-label="Close export menu"
+            aria-label={t('export.ariaClose')}
             tabIndex={0}
           />
           <div 
-            className="absolute top-full right-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2"
+            className="absolute top-full right-0 mt-2 w-72 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50 py-2"
             role="menu"
-            aria-label="Export options"
+            aria-label={t('export.ariaOptions')}
           >
             <button
               onClick={() => {
                 exportAsImage('png');
                 handleDropdownClose();
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
               role="menuitem"
             >
               <FileImage className="w-4 h-4" />
-              <span>Export as PNG</span>
+              <span>{t('export.asPng')}</span>
             </button>
             
             <button
@@ -319,11 +316,11 @@ export const ExportControls: React.FC = () => {
                 exportAsImage('jpg');
                 handleDropdownClose();
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
               role="menuitem"
             >
               <FileImage className="w-4 h-4" />
-              <span>Export as JPG</span>
+              <span>{t('export.asJpg')}</span>
             </button>
             
             <button
@@ -331,11 +328,11 @@ export const ExportControls: React.FC = () => {
                 exportAsPDF();
                 handleDropdownClose();
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
               role="menuitem"
             >
               <FileText className="w-4 h-4" />
-              <span>Export as PDF</span>
+              <span>{t('export.asPdf')}</span>
             </button>
 
             {/* Privacy mode for the GEDCOM/GEDZIP exports (S-06 Wave 1):
@@ -343,11 +340,11 @@ export const ExportControls: React.FC = () => {
                 the full archive stays locked behind an explicit
                 checkbox confirmation. */}
             <div
-              className="mt-2 mx-2 px-2 py-2 border-t border-gray-100"
+              className="mt-2 mx-2 px-2 py-2 border-t border-gray-100 dark:border-gray-800"
               role="group"
               aria-label={t('export.privacy.title')}
             >
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                 {t('export.privacy.title')}
               </p>
 
@@ -360,13 +357,13 @@ export const ExportControls: React.FC = () => {
                   onChange={() => selectPrivacyMode('clean')}
                   className="mt-0.5"
                 />
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-gray-700 dark:text-gray-300">
                   {t('export.privacy.modeClean')}
                 </span>
               </label>
               {privacyMode === 'clean' && (
                 <p
-                  className="text-xs text-gray-500 pl-6 mt-1"
+                  className="text-xs text-gray-500 dark:text-gray-400 pl-6 mt-1"
                   data-testid="export-privacy-report"
                 >
                   {t('export.privacy.report', {
@@ -389,7 +386,7 @@ export const ExportControls: React.FC = () => {
                   onChange={() => selectPrivacyMode('full')}
                   className="mt-0.5"
                 />
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-gray-700 dark:text-gray-300">
                   {t('export.privacy.modeFull')}
                 </span>
               </label>
@@ -405,7 +402,7 @@ export const ExportControls: React.FC = () => {
                       onChange={(e) => setConfirmFullArchive(e.target.checked)}
                       className="mt-0.5"
                     />
-                    <span className="text-xs text-gray-600">
+                    <span className="text-xs text-gray-600 dark:text-gray-400">
                       {t('export.privacy.confirmLabel')}
                     </span>
                   </label>
@@ -419,11 +416,11 @@ export const ExportControls: React.FC = () => {
                 handleDropdownClose();
               }}
               disabled={isExporting || !fullArchiveUnlocked}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               role="menuitem"
             >
               <FileJson className="w-4 h-4" />
-              <span>Export as GEDCOM 7.0 (.ged)</span>
+              <span>{t('export.asGedcom')}</span>
             </button>
 
             <button
@@ -432,11 +429,11 @@ export const ExportControls: React.FC = () => {
                 handleDropdownClose();
               }}
               disabled={isExporting || !fullArchiveUnlocked}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               role="menuitem"
             >
               <FileArchive className="w-4 h-4" />
-              <span>Export as GEDZIP (.gedzip)</span>
+              <span>{t('export.asGedzip')}</span>
             </button>
 
             {/* Poster PDF (beta, S-10): vector single-sheet poster with a
@@ -444,16 +441,16 @@ export const ExportControls: React.FC = () => {
                 canvas screenshot. The menu stays open while rendering so
                 busy and error feedback stay visible. */}
             <div
-              className="mt-2 mx-2 px-2 py-2 border-t border-gray-100"
+              className="mt-2 mx-2 px-2 py-2 border-t border-gray-100 dark:border-gray-800"
               role="group"
               aria-label={t('poster:export.button')}
             >
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                 {t('poster:export.button')}
               </p>
 
               <label
-                className="block mt-2 text-xs text-gray-600"
+                className="block mt-2 text-xs text-gray-600 dark:text-gray-400"
                 htmlFor="poster-paper-kind"
               >
                 {t('poster:paper.label')}
@@ -465,7 +462,7 @@ export const ExportControls: React.FC = () => {
                   setPosterPaperKind(e.target.value as PaperPreset['kind'])
                 }
                 disabled={isPosterBusy || isExporting}
-                className="mt-1 w-full rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-700"
+                className="mt-1 w-full rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 py-1 text-sm text-gray-700 dark:text-gray-300"
                 data-testid="poster-paper-kind"
               >
                 {POSTER_PAPER_PRESETS.map((preset) => (
@@ -475,12 +472,12 @@ export const ExportControls: React.FC = () => {
                 ))}
               </select>
 
-              <p className="mt-2 text-xs text-gray-500" data-testid="poster-notice">
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400" data-testid="poster-notice">
                 {t('poster:notice')}
               </p>
               {members.length === 0 && (
                 <p
-                  className="mt-1 text-xs text-gray-500"
+                  className="mt-1 text-xs text-gray-500 dark:text-gray-400"
                   data-testid="poster-empty-note"
                 >
                   {t('poster:export.empty')}
@@ -492,7 +489,7 @@ export const ExportControls: React.FC = () => {
                 disabled={
                   isPosterBusy || isExporting || members.length === 0
                 }
-                className="mt-2 w-full text-left px-3 py-2 text-sm rounded border border-gray-200 hover:bg-gray-50 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-2 w-full text-left px-3 py-2 text-sm rounded border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 role="menuitem"
                 aria-busy={isPosterBusy}
                 data-testid="poster-export-button"
@@ -507,7 +504,7 @@ export const ExportControls: React.FC = () => {
 
               {posterError && (
                 <p
-                  className="mt-2 text-xs text-red-600"
+                  className="mt-2 text-xs text-red-600 dark:text-red-400"
                   role="alert"
                   data-testid="poster-error"
                 >
@@ -523,11 +520,11 @@ export const ExportControls: React.FC = () => {
                 handlePrint();
                 handleDropdownClose();
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
               role="menuitem"
             >
               <Printer className="w-4 h-4" />
-              <span>Print</span>
+              <span>{t('export.print')}</span>
             </button>
           </div>
         </>

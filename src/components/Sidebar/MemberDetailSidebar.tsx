@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, Phone, Mail, MapPin, Calendar, Briefcase, GraduationCap, Heart, MessageCircle, Edit } from 'lucide-react';
 import { useFamilyStore } from '../../store/familyStore';
 import { UnifiedMemberModal } from '../Forms/UnifiedMemberModal';
 
 export const MemberDetailSidebar: React.FC = () => {
+  const { t } = useTranslation();
   const { selectedMember, setSelectedMember } = useFamilyStore();
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -27,12 +29,12 @@ export const MemberDetailSidebar: React.FC = () => {
     <>
       <div className="w-80 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 p-6 overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Member Details</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('memberDetail.title')}</h2>
           <div className="flex items-center space-x-2">
             <button
               onClick={handleEdit}
               className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
-              title="Edit"
+              title={t('memberDetail.edit')}
             >
               <Edit className="w-4 h-4" />
             </button>
@@ -71,7 +73,7 @@ export const MemberDetailSidebar: React.FC = () => {
           <div className="flex items-center space-x-3">
             <Calendar className="w-5 h-5 text-gray-400" />
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Birth Date</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('memberDetail.birthDate')}</p>
               <p className="font-medium text-gray-900 dark:text-white">
                 {new Date(selectedMember.birthDate).toLocaleDateString('en-US', {
                   day: 'numeric',
@@ -85,10 +87,10 @@ export const MemberDetailSidebar: React.FC = () => {
           <div className="flex items-center space-x-3">
             <Calendar className="w-5 h-5 text-gray-400" />
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Age</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('memberDetail.age')}</p>
               <p className="font-medium text-gray-900 dark:text-white">
-                {calculateAge(selectedMember.birthDate, selectedMember.deathDate)} years
-                {!selectedMember.isAlive && ' (dec.)'}
+                {t('memberDetail.years', { age: calculateAge(selectedMember.birthDate, selectedMember.deathDate) })}
+                {!selectedMember.isAlive && t('memberDetail.dec')}
               </p>
             </div>
           </div>
@@ -97,7 +99,7 @@ export const MemberDetailSidebar: React.FC = () => {
             <div className="flex items-center space-x-3">
               <MapPin className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Birth Place</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('memberDetail.birthPlace')}</p>
                 <p className="font-medium text-gray-900 dark:text-white">{selectedMember.birthPlace}</p>
               </div>
             </div>
@@ -107,7 +109,7 @@ export const MemberDetailSidebar: React.FC = () => {
             <div className="flex items-center space-x-3">
               <MapPin className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Current Location</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('memberDetail.currentLocation')}</p>
                 <p className="font-medium text-gray-900 dark:text-white">{selectedMember.currentLocation}</p>
               </div>
             </div>
@@ -117,7 +119,7 @@ export const MemberDetailSidebar: React.FC = () => {
             <div className="flex items-center space-x-3">
               <Briefcase className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Profession</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('memberDetail.profession')}</p>
                 <p className="font-medium text-gray-900 dark:text-white">{selectedMember.profession}</p>
               </div>
             </div>
@@ -127,7 +129,7 @@ export const MemberDetailSidebar: React.FC = () => {
             <div className="flex items-center space-x-3">
               <GraduationCap className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Education</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('memberDetail.education')}</p>
                 <p className="font-medium text-gray-900 dark:text-white">{selectedMember.education}</p>
               </div>
             </div>
@@ -136,12 +138,12 @@ export const MemberDetailSidebar: React.FC = () => {
           <div className="flex items-center space-x-3">
             <Heart className="w-5 h-5 text-gray-400" />
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Marital Status</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('memberDetail.maritalStatus')}</p>
               <p className="font-medium text-gray-900 dark:text-white">
-                {selectedMember.maritalStatus === 'married' && 'Married'}
-                {selectedMember.maritalStatus === 'single' && 'Single'}
-                {selectedMember.maritalStatus === 'divorced' && 'Divorced'}
-                {selectedMember.maritalStatus === 'widowed' && 'Widowed'}
+                {selectedMember.maritalStatus === 'married' && t('memberDetail.married')}
+                {selectedMember.maritalStatus === 'single' && t('memberDetail.single')}
+                {selectedMember.maritalStatus === 'divorced' && t('memberDetail.divorced')}
+                {selectedMember.maritalStatus === 'widowed' && t('memberDetail.widowed')}
               </p>
             </div>
           </div>
@@ -150,7 +152,7 @@ export const MemberDetailSidebar: React.FC = () => {
         {/* Contact Information */}
         {(selectedMember.phone || selectedMember.email) && (
           <div className="mb-8">
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Contact</h4>
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t('memberDetail.contact')}</h4>
             <div className="space-y-3">
               {selectedMember.phone && (
                 <div className="flex items-center space-x-3">
@@ -174,25 +176,25 @@ export const MemberDetailSidebar: React.FC = () => {
             onClick={handleEdit}
             className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
-            Edit Profile
+            {t('memberDetail.editProfile')}
           </button>
           
           {selectedMember.phone && (
             <button className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center justify-center space-x-2">
               <MessageCircle className="w-4 h-4" />
-              <span>WhatsApp</span>
+              <span>{t('memberDetail.whatsapp')}</span>
             </button>
           )}
           
           {selectedMember.email && (
             <button className="w-full px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors flex items-center justify-center space-x-2">
               <Mail className="w-4 h-4" />
-              <span>Email</span>
+              <span>{t('memberDetail.email')}</span>
             </button>
           )}
           
           <button className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-            Share Profile
+            {t('memberDetail.shareProfile')}
           </button>
         </div>
       </div>

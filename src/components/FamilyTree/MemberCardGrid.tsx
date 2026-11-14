@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GridMemberCard } from './GridMemberCard';
 import { useFamilyStore } from '../../store/familyStore';
 import { ChevronDown, SortAsc, Filter } from 'lucide-react';
@@ -7,6 +8,7 @@ type SortOption = 'name' | 'age' | 'location' | 'generation';
 type SortDirection = 'asc' | 'desc';
 
 export const MemberCardGrid: React.FC = () => {
+  const { t } = useTranslation('canvas');
   const { members, viewMode, searchQuery, selectedMember } = useFamilyStore();
   const [sortBy, setSortBy] = useState<SortOption>('name');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
@@ -76,11 +78,11 @@ export const MemberCardGrid: React.FC = () => {
 
   const getSortLabel = (sortOption: SortOption): string => {
     switch (sortOption) {
-      case 'name': return 'Name';
-      case 'age': return 'Age';
-      case 'location': return 'Location';
-      case 'generation': return 'Generation';
-      default: return 'Name';
+      case 'name': return t('grid.sortName');
+      case 'age': return t('grid.sortAge');
+      case 'location': return t('grid.sortLocation');
+      case 'generation': return t('grid.sortGeneration');
+      default: return t('grid.sortName');
     }
   };
 
@@ -98,17 +100,17 @@ export const MemberCardGrid: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 bg-gray-50 p-6 overflow-auto">
+    <div className="flex-1 bg-gray-50 dark:bg-gray-800 p-6 overflow-auto">
       {/* Sort Controls */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
-          <h3 className="text-lg font-semibold text-gray-900">
-            {filteredMembers.length} Family Members
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            {t('grid.membersCount', { count: filteredMembers.length })}
           </h3>
           
           {searchQuery && (
-            <div className="text-sm text-gray-600">
-              Search results for "{searchQuery}"
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {t('grid.searchResults', { query: searchQuery })}
             </div>
           )}
         </div>
@@ -116,29 +118,29 @@ export const MemberCardGrid: React.FC = () => {
         <div className="relative">
           <button
             onClick={() => setShowSortMenu(!showSortMenu)}
-            className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
             <SortAsc className="w-4 h-4" />
             <span className="text-sm">
-              Sort by: {getSortLabel(sortBy)}
+              {t('grid.sortBy', { label: getSortLabel(sortBy) })}
             </span>
             <ChevronDown className="w-4 h-4" />
           </button>
 
           {showSortMenu && (
-            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+            <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-10">
               <div className="py-2">
                 {[
-                  { key: 'name' as SortOption, label: 'Name' },
-                  { key: 'age' as SortOption, label: 'Age' },
-                  { key: 'generation' as SortOption, label: 'Generation' },
-                  { key: 'location' as SortOption, label: 'Location' },
+                  { key: 'name' as SortOption, label: t('grid.sortName') },
+                  { key: 'age' as SortOption, label: t('grid.sortAge') },
+                  { key: 'generation' as SortOption, label: t('grid.sortGeneration') },
+                  { key: 'location' as SortOption, label: t('grid.sortLocation') },
                 ].map(option => (
                   <button
                     key={option.key}
                     onClick={() => handleSort(option.key)}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
-                      sortBy === option.key ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700'
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                      sortBy === option.key ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300'
                     }`}
                   >
                     {option.label}
@@ -157,11 +159,11 @@ export const MemberCardGrid: React.FC = () => {
 
       {/* Cards Grid */}
       {filteredMembers.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+        <div className="flex flex-col items-center justify-center py-16 text-gray-500 dark:text-gray-400">
           <Filter className="w-12 h-12 mb-4 text-gray-300" />
-          <h3 className="text-lg font-medium mb-2">No members found</h3>
+          <h3 className="text-lg font-medium mb-2">{t('grid.noMembers')}</h3>
           <p className="text-sm text-center">
-            Try adjusting the filters or search keywords
+            {t('grid.noMembersDesc')}
           </p>
         </div>
       ) : (
@@ -180,8 +182,8 @@ export const MemberCardGrid: React.FC = () => {
       {/* Pagination placeholder for future implementation */}
       {filteredMembers.length > 50 && (
         <div className="flex justify-center mt-8">
-          <div className="text-sm text-gray-500">
-            Showing {Math.min(50, filteredMembers.length)} of {filteredMembers.length} members
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            {t('grid.showing', { shown: Math.min(50, filteredMembers.length), total: filteredMembers.length })}
           </div>
         </div>
       )}

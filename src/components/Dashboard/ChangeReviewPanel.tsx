@@ -128,8 +128,8 @@ export const ChangeReviewPanel: React.FC<{
     <dl className="text-sm space-y-1">
       {Object.entries(slice).map(([field, value]) => (
         <div key={field} className="flex gap-2">
-          <dt className="text-gray-500 min-w-24">{field}</dt>
-          <dd className="text-gray-900 break-all">{value === null || value === '' ? '-' : String(value)}</dd>
+          <dt className="text-gray-500 dark:text-gray-400 min-w-24">{field}</dt>
+          <dd className="text-gray-900 dark:text-white break-all">{value === null || value === '' ? '-' : String(value)}</dd>
         </div>
       ))}
     </dl>
@@ -138,13 +138,13 @@ export const ChangeReviewPanel: React.FC<{
   const renderProposal = (proposal: ChangeProposalRecord) => (
     <article
       key={proposal.id}
-      className="border border-gray-200 rounded-lg p-4 space-y-3"
+      className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 space-y-3"
       data-testid={`change-proposal-${proposal.id}`}
     >
       <header className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-2 text-sm">
-          <FileDiff className="w-4 h-4 text-gray-500" />
-          <span className="font-medium text-gray-900">
+          <FileDiff className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          <span className="font-medium text-gray-900 dark:text-white">
             {t(`changeReview.targetType.${proposal.targetType}`)}
           </span>
           <span
@@ -152,32 +152,32 @@ export const ChangeReviewPanel: React.FC<{
               proposal.state === 'pending'
                 ? 'bg-amber-100 text-amber-800'
                 : proposal.state === 'rejected'
-                  ? 'bg-red-100 text-red-700'
+                  ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300'
                   : 'bg-purple-100 text-purple-700'
             }`}
           >
             {t(`changeReview.state.${proposal.state}`)}
           </span>
         </div>
-        <time className="text-xs text-gray-500">
+        <time className="text-xs text-gray-500 dark:text-gray-400">
           {t('changeReview.proposedAt', { date: formatWhen(proposal.createdAt) })}
         </time>
       </header>
 
-      <div className="space-y-1 text-sm text-gray-700">
-        <p className="font-medium text-gray-900">{t('changeReview.reasonLabel')}</p>
+      <div className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
+        <p className="font-medium text-gray-900 dark:text-white">{t('changeReview.reasonLabel')}</p>
         <p>{proposal.reasonNote}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <section className="bg-gray-50 rounded-md p-3">
-          <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+        <section className="bg-gray-50 dark:bg-gray-800 rounded-md p-3">
+          <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">
             {t('changeReview.beforeLabel')}
           </h4>
           {renderSlice(proposal.before)}
         </section>
-        <section className="bg-green-50 rounded-md p-3">
-          <h4 className="text-xs font-semibold text-green-700 uppercase mb-2">
+        <section className="bg-green-50 dark:bg-green-900/20 rounded-md p-3">
+          <h4 className="text-xs font-semibold text-green-700 dark:text-green-300 uppercase mb-2">
             {t('changeReview.afterLabel')}
           </h4>
           {renderSlice(proposal.after)}
@@ -185,7 +185,7 @@ export const ChangeReviewPanel: React.FC<{
       </div>
 
       {proposal.state !== 'pending' && (
-        <footer className="text-xs text-gray-600 space-y-1 border-t border-gray-100 pt-2">
+        <footer className="text-xs text-gray-600 dark:text-gray-400 space-y-1 border-t border-gray-100 dark:border-gray-800 pt-2">
           <p>{t('changeReview.decidedAt', { date: formatWhen(proposal.decidedAt) })}</p>
           {proposal.decisionNote !== null && proposal.decisionNote !== '' && (
             <p>
@@ -197,7 +197,7 @@ export const ChangeReviewPanel: React.FC<{
       )}
 
       {role === 'owner' && proposal.state === 'pending' && (
-        <div className="space-y-2 border-t border-gray-100 pt-3">
+        <div className="space-y-2 border-t border-gray-100 dark:border-gray-800 pt-3">
           {rejectingId === proposal.id ? (
             <div className="space-y-2">
               <textarea
@@ -205,7 +205,7 @@ export const ChangeReviewPanel: React.FC<{
                 onChange={(e) => setRejectNote(e.target.value)}
                 placeholder={t('changeReview.rejectNotePlaceholder')}
                 rows={2}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="w-full border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
                 data-testid={`reject-note-${proposal.id}`}
               />
               <div className="flex gap-2">
@@ -223,7 +223,7 @@ export const ChangeReviewPanel: React.FC<{
                     setRejectingId(null);
                     setRejectNote('');
                   }}
-                  className="px-3 py-1.5 rounded-md border border-gray-300 text-sm text-gray-700 hover:bg-gray-50"
+                  className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   {t('changeReview.cancelReject')}
                 </button>
@@ -263,7 +263,7 @@ export const ChangeReviewPanel: React.FC<{
             </div>
           )}
           {acceptDoneId === proposal.id && (
-            <p className="text-sm text-green-700 flex items-center gap-1.5">
+            <p className="text-sm text-green-700 dark:text-green-300 flex items-center gap-1.5">
               <CheckCircle className="w-4 h-4" />
               {t('changeReview.acceptDone')}
             </p>
@@ -276,14 +276,14 @@ export const ChangeReviewPanel: React.FC<{
   if (!changeApi) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div className="bg-white rounded-xl max-w-lg w-full p-6 space-y-4">
+        <div className="bg-white dark:bg-gray-900 rounded-xl max-w-lg w-full p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-gray-900">{t('changeReview.open')}</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('changeReview.open')}</h2>
             <button type="button" onClick={onClose} aria-label={t('changeReview.close')}>
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
             </button>
           </div>
-          <p className="text-sm text-gray-600">{t('changeReview.unavailable')}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{t('changeReview.unavailable')}</p>
         </div>
       </div>
     );
@@ -293,13 +293,13 @@ export const ChangeReviewPanel: React.FC<{
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" data-testid="change-review-panel">
-      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[85vh] flex flex-col">
-        <header className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-900 rounded-xl max-w-2xl w-full max-h-[85vh] flex flex-col">
+        <header className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
               {t('changeReview.title', { treeName })}
             </h2>
-            <p className="text-sm text-gray-500 flex items-center gap-1.5">
+            <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" />
               {role === 'owner'
                 ? `${t('changeReview.ownerTitle')} (${pendingCount})`
@@ -310,24 +310,24 @@ export const ChangeReviewPanel: React.FC<{
             <button
               type="button"
               onClick={() => void load()}
-              className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="p-2 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
               aria-label={t('changeReview.refresh')}
             >
-              <RefreshCw className="w-4 h-4 text-gray-600" />
+              <RefreshCw className="w-4 h-4 text-gray-600 dark:text-gray-400" />
             </button>
             <button type="button" onClick={onClose} aria-label={t('changeReview.close')}>
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
             </button>
           </div>
         </header>
 
         <div className="overflow-y-auto px-6 py-4 space-y-4">
           {isLoading ? (
-            <p className="text-sm text-gray-500">{t('changeReview.loading')}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t('changeReview.loading')}</p>
           ) : loadFailed ? (
-            <p className="text-sm text-red-600">{t('changeReview.loadFailed')}</p>
+            <p className="text-sm text-red-600 dark:text-red-400">{t('changeReview.loadFailed')}</p>
           ) : proposals.length === 0 ? (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {role === 'owner' ? t('changeReview.emptyOwner') : t('changeReview.emptyEditor')}
             </p>
           ) : (
@@ -335,7 +335,7 @@ export const ChangeReviewPanel: React.FC<{
           )}
 
           {actionError !== null && (
-            <div className="flex items-start gap-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded-md p-3">
+            <div className="flex items-start gap-2 text-sm text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-3">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
               <p className="break-words">{actionError}</p>
             </div>

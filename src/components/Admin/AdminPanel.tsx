@@ -100,17 +100,37 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
   const actionButtonClass = (action: AccountStatusAction) =>
     action === 'disable'
-      ? 'text-red-700 border-red-300 hover:bg-red-50'
-      : 'text-green-700 border-green-300 hover:bg-green-50';
+      ? 'text-red-700 dark:text-red-300 border-red-300 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20'
+      : 'text-green-700 dark:text-green-300 border-green-300 dark:border-green-700 hover:bg-green-50 dark:hover:bg-green-900/20';
+
+  // Owner promotion: confirm, then flip the role. There is no demotion
+  // endpoint on purpose — an owner can still hand effective control over
+  // by promoting someone else (multiple owners are allowed).
+  const runPromote = async (account: AdminAccount) => {
+    if (!window.confirm(t('admin.makeOwnerConfirm', { name: account.name }))) return;
+    setBusyAccountId(account.id);
+    setActionError(null);
+    try {
+      const updated = await accountAdmin.promoteToOwner(account.id);
+      setAccounts((prev) =>
+        prev.map((a) => (a.id === updated.id ? updated : a)),
+      );
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : String(error));
+      void load();
+    } finally {
+      setBusyAccountId(null);
+    }
+  };
 
   const statusBadgeClass = (status: AdminAccount['status']) => {
     switch (status) {
       case 'pending':
         return 'bg-amber-100 text-amber-800';
       case 'active':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 dark:bg-green-900/40 text-green-800';
       default:
-        return 'bg-gray-200 text-gray-600';
+        return 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400';
     }
   };
 
@@ -126,31 +146,31 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         role="dialog"
         aria-modal="true"
         aria-label={t('admin.title')}
-        className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-gray-100 max-h-[85vh] flex flex-col"
+        className="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 max-h-[85vh] flex flex-col"
       >
-        <div className="flex items-start justify-between p-5 border-b border-gray-100">
+        <div className="flex items-start justify-between p-5 border-b border-gray-100 dark:border-gray-800">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">{t('admin.title')}</h2>
-            <p className="text-sm text-gray-500 mt-0.5">{t('admin.subtitle')}</p>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('admin.title')}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t('admin.subtitle')}</p>
           </div>
           <div className="flex items-center space-x-1">
             <button
               onClick={loadWithSpinner}
               disabled={isLoading}
-              className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50 transition-colors"
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 transition-colors"
               aria-label={t('admin.refresh')}
               title={t('admin.refresh')}
             >
               <RefreshCw
-                className={`w-4 h-4 text-gray-500 ${isLoading ? 'animate-spin' : ''}`}
+                className={`w-4 h-4 text-gray-500 dark:text-gray-400 ${isLoading ? 'animate-spin' : ''}`}
               />
             </button>
             <button
               onClick={onClose}
-              className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               aria-label={t('admin.close')}
             >
-              <X className="w-4 h-4 text-gray-500" />
+              <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
           </div>
         </div>
@@ -158,15 +178,15 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <div className="p-5 overflow-y-auto">
           <GrowthMetricsPanel />
 
-          <p className="text-xs text-gray-400 mb-3">
+          <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">
             {t('admin.accounts', { count: accounts.length })}
           </p>
 
           {loadFailed && (
-            <p className="mb-3 text-sm text-red-600">{t('admin.loadError')}</p>
+            <p className="mb-3 text-sm text-red-600 dark:text-red-400">{t('admin.loadError')}</p>
           )}
           {actionError && (
-            <p className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+            <p className="mb-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-700 dark:text-red-300">
               {actionError}
             </p>
           )}
@@ -174,7 +194,7 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-xs text-gray-500 uppercase border-b border-gray-200">
+                <tr className="text-left text-xs text-gray-500 dark:text-gray-400 uppercase border-b border-gray-200 dark:border-gray-800">
                   <th className="py-2 pr-3 font-semibold">{t('admin.table.name')}</th>
                   <th className="py-2 pr-3 font-semibold">{t('admin.table.role')}</th>
                   <th className="py-2 pr-3 font-semibold">{t('admin.table.status')}</th>
@@ -186,17 +206,17 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 {accounts.map((account) => (
                   <tr key={account.id} className="border-b border-gray-50 last:border-b-0">
                     <td className="py-2.5 pr-3">
-                      <span className="block font-medium text-gray-900">
+                      <span className="block font-medium text-gray-900 dark:text-white">
                         {account.name}
                       </span>
-                      <span className="block text-xs text-gray-500">{account.email}</span>
+                      <span className="block text-xs text-gray-500 dark:text-gray-400">{account.email}</span>
                     </td>
                     <td className="py-2.5 pr-3">
                       <span
                         className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
                           account.role === 'owner'
                             ? 'bg-indigo-100 text-indigo-800'
-                            : 'bg-gray-100 text-gray-600'
+                            : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
                         }`}
                       >
                         {t(`admin.role.${account.role}`)}
@@ -209,7 +229,7 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         {t(`admin.status.${account.status}`)}
                       </span>
                     </td>
-                    <td className="py-2.5 pr-3 text-xs text-gray-500 whitespace-nowrap">
+                    <td className="py-2.5 pr-3 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                       {formatDate(account.createdAt, i18n.language)}
                     </td>
                     <td className="py-2.5">
@@ -224,6 +244,15 @@ export const AdminPanel: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                             {t(`admin.action.${action}`)}
                           </button>
                         ))}
+                        {account.role !== 'owner' && (
+                          <button
+                            onClick={() => void runPromote(account)}
+                            disabled={busyAccountId !== null}
+                            className="px-2.5 py-1 rounded border text-xs font-medium transition-colors disabled:opacity-50 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/20"
+                          >
+                            {t('admin.makeOwner')}
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

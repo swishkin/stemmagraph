@@ -1,13 +1,15 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFamilyStore } from '../../store/familyStore';
 
 export const MiniMap: React.FC = () => {
+  const { t } = useTranslation('canvas');
   const { members } = useFamilyStore();
 
   return (
-    <div className="fixed bottom-4 right-4 w-48 h-32 bg-white border border-gray-300 rounded-lg shadow-lg p-2">
-      <div className="text-xs font-medium text-gray-600 mb-2">Mini Map</div>
-      <div className="w-full h-full bg-gray-100 rounded relative overflow-hidden">
+    <div className="fixed bottom-4 right-4 w-48 h-32 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-2">
+      <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">{t('controls.miniMapTab')}</div>
+      <div className="w-full h-full bg-gray-100 dark:bg-gray-800 rounded relative overflow-hidden">
         {/* Simplified tree representation */}
         {members.slice(0, 10).map((member, index) => (
           <div

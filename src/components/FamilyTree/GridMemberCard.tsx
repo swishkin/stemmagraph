@@ -119,14 +119,14 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
     <>
       <button
         type="button"
-        className={`relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group transform hover:-translate-y-1 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-full text-left ${
+        className={`relative bg-white dark:bg-gray-900 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group transform hover:-translate-y-1 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-full text-left ${
           isSelected ? 'ring-2 ring-blue-500 shadow-lg' : ''
         } ${
           member.gender === 'male' 
-            ? 'border-2 border-blue-200 hover:border-blue-400' 
+            ? 'border-2 border-blue-200 dark:border-blue-800 hover:border-blue-400' 
             : 'border-2 border-pink-200 hover:border-pink-400'
         } ${
-          !member.isAlive ? 'border-gray-400 bg-gray-50' : ''
+          !member.isAlive ? 'border-gray-400 dark:border-gray-600 bg-gray-50 dark:bg-gray-800' : ''
         }`}
         onClick={handleClick}
         onContextMenu={handleContextMenu}
@@ -150,7 +150,7 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
 
         {/* Photo */}
         <div className="p-4 pb-2">
-          <div className="w-16 h-16 lg:w-20 lg:h-20 mx-auto rounded-full overflow-hidden bg-gray-200 mb-3">
+          <div className="w-16 h-16 lg:w-20 lg:h-20 mx-auto rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 mb-3">
             {member.photoUrl ? (
               <img
                 src={member.photoUrl}
@@ -174,45 +174,45 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
         <div className="px-4 pb-4 text-center">
           {/* Nickname first (if exists) */}
           {member.nickname && (
-            <p className="text-xs text-gray-500 mb-1 italic">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 italic">
               ({highlightText(member.nickname)})
             </p>
           )}
           
           {/* Full name */}
-          <h3 className="font-bold text-gray-900 text-sm lg:text-base leading-tight mb-1">
+          <h3 className="font-bold text-gray-900 dark:text-white text-sm lg:text-base leading-tight mb-1">
             {highlightText(member.name)}
           </h3>
           
           {/* Birth year and age */}
           <div className="space-y-0.5 mb-2">
-            <p className="text-xs lg:text-sm text-gray-600">
+            <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">
               {getYearDisplay()}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               {calculateAge()} tahun
             </p>
           </div>
         </div>
 
         {/* Additional Info - Visible on Hover */}
-        <div className="absolute inset-x-0 bottom-0 bg-white/95 backdrop-blur-sm rounded-b-lg p-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 border-t border-gray-100">
+        <div className="absolute inset-x-0 bottom-0 bg-white/95 backdrop-blur-sm rounded-b-lg p-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 border-t border-gray-100 dark:border-gray-800">
           <div className="space-y-2 text-xs">
             {member.profession && (
-              <div className="flex items-center space-x-2 text-gray-600">
+              <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                 <Briefcase className="w-3 h-3 shrink-0" />
                 <span className="truncate">{highlightText(member.profession)}</span>
               </div>
             )}
             
             {member.currentLocation && (
-              <div className="flex items-center space-x-2 text-gray-600">
+              <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                 <MapPin className="w-3 h-3 shrink-0" />
                 <span className="truncate">{highlightText(member.currentLocation)}</span>
               </div>
             )}
             
-            <div className="flex items-center space-x-2 text-gray-600">
+            <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
               <Calendar className="w-3 h-3 shrink-0" />
               <span>Generation {member.generation}</span>
             </div>
@@ -247,7 +247,7 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
             aria-label={t('contextMenu.close')}
           />
           <div 
-            className="fixed bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50 min-w-48"
+            className="fixed bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg py-2 z-50 min-w-48"
             style={{
               left: contextMenuPosition.x,
               top: contextMenuPosition.y,
@@ -255,7 +255,7 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
           >
             <button 
               onClick={handleEdit}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
             >
               <Edit className="w-4 h-4" />
               <span>{t('memberCard.editProfile')}</span>
@@ -263,21 +263,21 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
 
             <button 
               onClick={handleAddChild}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
             >
               <Plus className="w-4 h-4" />
               <span>{t('memberCard.addChild')}</span>
             </button>
             
             {member.phone && (
-              <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2">
+              <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2">
                 <Phone className="w-4 h-4" />
                 <span>{t('table.whatsapp')}</span>
               </button>
             )}
             
             {member.email && (
-              <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2">
+              <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2">
                 <Mail className="w-4 h-4" />
                 <span>{t('table.email')}</span>
               </button>
@@ -285,7 +285,7 @@ export const GridMemberCard: React.FC<GridMemberCardProps> = ({
             
             <hr className="my-2" />
             
-            <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors">
+            <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
               {t('memberCard.shareProfile')}
             </button>
           </div>

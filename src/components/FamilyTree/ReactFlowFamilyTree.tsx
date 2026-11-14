@@ -473,7 +473,7 @@ const ReactFlowFamilyTreeInner: React.FC<ReactFlowFamilyTreeProps> = ({
         edgeTypes={edgeTypes}
         fitView
         attributionPosition={undefined} // Remove React Flow attribution
-        className="bg-gray-50"
+        className="bg-gray-50 dark:bg-gray-800"
         minZoom={0.1}
         maxZoom={2}
         defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
@@ -492,7 +492,10 @@ const ReactFlowFamilyTreeInner: React.FC<ReactFlowFamilyTreeProps> = ({
             size={getGridSize(convertToBackgroundVariant(gridType))}
             color={getGridBackgroundColor(convertToBackgroundVariant(gridType))}
             style={{
-              backgroundColor: '#fafafa',
+              // Transparent: the ReactFlow div itself carries the themed
+              // background (bg-gray-50 / dark:bg-gray-800), so the canvas
+              // follows the light/dark theme.
+              backgroundColor: 'transparent',
               opacity: 0.4,
             }}
           />
@@ -516,13 +519,13 @@ const ReactFlowFamilyTreeInner: React.FC<ReactFlowFamilyTreeProps> = ({
         <Controls 
           position="bottom-right"
           showInteractive={false}
-          className="bg-white border border-gray-300 rounded-lg shadow-lg"
+          className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg"
         />
 
         {/* Minimap for navigation */}
         <MiniMap
           position="bottom-left"
-          className="bg-white border border-gray-300 rounded-lg shadow-lg"
+          className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg"
           nodeColor={(node) => {
             const member = node.data?.member as FamilyMember;
             if (!member) return '#e5e7eb';
@@ -559,7 +562,7 @@ const ReactFlowFamilyTreeInner: React.FC<ReactFlowFamilyTreeProps> = ({
         {/* Tier indicators for vertical layout */}
         {layoutDirection === 'TB' && tiers.length > 0 && (
           <Panel position="top-center" className="pointer-events-none">
-            <div className="text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
+            <div className="text-xs text-gray-500 dark:text-gray-400 bg-white/80 px-2 py-1 rounded">
               {t('generations.tierIndicator', { count: tiers.length })}
             </div>
           </Panel>
@@ -570,8 +573,8 @@ const ReactFlowFamilyTreeInner: React.FC<ReactFlowFamilyTreeProps> = ({
           generationLimitState.expandedBranches.size > 0 ||
           generationLimit.hiddenDescendantCounts.size > 0) && (
           <Panel position="top-center" className="mt-10">
-            <div className="flex items-center gap-2 text-xs bg-white/90 border border-gray-200 px-2 py-1 rounded">
-              <span className="text-gray-600">
+            <div className="flex items-center gap-2 text-xs bg-white/90 border border-gray-200 dark:border-gray-800 px-2 py-1 rounded">
+              <span className="text-gray-600 dark:text-gray-400">
                 {generationLimitState.fullExpand
                   ? t('generations.expandAll')
                   : t('generations.limitNotice', {
@@ -582,7 +585,7 @@ const ReactFlowFamilyTreeInner: React.FC<ReactFlowFamilyTreeProps> = ({
               {!generationLimitState.fullExpand && (
                 <button
                   type="button"
-                  className="px-2 py-0.5 border border-gray-300 rounded text-gray-700 bg-white hover:bg-gray-100"
+                  className="px-2 py-0.5 border border-gray-300 dark:border-gray-700 rounded text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
                   onClick={handleExpandAllGenerations}
                 >
                   {t('generations.expandAll')}
@@ -592,7 +595,7 @@ const ReactFlowFamilyTreeInner: React.FC<ReactFlowFamilyTreeProps> = ({
                 generationLimitState.expandedBranches.size > 0) && (
                 <button
                   type="button"
-                  className="px-2 py-0.5 border border-gray-300 rounded text-gray-700 bg-white hover:bg-gray-100"
+                  className="px-2 py-0.5 border border-gray-300 dark:border-gray-700 rounded text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
                   onClick={handleCollapseGenerations}
                 >
                   {t('generations.collapse')}

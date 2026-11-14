@@ -176,20 +176,20 @@ export const LoginPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-pink-50 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-800">
             {/* Header */}
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mb-4">
-                <TreePine className="w-8 h-8 text-green-600" />
+                <TreePine className="w-8 h-8 text-green-600 dark:text-green-400" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('auth.forgotTitle')}</h1>
-              <p className="text-gray-600">{t('auth.forgotSubtitle')}</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('auth.forgotTitle')}</h1>
+              <p className="text-gray-600 dark:text-gray-400">{t('auth.forgotSubtitle')}</p>
             </div>
 
             {/* Success Message */}
             {successMessage && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-3">
-                <CheckCircle className="w-5 h-5 text-green-600 shrink-0" />
+              <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center space-x-3">
+                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" />
                 <p className="text-green-800 text-sm">{successMessage}</p>
               </div>
             )}
@@ -197,24 +197,24 @@ export const LoginPage: React.FC = () => {
             {/* Form */}
             <form onSubmit={handleForgotPassword} className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t('auth.email')}
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                   <input
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => updateFormData('email', e.target.value)}
                     className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                      errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                      errors.email ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-700'
                     }`}
                     placeholder={t('auth.emailPlaceholder')}
                   />
                 </div>
                 {errors.email && (
-                  <p className="mt-2 text-sm text-red-600 flex items-center space-x-1">
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center space-x-1">
                     <AlertCircle className="w-4 h-4" />
                     <span>{errors.email}</span>
                   </p>
@@ -234,7 +234,7 @@ export const LoginPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowForgotPassword(false)}
-                  className="w-full text-gray-600 hover:text-gray-800 transition-colors"
+                  className="w-full text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
                 >
                   {t('auth.backToLogin')}
                 </button>
@@ -249,16 +249,16 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-pink-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-800">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
-              <TreePine className="w-8 h-8 text-green-600" />
+              <TreePine className="w-8 h-8 text-green-600 dark:text-green-400" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               {isSignUp ? t('auth.signupTitle') : t('auth.signinTitle')}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               {isSignUp ? t('auth.signupSubtitle') : t('auth.signinSubtitle')}
             </p>
           </div>
@@ -267,35 +267,35 @@ export const LoginPage: React.FC = () => {
               knows which tree invited them. The consent line deliberately
               promises no full tree access (R-74.6). */}
           {inviteInfo && (
-            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg" data-testid="invite-context">
+            <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg" data-testid="invite-context">
               <div className="flex items-start space-x-3">
-                <Link2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                <Link2 className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                 <div className="text-sm">
                   <p className="text-blue-900 font-medium">
                     {t('invite.contextTitle', { treeName: inviteInfo.treeName })}
                   </p>
-                  <p className="text-blue-800 mt-1">
+                  <p className="text-blue-800 dark:text-blue-300 mt-1">
                     {t('invite.contextBody', {
                       inviterName: inviteInfo.inviterName,
                       type: t(`invite.type.${inviteInfo.type}`),
                       expiresAt: formatDateWithLocale(inviteInfo.expiresAt, i18n.language),
                     })}
                   </p>
-                  <p className="text-blue-700 mt-1">
+                  <p className="text-blue-700 dark:text-blue-300 mt-1">
                     {t('invite.contextUses', { count: inviteInfo.remainingUses })}
                   </p>
-                  <p className="text-blue-700 mt-2 text-xs">{t('invite.consent')}</p>
+                  <p className="text-blue-700 dark:text-blue-300 mt-2 text-xs">{t('invite.consent')}</p>
                 </div>
               </div>
             </div>
           )}
           {inviteError && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3" data-testid="invite-error">
-              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start space-x-3" data-testid="invite-error">
+              <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
               <div className="text-sm">
                 <p className="text-red-900 font-medium">{t('invite.deadTitle')}</p>
                 <p className="text-red-800 mt-1">{inviteError}</p>
-                <p className="text-red-700 mt-1 text-xs">{t('invite.deadBody')}</p>
+                <p className="text-red-700 dark:text-red-300 mt-1 text-xs">{t('invite.deadBody')}</p>
               </div>
             </div>
           )}
@@ -325,8 +325,8 @@ export const LoginPage: React.FC = () => {
             </div>
           )}
           {loginBlock === 'disabled' && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
-              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start space-x-3">
+              <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
               <div>
                 <p className="text-red-900 text-sm font-medium">{t('auth.loginDisabledTitle')}</p>
                 <p className="text-red-800 text-sm mt-1">{t('auth.loginDisabledBody')}</p>
@@ -336,16 +336,16 @@ export const LoginPage: React.FC = () => {
 
           {/* Success Message */}
           {successMessage && (
-            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-3">
-              <CheckCircle className="w-5 h-5 text-green-600 shrink-0" />
+            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center space-x-3">
+              <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" />
               <p className="text-green-800 text-sm">{successMessage}</p>
             </div>
           )}
 
           {/* Error Message */}
           {(errors.general || error) && !loginBlock && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
-              <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center space-x-3">
+              <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0" />
               <p className="text-red-800 text-sm">{errors.general ?? error}</p>
             </div>
           )}
@@ -355,24 +355,24 @@ export const LoginPage: React.FC = () => {
             {/* Name Field (sign up only) */}
             {isSignUp && (
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t('auth.name')}
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                   <input
                     id="name"
                     type="text"
                     value={formData.name}
                     onChange={(e) => updateFormData('name', e.target.value)}
                     className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                      errors.name ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                      errors.name ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-700'
                     }`}
                     placeholder={t('auth.namePlaceholder')}
                   />
                 </div>
                 {errors.name && (
-                  <p className="mt-2 text-sm text-red-600 flex items-center space-x-1">
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center space-x-1">
                     <AlertCircle className="w-4 h-4" />
                     <span>{errors.name}</span>
                   </p>
@@ -382,24 +382,24 @@ export const LoginPage: React.FC = () => {
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t('auth.email')}
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 <input
                   id="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => updateFormData('email', e.target.value)}
                   className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                    errors.email ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-700'
                   }`}
                   placeholder={t('auth.emailPlaceholder')}
                 />
               </div>
               {errors.email && (
-                <p className="mt-2 text-sm text-red-600 flex items-center space-x-1">
+                <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center space-x-1">
                   <AlertCircle className="w-4 h-4" />
                   <span>{errors.email}</span>
                 </p>
@@ -408,31 +408,31 @@ export const LoginPage: React.FC = () => {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t('auth.password')}
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => updateFormData('password', e.target.value)}
                   className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    errors.password ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                    errors.password ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-700'
                   }`}
                   placeholder={t('auth.passwordPlaceholder')}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-2 text-sm text-red-600 flex items-center space-x-1">
+                <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center space-x-1">
                   <AlertCircle className="w-4 h-4" />
                   <span>{errors.password}</span>
                 </p>
@@ -445,7 +445,7 @@ export const LoginPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowForgotPassword(true)}
-                  className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 transition-colors"
                 >
                   {t('auth.forgot')}
                 </button>
@@ -471,11 +471,11 @@ export const LoginPage: React.FC = () => {
 
           {/* Toggle Sign Up / Login */}
           <div className="mt-8 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               {isSignUp ? t('auth.haveAccount') : t('auth.noAccount')}
               <button
                 onClick={switchMode}
-                className="ml-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                className="ml-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 font-medium transition-colors"
               >
                 {isSignUp ? t('auth.signinHere') : t('auth.signupHere')}
               </button>
@@ -483,9 +483,9 @@ export const LoginPage: React.FC = () => {
           </div>
 
           {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <p className="text-xs text-gray-600 text-center mb-2">{t('auth.demoTitle')}</p>
-            <div className="text-xs text-gray-500 space-y-1">
+          <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-800">
+            <p className="text-xs text-gray-600 dark:text-gray-400 text-center mb-2">{t('auth.demoTitle')}</p>
+            <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
               <p><strong>{t('auth.demoEmail')}:</strong> demo@familytree.app</p>
               <p><strong>{t('auth.demoPassword')}:</strong> demo123</p>
             </div>
@@ -494,7 +494,7 @@ export const LoginPage: React.FC = () => {
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-sm text-gray-500">{t('auth.footer')}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t('auth.footer')}</p>
         </div>
       </div>
     </div>

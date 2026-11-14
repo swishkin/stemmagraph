@@ -8,7 +8,7 @@ export const ListView: React.FC = () => {
   if (viewMode.type !== 'list') return null;
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-50">
+    <div className="flex-1 flex flex-col bg-gray-50 dark:bg-gray-800">
       <FamilyTable />
     </div>
   );

@@ -70,19 +70,19 @@ export const CreateFamilyTreeModal: React.FC<CreateFamilyTreeModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-300">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-              <TreePine className="w-5 h-5 text-green-600" />
+            <div className="w-10 h-10 bg-green-100 dark:bg-green-900/40 rounded-full flex items-center justify-center">
+              <TreePine className="w-5 h-5 text-green-600 dark:text-green-400" />
             </div>
-            <h2 className="text-xl font-bold text-gray-900">{t('createModal.title')}</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('createModal.title')}</h2>
           </div>
           <button
             onClick={handleClose}
             disabled={isCreating}
-            className="p-2 rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50"
+            className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
           >
             <X className="w-5 h-5" />
           </button>
@@ -91,7 +91,7 @@ export const CreateFamilyTreeModal: React.FC<CreateFamilyTreeModalProps> = ({
         {/* Content */}
         <form onSubmit={handleSubmit} className="p-6">
           <div className="mb-6">
-            <label htmlFor="family-name" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="family-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               {t('createModal.nameLabel')}
             </label>
             <input
@@ -103,23 +103,23 @@ export const CreateFamilyTreeModal: React.FC<CreateFamilyTreeModalProps> = ({
                 setErrorKey(null);
               }}
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors ${
-                errorKey ? 'border-red-500' : 'border-gray-300'
+                errorKey ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
               }`}
               placeholder={t('createModal.placeholder')}
               disabled={isCreating}
               autoFocus
             />
             {errorKey && (
-              <div className="mt-2 flex items-center space-x-2 text-red-600">
+              <div className="mt-2 flex items-center space-x-2 text-red-600 dark:text-red-400">
                 <AlertCircle className="w-4 h-4" />
                 <span className="text-sm">{t(errorKey)}</span>
               </div>
             )}
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
             <h4 className="font-medium text-blue-900 mb-2">{t('createModal.tipsTitle')}</h4>
-            <ul className="text-sm text-blue-800 space-y-1">
+            <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-1">
               <li>• {t('createModal.tips.surname')}</li>
               <li>• {t('createModal.tips.examples')}</li>
               <li>• {t('createModal.tips.avoidSpecific')}</li>
@@ -132,7 +132,7 @@ export const CreateFamilyTreeModal: React.FC<CreateFamilyTreeModalProps> = ({
               type="button"
               onClick={handleClose}
               disabled={isCreating}
-              className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors disabled:opacity-50"
+              className="px-6 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors disabled:opacity-50"
             >
               {t('createModal.cancel')}
             </button>

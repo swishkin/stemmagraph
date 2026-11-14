@@ -105,19 +105,19 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
 
   const validateForm = (): boolean => {
     if (!formData.name.trim()) {
-      setError('Full name is required');
+      setError(t('memberModal.errorNameRequired'));
       return false;
     }
 
     if (formData.name.trim().length < 2) {
-      setError('Name must be at least 2 characters');
+      setError(t('memberModal.errorNameShort'));
       return false;
     }
 
     if (formData.birthDate) {
       const birthDate = new Date(formData.birthDate);
       if (isNaN(birthDate.getTime())) {
-        setError('Invalid birth date format');
+        setError(t('memberModal.errorBirthDate'));
         return false;
       }
     }
@@ -126,7 +126,7 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
       const deathDate = new Date(formData.deathDate);
       const birthDate = new Date(formData.birthDate);
       if (birthDate > deathDate) {
-        setError('Death date cannot be earlier than birth date');
+        setError(t('memberModal.errorDeathBeforeBirth'));
         return false;
       }
     }
@@ -237,7 +237,7 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
           ? err.message
           : isProposeFlow
             ? t('changeReview.proposeFailed')
-            : 'Failed to save member data. Please try again.',
+            : t('memberModal.errorSaveFailed'),
       );
     } finally {
       setIsSubmitting(false);
@@ -265,35 +265,35 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
   };
 
   const getModalTitle = () => {
-    if (editingMember) return 'Edit Family Member';
-    if (isFirstMember) return 'First Family Member';
-    return 'Add Family Member';
+    if (editingMember) return t('memberModal.titleEdit');
+    if (isFirstMember) return t('memberModal.titleFirst');
+    return t('memberModal.titleAdd');
   };
 
   const getModalSubtitle = () => {
     if (isFirstMember && familyTreeName) return familyTreeName;
-    if (editingMember) return 'Edit family member details';
-    return 'Enter new member details';
+    if (editingMember) return t('memberModal.subtitleEdit');
+    return t('memberModal.subtitleAdd');
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in slide-in-from-bottom-4 duration-300">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white rounded-t-xl">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800 sticky top-0 bg-white dark:bg-gray-900 rounded-t-xl">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/40 rounded-full flex items-center justify-center">
+              <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">{getModalTitle()}</h2>
-              <p className="text-sm text-gray-500">{getModalSubtitle()}</p>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">{getModalTitle()}</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{getModalSubtitle()}</p>
             </div>
           </div>
           <button
             onClick={handleClose}
             disabled={isSubmitting}
-            className="p-2 rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50"
+            className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
           >
             <X className="w-5 h-5" />
           </button>
@@ -304,9 +304,7 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
           {/* First Member Context */}
           {isFirstMember && (
             <div className="mb-6 text-center">
-              <p className="text-gray-700 mb-4">
-                Who will be the <strong>"root"</strong> of this family tree?
-              </p>
+              <p className="text-gray-700 dark:text-gray-300 mb-4" dangerouslySetInnerHTML={{ __html: t('memberModal.rootQuestion') }} />
             </div>
           )}
 
@@ -319,8 +317,8 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
           )}
 
           {proposeSent && (
-            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
-              <CheckCircle className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start space-x-3">
+              <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
               <p className="text-green-800 text-sm">{t('changeReview.proposeSent')}</p>
             </div>
           )}
@@ -330,8 +328,8 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Full Name */}
               <div className="md:col-span-2">
-                <label htmlFor="member-name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name <span className="text-red-500">*</span>
+                <label htmlFor="member-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('memberModal.fullName')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="member-name"
@@ -339,9 +337,9 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
                   value={formData.name}
                   onChange={(e) => updateFormData({ name: e.target.value })}
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    error && !formData.name.trim() ? 'border-red-500' : 'border-gray-300'
+                    error && !formData.name.trim() ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
                   }`}
-                  placeholder="e.g., John Smith, Jane Doe"
+                  placeholder={t('memberModal.placeholderName')}
                   disabled={isSubmitting}
                   autoFocus
                 />
@@ -349,24 +347,24 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
 
               {/* Nickname */}
               <div>
-                <label htmlFor="nickname" className="block text-sm font-medium text-gray-700 mb-2">
-                  Nickname
+                <label htmlFor="nickname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('memberModal.nickname')}
                 </label>
                 <input
                   id="nickname"
                   type="text"
                   value={formData.nickname}
                   onChange={(e) => updateFormData({ nickname: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Nickname or alias"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder={t('memberModal.placeholderNickname')}
                   disabled={isSubmitting}
                 />
               </div>
 
               {/* Gender */}
               <fieldset>
-                <legend className="block text-sm font-medium text-gray-700 mb-2">
-                  Gender <span className="text-red-500">*</span>
+                <legend className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('memberModal.gender')} <span className="text-red-500">*</span>
                 </legend>
                 <div className="flex space-x-4">
                   <label className="flex items-center cursor-pointer">
@@ -375,10 +373,10 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
                       value="male"
                       checked={formData.gender === 'male'}
                       onChange={(e) => updateFormData({ gender: e.target.value as 'male' | 'female' })}
-                      className="mr-2 text-blue-600 focus:ring-blue-500"
+                      className="mr-2 text-blue-600 dark:text-blue-400 focus:ring-blue-500"
                       disabled={isSubmitting}
                     />
-                    <span className="text-sm text-gray-700">Male</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{t('memberModal.male')}</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
@@ -386,27 +384,27 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
                       value="female"
                       checked={formData.gender === 'female'}
                       onChange={(e) => updateFormData({ gender: e.target.value as 'male' | 'female' })}
-                      className="mr-2 text-blue-600 focus:ring-blue-500"
+                      className="mr-2 text-blue-600 dark:text-blue-400 focus:ring-blue-500"
                       disabled={isSubmitting}
                     />
-                    <span className="text-sm text-gray-700">Female</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{t('memberModal.female')}</span>
                   </label>
                 </div>
               </fieldset>
 
               {/* Birth Date */}
               <div>
-                <label htmlFor="birth-date" className="block text-sm font-medium text-gray-700 mb-2">
-                  Birth Date
+                <label htmlFor="birth-date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('memberModal.birthDate')}
                 </label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <input
                     id="birth-date"
                     type="date"
                     value={formData.birthDate}
                     onChange={(e) => updateFormData({ birthDate: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -416,18 +414,18 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
 
               {/* Birth Place */}
               <div>
-                <label htmlFor="birth-place" className="block text-sm font-medium text-gray-700 mb-2">
-                  Birth Place
+                <label htmlFor="birth-place" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('memberModal.birthPlace')}
                 </label>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <input
                     id="birth-place"
                     type="text"
                     value={formData.birthPlace}
                     onChange={(e) => updateFormData({ birthPlace: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="City/Town"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder={t('memberModal.placeholderBirthPlace')}
                     disabled={isSubmitting}
                   />
                 </div>
@@ -435,8 +433,8 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
 
               {/* Living Status */}
               <fieldset className="md:col-span-2">
-                <legend className="block text-sm font-medium text-gray-700 mb-2">
-                  Status
+                <legend className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('memberModal.status')}
                 </legend>
                 <div className="flex space-x-4 mb-4">
                   <label className="flex items-center cursor-pointer">
@@ -444,37 +442,37 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
                       type="radio"
                       checked={formData.isAlive}
                       onChange={() => updateFormData({ isAlive: true, deathDate: '' })}
-                      className="mr-2 text-blue-600 focus:ring-blue-500"
+                      className="mr-2 text-blue-600 dark:text-blue-400 focus:ring-blue-500"
                       disabled={isSubmitting}
                     />
-                    <span className="text-sm text-gray-700">Living</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{t('memberModal.living')}</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       checked={!formData.isAlive}
                       onChange={() => updateFormData({ isAlive: false })}
-                      className="mr-2 text-blue-600 focus:ring-blue-500"
+                      className="mr-2 text-blue-600 dark:text-blue-400 focus:ring-blue-500"
                       disabled={isSubmitting}
                     />
-                    <span className="text-sm text-gray-700">Deceased</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{t('memberModal.deceased')}</span>
                   </label>
                 </div>
 
                 {/* Death Date */}
                 {!formData.isAlive && (
                   <div>
-                    <label htmlFor="death-date" className="block text-sm font-medium text-gray-700 mb-2">
-                      Death Date
+                    <label htmlFor="death-date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      {t('memberModal.deathDate')}
                     </label>
                     <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                       <input
                         id="death-date"
                         type="date"
                         value={formData.deathDate}
                         onChange={(e) => updateFormData({ deathDate: e.target.value })}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         disabled={isSubmitting}
                       />
                     </div>
@@ -486,20 +484,20 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
               {isFirstMember && (
                 <div className="md:col-span-2">
                   <fieldset>
-                    <legend className="block text-sm font-medium text-gray-700 mb-3">
-                      Role:
+                    <legend className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                      {t('memberModal.roleLabel')}:
                     </legend>
                     <div className="space-y-3">
                       {[
-                        { value: 'myself', label: 'Myself', desc: 'I will be the center of the family tree' },
-                        { value: 'parent', label: 'My parent', desc: 'Father or mother as the family root' },
-                        { value: 'grandparent', label: 'Grandparent', desc: 'Oldest known generation' },
-                        { value: 'other', label: 'Other', desc: 'Another family member' }
+                        { value: 'myself', label: t('memberModal.roleMyself'), desc: t('memberModal.roleMyselfDesc') },
+                        { value: 'parent', label: t('memberModal.roleParent'), desc: t('memberModal.roleParentDesc') },
+                        { value: 'grandparent', label: t('memberModal.roleGrandparent'), desc: t('memberModal.roleGrandparentDesc') },
+                        { value: 'other', label: t('memberModal.roleOther'), desc: t('memberModal.roleOtherDesc') }
                       ].map((option) => (
                         <label
                           key={option.value}
-                          className={`flex items-start space-x-3 p-3 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 ${
-                            formData.role === option.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                          className={`flex items-start space-x-3 p-3 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
+                            formData.role === option.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-800'
                           }`}
                           aria-label={`${option.label}: ${option.desc}`}
                         >
@@ -509,13 +507,13 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
                             value={option.value}
                             checked={formData.role === option.value}
                             onChange={(e) => updateFormData({ role: e.target.value as FormData['role'] })}
-                            className="mt-1 text-blue-600 focus:ring-blue-500"
+                            className="mt-1 text-blue-600 dark:text-blue-400 focus:ring-blue-500"
                             disabled={isSubmitting}
                             aria-describedby={`role-desc-${option.value}`}
                           />
                           <div className="flex-1">
-                            <div className="font-medium text-gray-900">{option.label}</div>
-                            <div className="text-sm text-gray-500" id={`role-desc-${option.value}`}>{option.desc}</div>
+                            <div className="font-medium text-gray-900 dark:text-white">{option.label}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400" id={`role-desc-${option.value}`}>{option.desc}</div>
                           </div>
                         </label>
                       ))}
@@ -528,7 +526,7 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
             {/* Reason note: only on the editor propose path (P2-5 U5d). */}
             {isProposeFlow && !proposeSent && (
               <div>
-                <label htmlFor="reason-note" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="reason-note" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t('changeReview.reasonNoteLabel')} <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -540,7 +538,7 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
                   }}
                   rows={3}
                   maxLength={500}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder={t('changeReview.reasonNotePlaceholder')}
                   disabled={isSubmitting}
                 />
@@ -549,21 +547,21 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
 
             {/* Error Message */}
             {error && (
-              <div className="flex items-center space-x-2 text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">
+              <div className="flex items-center space-x-2 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
                 <AlertCircle className="w-4 h-4" />
                 <span className="text-sm">{error}</span>
               </div>
             )}
 
             {/* Actions */}
-            <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+            <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-800">
               <button
                 type="button"
                 onClick={handleClose}
                 disabled={isSubmitting}
-                className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors disabled:opacity-50"
+                className="px-6 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors disabled:opacity-50"
               >
-                CANCEL
+                {t('memberModal.cancel')}
               </button>
               <button
                 type="submit"
@@ -575,10 +573,10 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
                 )}
                 <span>
                   {(() => {
-                    if (isSubmitting) return 'SAVING...';
+                    if (isSubmitting) return t('memberModal.saving');
                     if (isProposeFlow) return t('changeReview.submitPropose');
-                    if (editingMember) return 'UPDATE';
-                    return 'SAVE';
+                    if (editingMember) return t('memberModal.update');
+                    return t('memberModal.save');
                   })()}
                 </span>
               </button>

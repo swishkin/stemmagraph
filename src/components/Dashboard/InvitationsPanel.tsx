@@ -64,6 +64,12 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
   const [waPhone, setWaPhone] = useState('');
   const [isSharing, setIsSharing] = useState(false);
 
+  // Add-existing-user form state. Local only, like waPhone: the typed
+  // email lives here until it is sent to the server (or the panel closes).
+  const [addEmail, setAddEmail] = useState('');
+  const [addRole, setAddRole] = useState<TreeRoleValue>('editor');
+  const [isAdding, setIsAdding] = useState(false);
+
   const load = useCallback(async () => {
     if (!invitationsApi) return;
     try {
@@ -166,6 +172,30 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
     }
   };
 
+  // Add an already-registered user straight to this tree (no invite link). The
+  // server answers USER_NOT_FOUND with honest text when the email has no
+  // account on this installation.
+  const handleAddExisting = async () => {
+    if (!invitationsApi) return;
+    const email = addEmail.trim();
+    if (!email) {
+      setActionError(t('invitePanel.addExistingEmailRequired'));
+      return;
+    }
+    setIsAdding(true);
+    setActionError(null);
+    try {
+      await invitationsApi.addTreeMember(treeId, email, addRole);
+      setMembers(await invitationsApi.listTreeMembership(treeId));
+      setAddEmail('');
+      setAddRole('editor');
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : t('invitePanel.memberUpdateFailed'));
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   const handleCopy = async () => {
     if (!created) return;
     try {
@@ -231,11 +261,11 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
 
   const stateBadge = (state: InvitationRecord['state']) => {
     const palette: Record<InvitationRecord['state'], string> = {
-      active: 'bg-green-100 text-green-800',
-      expired: 'bg-gray-100 text-gray-700',
-      exhausted: 'bg-gray-100 text-gray-700',
-      revoked: 'bg-red-100 text-red-800',
-      consumed: 'bg-blue-100 text-blue-800',
+      active: 'bg-green-100 dark:bg-green-900/40 text-green-800',
+      expired: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+      exhausted: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+      revoked: 'bg-red-100 dark:bg-red-900/40 text-red-800',
+      consumed: 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300',
     };
     return (
       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${palette[state]}`}>
@@ -247,12 +277,12 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
   if (!invitationsApi) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-        <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
-          <p className="text-sm text-gray-700">{t('invitePanel.unavailable')}</p>
+        <div className="w-full max-w-lg rounded-xl bg-white dark:bg-gray-900 p-6 shadow-xl">
+          <p className="text-sm text-gray-700 dark:text-gray-300">{t('invitePanel.unavailable')}</p>
           <button
             type="button"
             onClick={onClose}
-            className="mt-4 w-full rounded-lg bg-gray-100 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200"
+            className="mt-4 w-full rounded-lg bg-gray-100 dark:bg-gray-800 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
           >
             {t('invitePanel.close')}
           </button>
@@ -263,12 +293,12 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" data-testid="invitations-panel">
-      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-xl bg-white shadow-xl">
+      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-xl bg-white dark:bg-gray-900 shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 px-6 py-4">
           <div className="flex items-center space-x-2">
-            <UserPlus className="h-5 w-5 text-green-600" />
-            <h2 className="text-lg font-bold text-gray-900">
+            <UserPlus className="h-5 w-5 text-green-600 dark:text-green-400" />
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
               {t('invitePanel.title', { treeName })}
             </h2>
           </div>
@@ -279,12 +309,12 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                 setIsLoading(true);
                 void load();
               }}
-              className="rounded-lg p-2 text-gray-500 hover:bg-gray-100"
+              className="rounded-lg p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
               title={t('invitePanel.refresh')}
             >
               <RefreshCw className="h-4 w-4" />
             </button>
-            <button type="button" onClick={onClose} className="rounded-lg p-2 text-gray-500 hover:bg-gray-100">
+            <button type="button" onClick={onClose} className="rounded-lg p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -293,37 +323,37 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
         {/* Body */}
         <div className="flex-1 space-y-6 overflow-y-auto px-6 py-4">
           {actionError && (
-            <div className="flex items-start space-x-2 rounded-lg border border-red-200 bg-red-50 p-3">
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
+            <div className="flex items-start space-x-2 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
               <p className="text-sm text-red-800">{actionError}</p>
             </div>
           )}
 
           {/* Create invitation */}
-          <section className="rounded-lg border border-gray-200 p-4">
-            <h3 className="mb-3 flex items-center space-x-2 text-sm font-semibold text-gray-900">
-              <Link2 className="h-4 w-4 text-blue-600" />
+          <section className="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+            <h3 className="mb-3 flex items-center space-x-2 text-sm font-semibold text-gray-900 dark:text-white">
+              <Link2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               <span>{t('invitePanel.createTitle')}</span>
             </h3>
             <div className="grid grid-cols-2 gap-3">
-              <label className="text-xs font-medium text-gray-700">
+              <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                 {t('invitePanel.fieldType')}
                 <select
                   value={inviteType}
                   onChange={(e) => handleTypeChange(e.target.value as InvitationTypeValue)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-2 py-2 text-sm"
+                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-2 text-sm"
                 >
                   <option value="personal">{t('invite.type.personal')}</option>
                   <option value="family">{t('invite.type.family')}</option>
                 </select>
               </label>
-              <label className="text-xs font-medium text-gray-700">
+              <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                 {t('invitePanel.fieldRole')}
                 <select
                   value={grantedRole}
                   onChange={(e) => setGrantedRole(e.target.value as TreeRoleValue)}
                   disabled={inviteType === 'personal'}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-2 py-2 text-sm disabled:bg-gray-100"
+                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-2 text-sm disabled:bg-gray-100 dark:bg-gray-800"
                 >
                   <option value="viewer">{t('invitePanel.role.viewer')}</option>
                   <option value="editor" disabled={inviteType === 'personal'}>
@@ -331,12 +361,12 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                   </option>
                 </select>
               </label>
-              <label className="text-xs font-medium text-gray-700">
+              <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                 {t('invitePanel.fieldChannel')}
                 <select
                   value={channel}
                   onChange={(e) => setChannel(e.target.value as 'manual' | 'wa' | 'email')}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-2 py-2 text-sm"
+                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-2 text-sm"
                 >
                   <option value="manual">{t('invitePanel.channel.manual')}</option>
                   <option value="wa">{t('invitePanel.channel.wa')}</option>
@@ -344,7 +374,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                 </select>
               </label>
               {inviteType === 'family' && (
-                <label className="text-xs font-medium text-gray-700">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   {t('invitePanel.fieldMaxUses')}
                   <input
                     type="number"
@@ -352,12 +382,12 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                     max={100}
                     value={maxUses}
                     onChange={(e) => setMaxUses(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-2 py-2 text-sm"
+                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-2 text-sm"
                   />
                 </label>
               )}
             </div>
-            <p className="mt-2 text-xs text-gray-500">{t('invitePanel.createHint')}</p>
+            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">{t('invitePanel.createHint')}</p>
             <button
               type="button"
               onClick={handleCreate}
@@ -370,8 +400,8 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
 
             {/* WhatsApp share block (P2-4 AC-3): optional phone, never stored. */}
             {channel === 'wa' && (
-              <div className="mt-3 rounded-lg border border-green-200 bg-green-50 p-3" data-testid="wa-share-block">
-                <label className="text-xs font-medium text-gray-700">
+              <div className="mt-3 rounded-lg border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-3" data-testid="wa-share-block">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   {t('invitePanel.waPhoneLabel')}
                   <input
                     type="text"
@@ -381,10 +411,10 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                     placeholder={t('invitePanel.waPhonePlaceholder')}
                     autoComplete="off"
                     data-testid="wa-phone-input"
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-2 py-2 text-sm"
+                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-2 text-sm"
                   />
                 </label>
-                <p className="mt-1 text-xs text-gray-500">{t('invitePanel.waPhoneNote')}</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t('invitePanel.waPhoneNote')}</p>
                 <button
                   type="button"
                   onClick={handleWhatsAppShare}
@@ -400,19 +430,19 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
 
             {/* The full link appears exactly once, here. */}
             {created && (
-              <div className="mt-3 rounded-lg border border-green-200 bg-green-50 p-3" data-testid="created-invitation">
+              <div className="mt-3 rounded-lg border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-3" data-testid="created-invitation">
                 <p className="flex items-center space-x-1 text-xs font-medium text-green-900">
                   <CheckCircle className="h-4 w-4" />
                   <span>{t('invitePanel.createdOnce')}</span>
                 </p>
                 <div className="mt-2 flex items-center space-x-2">
-                  <code className="flex-1 overflow-x-auto rounded bg-white px-2 py-1 text-xs text-gray-800">
+                  <code className="flex-1 overflow-x-auto rounded bg-white dark:bg-gray-900 px-2 py-1 text-xs text-gray-800 dark:text-gray-200">
                     {created.url}
                   </code>
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="flex items-center space-x-1 rounded-lg border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50"
+                    className="flex items-center space-x-1 rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-1 text-xs hover:bg-gray-50 dark:hover:bg-gray-800"
                   >
                     <Copy className="h-3 w-3" />
                     <span>{copied ? t('invitePanel.copied') : t('invitePanel.copy')}</span>
@@ -425,23 +455,23 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
 
           {/* Invitation list */}
           <section>
-            <h3 className="mb-2 text-sm font-semibold text-gray-900">{t('invitePanel.listTitle')}</h3>
+            <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">{t('invitePanel.listTitle')}</h3>
             {isLoading ? (
-              <p className="py-4 text-center text-sm text-gray-500">{t('invitePanel.loading')}</p>
+              <p className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">{t('invitePanel.loading')}</p>
             ) : loadFailed ? (
-              <p className="py-4 text-center text-sm text-red-600">{t('invitePanel.loadFailed')}</p>
+              <p className="py-4 text-center text-sm text-red-600 dark:text-red-400">{t('invitePanel.loadFailed')}</p>
             ) : invitations.length === 0 ? (
-              <p className="py-4 text-center text-sm text-gray-500">{t('invitePanel.empty')}</p>
+              <p className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">{t('invitePanel.empty')}</p>
             ) : (
-              <ul className="divide-y divide-gray-100 rounded-lg border border-gray-200">
+              <ul className="divide-y divide-gray-100 dark:divide-gray-800 rounded-lg border border-gray-200 dark:border-gray-800">
                 {invitations.map((invitation) => (
                   <li key={invitation.id} className="flex items-center justify-between gap-2 px-3 py-2">
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {t(`invite.type.${invitation.type}`)} · {t(`invitePanel.role.${invitation.grantedRole}`)} ·{' '}
-                        <span className="font-mono text-xs text-gray-500">{invitation.tokenMasked}</span>
+                        <span className="font-mono text-xs text-gray-500 dark:text-gray-400">{invitation.tokenMasked}</span>
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         {t('invitePanel.uses', { used: invitation.usedCount, max: invitation.maxUses })} ·{' '}
                         {t('invitePanel.expires', { date: formatDate(invitation.expiresAt, i18n.language) })}
                       </p>
@@ -452,7 +482,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                         <button
                           type="button"
                           onClick={() => handleRevoke(invitation.id)}
-                          className="rounded-lg border border-red-200 px-2 py-1 text-xs text-red-700 hover:bg-red-50"
+                          className="rounded-lg border border-red-200 dark:border-red-800 px-2 py-1 text-xs text-red-700 dark:text-red-300 hover:bg-red-50"
                         >
                           {t('invitePanel.revoke')}
                         </button>
@@ -466,30 +496,30 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
 
           {/* Tree membership */}
           <section>
-            <h3 className="mb-2 flex items-center space-x-2 text-sm font-semibold text-gray-900">
-              <Users className="h-4 w-4 text-gray-600" />
+            <h3 className="mb-2 flex items-center space-x-2 text-sm font-semibold text-gray-900 dark:text-white">
+              <Users className="h-4 w-4 text-gray-600 dark:text-gray-400" />
               <span>{t('invitePanel.membersTitle')}</span>
             </h3>
             {isLoading ? (
-              <p className="py-4 text-center text-sm text-gray-500">{t('invitePanel.loading')}</p>
+              <p className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">{t('invitePanel.loading')}</p>
             ) : (
-              <ul className="divide-y divide-gray-100 rounded-lg border border-gray-200">
+              <ul className="divide-y divide-gray-100 dark:divide-gray-800 rounded-lg border border-gray-200 dark:border-gray-800">
                 {members.map((member) => (
                   <li key={member.id} className="flex items-center justify-between gap-2 px-3 py-2">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-gray-900">
+                      <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
                         {member.name}
                         {member.userStatus !== 'active' && (
-                          <span className="ml-2 text-xs text-gray-500">({t(`invitePanel.userStatus.${member.userStatus}`)})</span>
+                          <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">({t(`invitePanel.userStatus.${member.userStatus}`)})</span>
                         )}
                       </p>
-                      <p className="truncate text-xs text-gray-500">{member.email}</p>
+                      <p className="truncate text-xs text-gray-500 dark:text-gray-400">{member.email}</p>
                     </div>
                     <div className="flex shrink-0 items-center space-x-2">
                       <select
                         value={member.role}
                         onChange={(e) => handleRoleChange(member.id, e.target.value as TreeRoleValue)}
-                        className="rounded-lg border border-gray-300 px-2 py-1 text-xs"
+                        className="rounded-lg border border-gray-300 dark:border-gray-700 px-2 py-1 text-xs"
                         title={t('invitePanel.changeRole')}
                       >
                         <option value="owner">{t('invitePanel.role.owner')}</option>
@@ -499,7 +529,7 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                       <button
                         type="button"
                         onClick={() => handleRemoveMember(member.id)}
-                        className="rounded-lg border border-red-200 px-2 py-1 text-xs text-red-700 hover:bg-red-50"
+                        className="rounded-lg border border-red-200 dark:border-red-800 px-2 py-1 text-xs text-red-700 dark:text-red-300 hover:bg-red-50"
                         title={t('invitePanel.removeMember')}
                       >
                         {t('invitePanel.remove')}
@@ -509,7 +539,56 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
                 ))}
               </ul>
             )}
-            <p className="mt-2 text-xs text-gray-500">{t('invitePanel.membersHint')}</p>
+
+            {/* Add an existing user (no invite link): the account must
+                already exist on this installation, which the server
+                verifies with a USER_NOT_FOUND answer. */}
+            <form
+              className="mt-3 flex flex-wrap items-end gap-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 p-3"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void handleAddExisting();
+              }}
+            >
+              <p className="w-full text-xs font-semibold text-gray-700 dark:text-gray-300">
+                {t('invitePanel.addExistingTitle')}
+              </p>
+              <label className="min-w-[200px] flex-1">
+                <span className="block text-xs text-gray-600 dark:text-gray-400">{t('invitePanel.addExistingEmail')}</span>
+                <input
+                  type="email"
+                  value={addEmail}
+                  onChange={(e) => setAddEmail(e.target.value)}
+                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 py-1.5 text-sm"
+                  autoComplete="off"
+                  data-testid="add-member-email"
+                />
+              </label>
+              <label>
+                <span className="block text-xs text-gray-600 dark:text-gray-400">{t('invitePanel.addExistingRole')}</span>
+                <select
+                  value={addRole}
+                  onChange={(e) => setAddRole(e.target.value as TreeRoleValue)}
+                  className="mt-1 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 py-1.5 text-sm"
+                >
+                  <option value="owner">{t('invitePanel.role.owner')}</option>
+                  <option value="editor">{t('invitePanel.role.editor')}</option>
+                  <option value="viewer">{t('invitePanel.role.viewer')}</option>
+                </select>
+              </label>
+              <button
+                type="submit"
+                disabled={isAdding}
+                data-testid="add-member-button"
+                className="flex items-center space-x-1.5 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              >
+                <UserPlus className="h-4 w-4" />
+                <span>{isAdding ? t('invitePanel.creating') : t('invitePanel.addExistingAction')}</span>
+              </button>
+              <p className="w-full text-xs text-gray-500 dark:text-gray-400">{t('invitePanel.addExistingHint')}</p>
+            </form>
+
+            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">{t('invitePanel.membersHint')}</p>
           </section>
         </div>
       </div>

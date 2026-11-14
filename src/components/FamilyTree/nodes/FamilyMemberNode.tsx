@@ -78,10 +78,10 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
 
   // Helper function to get card border class
   const getCardBorderClass = () => {
-    const baseClasses = 'w-48 bg-white rounded-lg shadow-lg border-2 transition-all duration-200 cursor-pointer group transform hover:-translate-y-1';
-    const selectedClass = selected ? 'border-blue-500 shadow-xl' : 'border-gray-200 hover:border-gray-300';
+    const baseClasses = 'w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border-2 transition-all duration-200 cursor-pointer group transform hover:-translate-y-1';
+    const selectedClass = selected ? 'border-blue-500 shadow-xl' : 'border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-600';
     const genderClass = member.gender === 'male' ? 'border-l-4 border-l-blue-500' : 'border-l-4 border-l-pink-500';
-    const aliveClass = !member.isAlive ? 'opacity-75 bg-gray-50' : '';
+    const aliveClass = !member.isAlive ? 'opacity-75 bg-gray-50 dark:bg-gray-800' : '';
     
     return `${baseClasses} ${selectedClass} ${genderClass} ${aliveClass}`;
   };
@@ -147,9 +147,9 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
         onDoubleClick={() => onEdit(member)}
         onKeyDown={handleKeyDown}
         aria-label={[
-          `Family member ${member.name}`,
-          `${calculateAge()} years old`,
-          `generation ${member.generation}`,
+          t('node.ariaFamilyMember', { name: member.name }),
+          t('node.ariaYearsOld', { age: calculateAge() }),
+          t('node.ariaGeneration', { generation: member.generation }),
           member.profession ?? null
         ].filter(Boolean).join(', ')}
         aria-describedby={`member-details-${member.id}`}
@@ -180,7 +180,7 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
         <div className="p-4">
           {/* Photo */}
           <div className="flex justify-center mb-3">
-            <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 shadow-xs">
+            <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 shadow-xs">
               {member.photoUrl ? (
                 <img
                   src={member.photoUrl}
@@ -199,22 +199,22 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
           <div className="text-center space-y-1" id={`member-details-${member.id}`}>
             {/* Nickname first (if exists) */}
             {member.nickname && (
-              <p className="text-sm text-gray-500 italic">
+              <p className="text-sm text-gray-500 dark:text-gray-400 italic">
                 ({member.nickname})
               </p>
             )}
             
             {/* Full name */}
-            <h3 className="font-bold text-gray-900 text-sm leading-tight">
+            <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-tight">
               {member.name}
             </h3>
             
             {/* Birth year and age */}
             <div className="space-y-0.5">
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-gray-600 dark:text-gray-400">
                 {getYearDisplay()}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {calculateAge()} years
               </p>
             </div>
@@ -222,8 +222,8 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
 
           {/* Additional info (profession/location) - Enhanced spacing */}
           {(member.profession || member.currentLocation) && (
-            <div className="mt-3 pt-2 border-t border-gray-100">
-              <div className="space-y-1 text-xs text-gray-600 text-center">
+            <div className="mt-3 pt-2 border-t border-gray-100 dark:border-gray-800">
+              <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400 text-center">
                 {member.profession && (
                   <div className="flex items-center justify-center space-x-1">
                     <Briefcase className="w-3 h-3" />
@@ -249,7 +249,7 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
         data.onExpandBranch && (
           <button
             type="button"
-            className="absolute -bottom-9 left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1 text-xs bg-white border border-gray-300 rounded-full text-gray-700 hover:bg-gray-100 z-20"
+            className="absolute -bottom-9 left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1 text-xs bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 z-20"
             onClick={(e) => {
               e.stopPropagation();
               data.onExpandBranch?.(member.id);
@@ -274,19 +274,19 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
                 setShowContextMenu(false);
               }
             }}
-            aria-label="Close context menu"
+            aria-label={t('contextMenu.close')}
             tabIndex={0}
           />
-          <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2">
+          <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50 py-2">
             <button
               onClick={() => {
                 onEdit(member);
                 setShowContextMenu(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
             >
               <Edit className="w-4 h-4" />
-              <span>Edit Profile</span>
+              <span>{t('node.editProfile')}</span>
             </button>
             
             <button
@@ -294,10 +294,10 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
                 onAddChild(member.id);
                 setShowContextMenu(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
             >
               <UserPlus className="w-4 h-4" />
-              <span>Add Child</span>
+              <span>{t('node.addChild')}</span>
             </button>
             
             <button
@@ -305,10 +305,10 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
                 onAddSpouse(member.id);
                 setShowContextMenu(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center space-x-2"
             >
               <Heart className="w-4 h-4" />
-              <span>Add Spouse</span>
+              <span>{t('node.addSpouse')}</span>
             </button>
             
             <hr className="my-2" />
@@ -320,10 +320,10 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
                 }
                 setShowContextMenu(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 transition-colors flex items-center space-x-2"
+              className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 dark:text-red-400 transition-colors flex items-center space-x-2"
             >
               <Trash2 className="w-4 h-4" />
-              <span>Delete</span>
+              <span>{t('node.delete')}</span>
             </button>
           </div>
         </>

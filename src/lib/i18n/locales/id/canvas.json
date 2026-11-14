@@ -1,4 +1,7 @@
 {
+  "contextMenu": {
+    "close": "Tutup menu konteks"
+  },
   "controls": {
     "miniMap": "Peta Mini",
     "legend": "Legenda",
@@ -11,59 +14,66 @@
     "female": "Perempuan",
     "deceased": "Wafat",
     "familyRelationship": "Hubungan Keluarga",
-    "married": "Menikah"
+    "married": "Menikah",
+    "layoutControls": "Kontrol Tata Letak",
+    "tierLayout": "Tata letak bertingkat (generasi tersusun rapi)",
+    "freeLayout": "Tata letak bebas (penataan bebas)",
+    "tierModeHint": "Mode bertingkat: seret kiri-kanan saja",
+    "gridPattern": "Pola Kisi",
+    "showGrid": "Tampilkan Kisi",
+    "hideGrid": "Sembunyikan Kisi",
+    "dotsGrid": "Kisi Titik",
+    "linesGrid": "Kisi Garis",
+    "crossGrid": "Kisi Silang",
+    "autoLayout": "Tata Letak Otomatis",
+    "fitView": "Muat ke Layar",
+    "miniMapTab": "Peta Mini",
+    "legendTab": "Legenda",
+    "memberGen": "{{name}} (Gen {{generation}})"
   },
-  "table": {
-    "columns": {
-      "photo": "Foto",
-      "name": "Nama",
-      "relationship": "Hubungan",
-      "birth": "Lahir",
-      "age": "Usia",
-      "status": "Status",
-      "location": "Lokasi",
-      "contact": "Kontak"
-    },
-    "living": "Hidup",
-    "deceased": "Wafat",
-    "ageYears": "{{age}} thn",
-    "whatsapp": "WhatsApp",
-    "email": "Email",
-    "detail": "Detail",
-    "selected_one": "{{count}} anggota dipilih",
-    "selected_other": "{{count}} anggota dipilih",
-    "export": "Ekspor",
-    "sendMessage": "Kirim Pesan",
-    "group": "Grup",
-    "delete": "Hapus",
-    "clearSelection": "Batal Pilih",
-    "membersTitle_one": "{{count}} Anggota Keluarga",
-    "membersTitle_other": "{{count}} Anggota Keluarga",
-    "searchResultsFor": "Hasil pencarian untuk \"{{query}}\"",
-    "show": "Tampilkan:",
-    "all": "Semua",
-    "columnsButton": "Kolom",
-    "showColumns": "Tampilkan Kolom:",
-    "filterName": "Filter nama...",
-    "filterLocation": "Filter lokasi...",
-    "childOf": "Anak dari {{name}}",
-    "child": "Anak",
-    "grandparent": "Kakek/Nenek",
-    "parent": "Orang Tua",
-    "descendant": "Keturunan",
+  "generations": {
+    "limitNotice": "Batas generasi aktif: {{shown}} generasi pertama dari {{total}}",
+    "hiddenDescendants_one": "{{count}} keturunan tersembunyi",
+    "hiddenDescendants_other": "{{count}} keturunan tersembunyi",
+    "expandBranch": "Buka {{count}} keturunan",
+    "expandAll": "Tampilkan semua generasi",
+    "expandAllWarning": "Seluruh pohon akan dirender penuh ({{count}} individu) dan bisa berat pada perangkat lambat. Lanjutkan?",
+    "collapse": "Kembalikan batas generasi",
+    "tierIndicator": "{{count}} generasi • Geser horizontal saja"
+  },
+  "grid": {
     "noMembers": "Tidak ada anggota ditemukan",
-    "noMembersHint": "Coba ubah filter atau kata kunci pencarian",
-    "showing": "Menampilkan {{from}}-{{to}} dari {{total}} anggota",
-    "previous": "Sebelumnya",
-    "next": "Berikutnya"
+    "noMembersDesc": "Coba sesuaikan filter atau kata kunci pencarian",
+    "sortName": "Nama",
+    "sortAge": "Usia",
+    "sortLocation": "Lokasi",
+    "sortGeneration": "Generasi",
+    "membersCount_one": "{{count}} Anggota Keluarga",
+    "membersCount_other": "{{count}} Anggota Keluarga",
+    "searchResults": "Hasil pencarian \"{{query}}\"",
+    "sortBy": "Urutkan: {{label}}",
+    "showing": "Menampilkan {{shown}} dari {{total}} anggota"
   },
   "memberCard": {
     "editProfile": "Edit Profil",
     "addChild": "Tambah Anak",
-    "shareProfile": "Bagikan Profil"
+    "shareProfile": "Bagikan Profil",
+    "duplicate": "Duplikasi",
+    "move": "Pindahkan",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "ariaEditHint": "klik untuk mengedit atau klik kanan untuk opsi lain",
+    "ariaSelectHint": "klik untuk memilih",
+    "statusIndicators": "Indikator status"
   },
-  "contextMenu": {
-    "close": "Tutup menu konteks"
+  "node": {
+    "addChild": "Tambah Anak",
+    "addSpouse": "Tambah Pasangan",
+    "editProfile": "Edit Profil",
+    "delete": "Hapus",
+    "ariaFamilyMember": "Anggota keluarga {{name}}",
+    "ariaYearsOld": "{{age}} tahun",
+    "ariaGeneration": "generasi {{generation}}"
   },
   "relationship": {
     "selectType": "Pilih jenis hubungan:",
@@ -137,14 +147,48 @@
       }
     }
   },
-  "generations": {
-    "limitNotice": "Batas generasi aktif: {{shown}} generasi pertama dari {{total}}",
-    "hiddenDescendants_one": "{{count}} keturunan tersembunyi",
-    "hiddenDescendants_other": "{{count}} keturunan tersembunyi",
-    "expandBranch": "Buka {{count}} keturunan",
-    "expandAll": "Tampilkan semua generasi",
-    "expandAllWarning": "Seluruh pohon akan dirender penuh ({{count}} individu) dan bisa berat pada perangkat lambat. Lanjutkan?",
-    "collapse": "Kembalikan batas generasi",
-    "tierIndicator": "{{count}} generasi • Geser horizontal saja"
+  "table": {
+    "columns": {
+      "photo": "Foto",
+      "name": "Nama",
+      "relationship": "Hubungan",
+      "birth": "Lahir",
+      "age": "Usia",
+      "status": "Status",
+      "location": "Lokasi",
+      "contact": "Kontak"
+    },
+    "living": "Hidup",
+    "deceased": "Wafat",
+    "ageYears": "{{age}} thn",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "detail": "Detail",
+    "selected_one": "{{count}} anggota dipilih",
+    "selected_other": "{{count}} anggota dipilih",
+    "export": "Ekspor",
+    "sendMessage": "Kirim Pesan",
+    "group": "Grup",
+    "delete": "Hapus",
+    "clearSelection": "Batal Pilih",
+    "membersTitle_one": "{{count}} Anggota Keluarga",
+    "membersTitle_other": "{{count}} Anggota Keluarga",
+    "searchResultsFor": "Hasil pencarian untuk \"{{query}}\"",
+    "show": "Tampilkan:",
+    "all": "Semua",
+    "columnsButton": "Kolom",
+    "showColumns": "Tampilkan Kolom:",
+    "filterName": "Filter nama...",
+    "filterLocation": "Filter lokasi...",
+    "childOf": "Anak dari {{name}}",
+    "child": "Anak",
+    "grandparent": "Kakek/Nenek",
+    "parent": "Orang Tua",
+    "descendant": "Keturunan",
+    "noMembers": "Tidak ada anggota ditemukan",
+    "noMembersHint": "Coba ubah filter atau kata kunci pencarian",
+    "showing": "Menampilkan {{from}}-{{to}} dari {{total}} anggota",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya"
   }
 }
