@@ -60,8 +60,13 @@ void i18n
     fallbackLng: 'id',
     fallbackNS: 'common',
     defaultNS: 'common',
-    // Namespaces load on demand; components opt in with useTranslation('canvas')
-    ns: [],
+    // Every namespace, explicitly. With an empty ns list i18next requests
+    // NOTHING from the backend at init or on changeLanguage, so a fresh
+    // 'en' session would silently fall back to the bundled Indonesian and
+    // the lazy EN chunks would never load. Declaring them means init and
+    // language switches fetch the missing language for each namespace.
+    // Components still opt in per-namespace via useTranslation('canvas').
+    ns: ['common', 'canvas', 'poster'],
     partialBundledLanguages: true,
     returnEmptyString: false,
     resources: {

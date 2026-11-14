@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { AuthError, getInvitationAdminApi } from '../../lib/adapters';
 import type { InvitationContextInfo } from '../../lib/adapters';
 import { formatDate as formatDateWithLocale } from '../../lib/i18n';
+import { LanguageSwitcher } from '../Header/LanguageSwitcher';
 
 interface LoginFormData {
   name: string;
@@ -250,6 +251,12 @@ export const LoginPage: React.FC = () => {
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-pink-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-800">
+          {/* Language switcher: the login page is outside UserChrome, so it
+              carries its own — the deployment default (VITE_UI_LANG) applies
+              until the user picks a language here or in Settings. */}
+          <div className="flex justify-end mb-2">
+            <LanguageSwitcher />
+          </div>
           {/* Header */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
