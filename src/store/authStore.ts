@@ -47,11 +47,26 @@ export const useAuthStore = create<AuthState>()(
               isInitialized: true,
             });
           } else {
-            set({ isLoading: false, isInitialized: true });
+            // Session restore failed (expired or missing token): clear any
+            // stale persisted auth state. Without this, an isAuthenticated
+            // left over from an older build would leave the UI in a broken
+            // logged-in shell (0 trees, 401 storms) instead of the login
+            // page. The adapter has already dropped the dead token.
+            set({
+              user: null,
+              isAuthenticated: false,
+              isLoading: false,
+              isInitialized: true,
+            });
           }
         } catch {
           // Session restore failed — user stays logged out
-          set({ isLoading: false, isInitialized: true });
+          set({
+            user: null,
+            isAuthenticated: false,
+            isLoading: false,
+            isInitialized: true,
+          });
         }
       },
 

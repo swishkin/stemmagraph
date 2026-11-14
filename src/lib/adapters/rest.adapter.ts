@@ -69,6 +69,9 @@ import type { FeedItem } from '../feed';
  */
 const ACCOUNT_STATE_ERROR_CODES = new Set(['ACCOUNT_PENDING', 'ACCOUNT_DISABLED']);
 
+/** localStorage key for the persisted session token (survives reloads). */
+const TOKEN_STORAGE_KEY = 'stemmagraph.token';
+
 interface RestAdapterOptions {
   baseUrl: string;
   headers?: Record<string, string>;
@@ -89,6 +92,28 @@ export class RestAdapter implements DataAdapter, AccountAdminApi, InvitationAdmi
       headers: { 'Content-Type': 'application/json' },
       ...options,
     };
+    // Restore a persisted session token so full page reloads (the dashboard
+    // OPEN button and manual refresh do window.location navigations) do not
+    // kill the session. The store's initialize() verifies the token against
+    // /auth/session on boot and clears it if the server rejects it.
+    try {
+      this.token = window.localStorage.getItem(TOKEN_STORAGE_KEY);
+    } catch {
+      this.token = null;
+    }
+  }
+
+  // Single write path for the token: memory plus localStorage. Storage can
+  // be unavailable (private browsing, SSR) — then the session is memory-only
+  // as before.
+  private setToken(token: string | null): void {
+    this.token = token;
+    try {
+      if (token) window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
+      else window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+    } catch {
+      // Storage unavailable — keep the in-memory token only.
+    }
   }
 
   // ── HTTP Helpers ────────────────────────────────────────
@@ -115,7 +140,7 @@ export class RestAdapter implements DataAdapter, AccountAdminApi, InvitationAdmi
     if (res.status === 401 && this.options.onTokenRefresh) {
       const newToken = await this.options.onTokenRefresh();
       if (newToken) {
-        this.token = newToken;
+        this.setToken(newToken);
         headers['Authorization'] = `Bearer ${newToken}`;
         const retry = await fetch(url, {
           method,
@@ -145,7 +170,7 @@ export class RestAdapter implements DataAdapter, AccountAdminApi, InvitationAdmi
   async login(credentials: AuthCredentials): Promise<AuthSession> {
     try {
       const session = await this.request<AuthSession>('POST', '/auth/login', credentials);
-      this.token = session.token ?? null;
+      this.setToken(session.token ?? null);
       return session;
     } catch (e) {
       // P2-1: a pending or disabled account is a typed auth state, not a
@@ -171,19 +196,23 @@ export class RestAdapter implements DataAdapter, AccountAdminApi, InvitationAdmi
         202,
       );
     }
-    this.token = body.token ?? null;
+    this.setToken(body.token ?? null);
     return body;
   }
 
   async logout(): Promise<void> {
     await this.request<void>('POST', '/auth/logout');
-    this.token = null;
+    this.setToken(null);
   }
 
   async getSession(): Promise<AuthSession | null> {
     try {
       return await this.request<AuthSession>('GET', '/auth/session');
     } catch {
+      // The persisted token is missing or the server rejected it (expired,
+      // revoked, unknown) — drop it so the next login starts clean and the
+      // store does not restore a dead session.
+      this.setToken(null);
       return null;
     }
   }
@@ -192,7 +221,7 @@ export class RestAdapter implements DataAdapter, AccountAdminApi, InvitationAdmi
     if (this.options.onTokenRefresh) {
       const newToken = await this.options.onTokenRefresh();
       if (newToken) {
-        this.token = newToken;
+        this.setToken(newToken);
         return this.getSession();
       }
     }
