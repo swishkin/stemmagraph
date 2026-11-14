@@ -290,7 +290,9 @@ export const ExportControls: React.FC<ExportControlsProps> = ({ openTriggerRef }
         aria-haspopup="menu"
       >
         <Download className="w-4 h-4" />
-        <span>{isExporting ? t('export.exporting') : t('export.button')}</span>
+        {/* Explicit common-ns keys: with ['poster','common'] the bare
+            'export.button' would resolve to the poster label. */}
+        <span>{isExporting ? t('common:export.exporting') : t('common:export.button')}</span>
         <ChevronDown className="w-4 h-4" />
       </button>
 
