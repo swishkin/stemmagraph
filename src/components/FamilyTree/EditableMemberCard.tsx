@@ -361,7 +361,7 @@ export const EditableMemberCard: React.FC<EditableMemberCardProps> = ({
             
             <button 
               onClick={() => {
-                if (confirm('Are you sure you want to delete this member?')) {
+                if (confirm(t('node.confirmDelete'))) {
                   // Handle delete
                 }
                 setShowContextMenu(false);

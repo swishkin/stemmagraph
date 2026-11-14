@@ -73,7 +73,8 @@
     "delete": "Hapus",
     "ariaFamilyMember": "Anggota keluarga {{name}}",
     "ariaYearsOld": "{{age}} tahun",
-    "ariaGeneration": "generasi {{generation}}"
+    "ariaGeneration": "generasi {{generation}}",
+    "confirmDelete": "Yakin ingin menghapus anggota keluarga ini? Tindakan ini tidak dapat dibatalkan."
   },
   "relationship": {
     "selectType": "Pilih jenis hubungan:",

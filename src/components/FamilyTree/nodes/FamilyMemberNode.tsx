@@ -315,7 +315,7 @@ export const FamilyMemberNode = memo(({ data, selected }: NodeProps<FamilyMember
             
             <button
               onClick={() => {
-                if (confirm('Are you sure you want to delete this family member?')) {
+                if (confirm(t('node.confirmDelete'))) {
                   onDelete?.(member.id);
                 }
                 setShowContextMenu(false);
