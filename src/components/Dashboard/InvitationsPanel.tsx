@@ -314,7 +314,12 @@ export const InvitationsPanel: React.FC<{ treeId: string; treeName: string; onCl
             >
               <RefreshCw className="h-4 w-4" />
             </button>
-            <button type="button" onClick={onClose} className="rounded-lg p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label={t('invitePanel.close')}
+              className="rounded-lg p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
               <X className="h-5 w-5" />
             </button>
           </div>
