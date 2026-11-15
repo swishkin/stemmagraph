@@ -9,6 +9,7 @@ import { FamilyTreeView } from './components/FamilyTree/FamilyTreeView';
 import { useFamilyStore } from './store/familyStore';
 import { useDashboardStore } from './store/dashboardStore';
 import { useAuthStore } from './store/authStore';
+import { usePrefsStore } from './store/prefsStore';
 import { currentRoute, pushRoute } from './utils/routing';
 
 function App() {
@@ -34,6 +35,16 @@ function App() {
       fetchTrees();
     }
   }, [isInitialized, isAuthenticated, fetchTrees]);
+
+  // Reconcile per-user UI preferences (language + theme) with the
+  // account as soon as a session is known — on first load, after
+  // login, and when a different account signs in on this browser.
+  // applyUserPrefs is a no-op for users without stored preferences.
+  const user = useAuthStore((s) => s.user);
+  const applyFromUser = usePrefsStore((s) => s.applyFromUser);
+  useEffect(() => {
+    if (user) applyFromUser(user);
+  }, [user, applyFromUser]);
 
   useEffect(() => {
     // Wait for trees to load before determining view

@@ -113,6 +113,10 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
   };
 
   const validateForm = (): boolean => {
+    // Unified validation contract: the add dialog and the edit dialog
+    // (MemberEditModal.validateForm) must enforce exactly the same
+    // requirements on every field — same required fields, same
+    // date-order rule. Keep both in sync.
     if (!formData.name.trim()) {
       setError(t('memberModal.errorNameRequired'));
       return false;
@@ -123,14 +127,28 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
       return false;
     }
 
-    if (formData.birthDate) {
-      const birthDate = new Date(formData.birthDate);
-      if (isNaN(birthDate.getTime())) {
-        setError(t('memberModal.errorBirthDate'));
-        return false;
-      }
+    if (!formData.birthDate) {
+      setError(t('memberModal.errorBirthDateRequired'));
+      return false;
     }
 
+    if (isNaN(new Date(formData.birthDate).getTime())) {
+      setError(t('memberModal.errorBirthDate'));
+      return false;
+    }
+
+    if (!formData.birthPlace.trim()) {
+      setError(t('memberModal.errorBirthPlaceRequired'));
+      return false;
+    }
+
+    if (!formData.gender) {
+      setError(t('memberEdit.errorGenderRequired'));
+      return false;
+    }
+
+    // Death date must be on or after the birth date (birthDate is
+    // guaranteed valid here by the checks above).
     if (!formData.isAlive && formData.deathDate) {
       const deathDate = new Date(formData.deathDate);
       const birthDate = new Date(formData.birthDate);
@@ -443,7 +461,7 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
               {/* Birth Date */}
               <div>
                 <label htmlFor="birth-date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {t('memberModal.birthDate')}
+                  {t('memberModal.birthDate')} <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -463,7 +481,7 @@ export const UnifiedMemberModal: React.FC<UnifiedMemberModalProps> = ({
               {/* Birth Place */}
               <div>
                 <label htmlFor="birth-place" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {t('memberModal.birthPlace')}
+                  {t('memberModal.birthPlace')} <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />

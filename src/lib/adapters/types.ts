@@ -12,6 +12,12 @@ export interface AuthUser {
   name: string;
   familyName?: string;
   avatar?: string;
+  /** UI language preference ("en" | "id"). Absent/undefined when the
+      user never picked one — the client then keeps its built-in default. */
+  language?: string | null;
+  /** UI theme preference ("light" | "dark"). Absent/undefined when the
+      user never picked one. */
+  theme?: string | null;
   /** Account state from the server (ADR 0002). Absent on adapters without accounts. */
   status?: 'pending' | 'active' | 'disabled';
   /** Installation-level role from the server. Absent on adapters without accounts. */
@@ -364,6 +370,10 @@ export interface ProfileUpdate {
   familyName?: string | null;
   avatar?: string | null;
   email?: string;
+  /** UI language preference; null clears it (back to client default). */
+  language?: string | null;
+  /** UI theme preference; null clears it (back to client default). */
+  theme?: string | null;
 }
 
 export interface UserProfileApi {

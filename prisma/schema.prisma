@@ -32,6 +32,14 @@ model User {
   // succeeds. No email content is persisted anywhere.
   digestOptIn      Boolean   @default(false)
   digestLastSentAt DateTime?
+  // Per-user UI preferences, synced from the client (PUT /users/me) so a
+  // choice follows the account across browsers and devices instead of
+  // living only in one browser's localStorage. Values: language is
+  // "en" | "id"; theme is "light" | "dark". NULL means the user never
+  // picked — the client then falls back to its built-in default
+  // (VITE_UI_LANG / 'id', light theme).
+  language String?
+  theme    String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 

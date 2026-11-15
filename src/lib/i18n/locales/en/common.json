@@ -482,6 +482,7 @@
     "errorNameRequired": "Name is required",
     "errorBirthDateRequired": "Birth date is required",
     "errorBirthPlaceRequired": "Birth place is required",
+    "errorDeathBeforeBirth": "Death date cannot be earlier than birth date",
     "errorGenderRequired": "Gender must be selected",
     "closeModal": "Close modal"
   },
@@ -494,6 +495,8 @@
     "email": "Email",
     "emailPlaceholder": "name@email.com",
     "errorBirthDate": "Invalid birth date format",
+    "errorBirthDateRequired": "Birth date is required",
+    "errorBirthPlaceRequired": "Birth place is required",
     "errorDeathBeforeBirth": "Death date cannot be earlier than birth date",
     "errorNameRequired": "Full name is required",
     "errorNameShort": "Name must be at least 2 characters",
@@ -584,7 +587,7 @@
     "light": "Light",
     "dark": "Dark",
     "language": "Language",
-    "scopeNote": "Theme and language are saved in this browser only."
+    "scopeNote": "Theme and language are saved to your account and applied on every device you sign in from."
   },
   "statsSidebar": {
     "title": "Family Statistics",

@@ -1,6 +1,8 @@
-// UI theme (light/dark). Client-side only: the choice is persisted in
-// this browser's localStorage and applied as a `dark` class on
-// <html>, which Tailwind's dark: variants key off.
+// UI theme (light/dark). The choice persists on the user's account
+// (see src/store/prefsStore) and is applied as a `dark` class on
+// <html>, which Tailwind's dark: variants key off. localStorage acts
+// as a local cache so the very first paint (before the session is
+// restored) already shows the right theme.
 
 export type AppTheme = 'light' | 'dark';
 export const THEME_STORAGE_KEY = 'stemmagraph.theme';

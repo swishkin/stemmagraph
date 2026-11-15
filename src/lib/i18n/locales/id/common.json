@@ -482,6 +482,7 @@
     "errorNameRequired": "Nama wajib diisi",
     "errorBirthDateRequired": "Tanggal lahir wajib diisi",
     "errorBirthPlaceRequired": "Tempat lahir wajib diisi",
+    "errorDeathBeforeBirth": "Tanggal wafat tidak boleh sebelum tanggal lahir",
     "errorGenderRequired": "Jenis kelamin harus dipilih",
     "closeModal": "Tutup modal"
   },
@@ -494,6 +495,8 @@
     "email": "Email",
     "emailPlaceholder": "nama@email.com",
     "errorBirthDate": "Format tanggal lahir tidak valid",
+    "errorBirthDateRequired": "Tanggal lahir wajib diisi",
+    "errorBirthPlaceRequired": "Tempat lahir wajib diisi",
     "errorDeathBeforeBirth": "Tanggal wafat tidak boleh sebelum tanggal lahir",
     "errorNameRequired": "Nama lengkap wajib diisi",
     "errorNameShort": "Nama minimal 2 karakter",
@@ -584,7 +587,7 @@
     "light": "Terang",
     "dark": "Gelap",
     "language": "Bahasa",
-    "scopeNote": "Tema dan bahasa disimpan di peramban ini saja."
+    "scopeNote": "Tema dan bahasa disimpan ke akun Anda dan diterapkan di semua perangkat tempat Anda masuk."
   },
   "statsSidebar": {
     "title": "Statistik Keluarga",

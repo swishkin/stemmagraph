@@ -29,14 +29,22 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
   }, [member, isOpen]);
 
   const validateForm = (): boolean => {
+    // Unified validation contract: the edit dialog and the add dialog
+    // (UnifiedMemberModal.validateForm) must enforce exactly the same
+    // requirements on every field — same required fields, same
+    // date-order rule. Keep both in sync.
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
       newErrors.name = t('memberEdit.errorNameRequired');
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = t('memberModal.errorNameShort');
     }
 
     if (!formData.birthDate) {
       newErrors.birthDate = t('memberEdit.errorBirthDateRequired');
+    } else if (isNaN(new Date(formData.birthDate).getTime())) {
+      newErrors.birthDate = t('memberModal.errorBirthDate');
     }
 
     if (!formData.birthPlace?.trim()) {
@@ -45,6 +53,16 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
 
     if (!formData.gender) {
       newErrors.gender = t('memberEdit.errorGenderRequired');
+    }
+
+    // Death date must be on or after the birth date.
+    if (
+      !formData.isAlive &&
+      formData.deathDate &&
+      !isNaN(new Date(formData.birthDate).getTime()) &&
+      new Date(formData.birthDate) > new Date(formData.deathDate)
+    ) {
+      newErrors.deathDate = t('memberEdit.errorDeathBeforeBirth');
     }
 
     setErrors(newErrors);
@@ -268,8 +286,13 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                   type="date"
                   value={formData.deathDate ?? ''}
                   onChange={(e) => handleInputChange('deathDate', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500 max-w-xs"
+                  className={`w-full px-3 py-2 border rounded-md shadow-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500 max-w-xs ${
+                    errors.deathDate ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+                  }`}
                 />
+                {errors.deathDate && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.deathDate}</p>
+                )}
               </div>
             )}
           </div>

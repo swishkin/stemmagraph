@@ -1,15 +1,19 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { changeAppLanguage, SUPPORTED_LANGUAGES, type AppLanguage } from '../../lib/i18n';
+import { SUPPORTED_LANGUAGES, type AppLanguage } from '../../lib/i18n';
+import { usePrefsStore } from '../../store/prefsStore';
 
 // UI language switcher. Shared by the dashboard header and the family
 // tree header so the language can be changed from anywhere in the app.
+// The choice is persisted on the user's account (prefsStore); on the
+// login page (no account) it stays a local browser choice.
 export const LanguageSwitcher: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const setLanguage = usePrefsStore((s) => s.setLanguage);
 
   const handleSwitch = (language: AppLanguage) => {
     if (language !== i18n.language) {
-      void changeAppLanguage(language);
+      setLanguage(language);
     }
   };
 

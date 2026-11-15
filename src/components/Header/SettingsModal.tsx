@@ -1,8 +1,9 @@
 import React from 'react';
 import { Moon, Sun, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { changeAppLanguage, SUPPORTED_LANGUAGES, type AppLanguage } from '../../lib/i18n';
-import { setTheme, type AppTheme } from '../../lib/theme';
+import { SUPPORTED_LANGUAGES, type AppLanguage } from '../../lib/i18n';
+import { type AppTheme } from '../../lib/theme';
+import { usePrefsStore } from '../../store/prefsStore';
 
 interface SettingsModalProps {
   onClose: () => void;
@@ -11,12 +12,14 @@ interface SettingsModalProps {
 }
 
 /**
- * App settings: appearance (light/dark theme) and language. The theme
- * choice persists per browser via localStorage; the language choice
- * uses the same i18n store as the header switcher.
+ * App settings: appearance (light/dark theme) and language. Both
+ * choices are persisted on the user's account (prefsStore), so they
+ * follow the account across browsers and devices; localStorage only
+ * caches the last value for an instant first paint.
  */
 export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, theme, onThemeChange }) => {
   const { t, i18n } = useTranslation();
+  const { setLanguage, setTheme } = usePrefsStore();
 
   const handleTheme = (next: AppTheme) => {
     setTheme(next);
@@ -25,7 +28,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, theme, on
 
   const handleLanguage = (language: AppLanguage) => {
     if (language !== i18n.language) {
-      void changeAppLanguage(language);
+      setLanguage(language);
     }
   };
 

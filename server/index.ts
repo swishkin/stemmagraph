@@ -96,6 +96,10 @@ interface PublicUser {
   name: string;
   familyName: string | null;
   avatar: string | null;
+  /** UI language preference ("en" | "id") or null when never set. */
+  language: string | null;
+  /** UI theme preference ("light" | "dark") or null when never set. */
+  theme: string | null;
   status: AccountStatus;
   role: AccountRole;
   createdAt: string;
@@ -114,6 +118,8 @@ function toPublicUser(user: User): PublicUser {
     name: user.name,
     familyName: user.familyName,
     avatar: user.avatar,
+    language: user.language,
+    theme: user.theme,
     status: user.status as AccountStatus,
     role: user.role as AccountRole,
     createdAt: user.createdAt.toISOString(),
@@ -370,11 +376,12 @@ app.post('/api/v1/auth/logout', (_req, res) => res.status(204).send());
 // A user manages only their own account; every route here is scoped to
 // req.userId. Status and role stay owner-managed (admin routes below).
 
-// Update own profile: name, familyName, avatar, email.
+// Update own profile: name, familyName, avatar, email, language, theme.
 app.put('/api/v1/users/me', requireAuth, async (req: AuthenticatedRequest, res) => {
   try {
     const body = (req.body ?? {}) as {
       name?: unknown; familyName?: unknown; avatar?: unknown; email?: unknown;
+      language?: unknown; theme?: unknown;
     };
     const data: Record<string, unknown> = {};
 
@@ -401,6 +408,21 @@ app.put('/api/v1/users/me', requireAuth, async (req: AuthenticatedRequest, res) 
         return res.status(409).json({ code: 'EMAIL_EXISTS', message: 'Email is already in use' });
       }
       data.email = trimmed;
+    }
+    // UI preferences follow the account (persisted cross-browser). The
+    // client only ever sends the supported codes; anything else is
+    // rejected so a future client can't smuggle an unknown value in.
+    if (body.language !== undefined) {
+      if (body.language !== null && body.language !== 'en' && body.language !== 'id') {
+        return res.status(400).json({ code: 'VALIDATION_ERROR', message: 'language must be "en", "id" or null' });
+      }
+      data.language = body.language === null ? null : body.language;
+    }
+    if (body.theme !== undefined) {
+      if (body.theme !== null && body.theme !== 'light' && body.theme !== 'dark') {
+        return res.status(400).json({ code: 'VALIDATION_ERROR', message: 'theme must be "light", "dark" or null' });
+      }
+      data.theme = body.theme === null ? null : body.theme;
     }
 
     if (Object.keys(data).length === 0) {

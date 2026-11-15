@@ -7,7 +7,7 @@ import { isAdminUser } from '../../lib/account-states/adminView';
 import { AdminPanel } from '../Admin/AdminPanel';
 import { ProfileModal } from './ProfileModal';
 import { SettingsModal } from './SettingsModal';
-import { resolveTheme, setTheme, THEME_STORAGE_KEY, type AppTheme } from '../../lib/theme';
+import { resolveTheme, THEME_STORAGE_KEY, type AppTheme } from '../../lib/theme';
 
 export const UserMenu: React.FC = () => {
   const { user, logout } = useAuthStore();
@@ -17,7 +17,8 @@ export const UserMenu: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   // Current theme for the Settings modal; the actual application to
-  // <html> + persistence happens in lib/theme on every change.
+  // <html>, localStorage cache, and account persistence all happen in
+  // the prefs store (SettingsModal) on every change.
   const [theme, setThemeState] = useState<AppTheme>(() => {
     try {
       return resolveTheme(window.localStorage.getItem(THEME_STORAGE_KEY));
@@ -52,10 +53,7 @@ export const UserMenu: React.FC = () => {
     setIsSettingsOpen(true);
   };
 
-  const handleThemeChange = (next: AppTheme) => {
-    setTheme(next); // persist + apply the class on <html>
-    setThemeState(next);
-  };
+
 
   return (
     <div className="relative">
@@ -149,7 +147,7 @@ export const UserMenu: React.FC = () => {
         <SettingsModal
           onClose={() => setIsSettingsOpen(false)}
           theme={theme}
-          onThemeChange={handleThemeChange}
+          onThemeChange={setThemeState}
         />
       )}
     </div>
